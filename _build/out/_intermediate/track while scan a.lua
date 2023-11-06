@@ -1,3 +1,4 @@
+
 --math input and other shorthands
 m,i,o,p,s,T,F = math,input,output,property,screen,true,false
 ign,osn,igb,osb = i.getNumber, o.setNumber, i.getBool, o.setBool
