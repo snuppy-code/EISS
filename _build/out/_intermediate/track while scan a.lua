@@ -152,12 +152,16 @@ function onTick()
 
     do ---- Raw Radar Targets to TWS ----
 		--store targets in raw table we loop through for actual logic
+		rawradartargets[1] = {}
 		rawradartargets[1].pos = vec(ign(15),ign(16),ign(17))				--verold r tgt xyz 15,16,17
-		rawradartargets[1].tsd = 0											--tsd: X
+		rawradartargets[1].tsd = 0
+		rawradartargets[2] = {}											--tsd: X
 		rawradartargets[2].pos = stoctoglobal(ign(18),ign(19),ign(20))		--new1 r tgt d,a,e 18,19,20
 		rawradartargets[2].tsd = ign(31)									--tsd: 31
+		rawradartargets[3] = {}
 		rawradartargets[3].pos = stoctoglobal(ign(24),ign(25),ign(26))		--new3 r tgt d,a,e 24,25,26
 		rawradartargets[3].tsd = ign(31)									--tsd: 31
+		--rawradartargets[4] = {}
 		--rawradartargets[4] = stoctoglobal(ign(27),ign(28),ign(29))		--vernew r tgt d,a,e 27,28,29, 30..
 		--rawradartargets[4].tsd = ign(32)									--tsd: 32
 		
