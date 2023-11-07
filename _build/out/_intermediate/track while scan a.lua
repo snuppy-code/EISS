@@ -71,9 +71,15 @@ vicuserf = pgn("VL You Frq")
 vicendf = pgn("VL End Frq")
 vicmyuser = property.getText("VL User")
 
+--MSLLINK (missile datalink)
+mslstartfreq = pgn("ML Strt Frq")
+mslendf = pgn("ML End Frq")
 
 rawtargets = {}
 targetfiles = {}
+friendlyfiles = {}
+missilefiles = {}
+
 
 function onTick()
 
@@ -85,6 +91,14 @@ function onTick()
 	fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
 	up = cross(right,fwd)
     
+	--get friendlies
+
+
+	
+	--get missiles
+
+
+
     --get targets
 	
 end

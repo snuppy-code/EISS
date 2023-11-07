@@ -70,9 +70,15 @@ vicuserf = pgn("VL You Frq")
 vicendf = pgn("VL End Frq")
 vicmyuser = property.getText("VL User")
 
+--MSLLINK (missile datalink)
+mslstartfreq = pgn("ML Strt Frq")
+mslendf = pgn("ML End Frq")
 
 rawtargets = {}
 targetfiles = {}
+friendlyfiles = {}
+missilefiles = {}
+
 
 function onTick()
 
@@ -83,7 +89,43 @@ function onTick()
 	right = vec(cy*cz, -sy, cy*sz)
 	fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
 	up = cross(right,fwd)
-    
+
+	---- VICLINK ----
+	--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlies table at index of their ASCII
+	fpos = vec(ign(27),ign(28),ign(29))
+	--debug.log(fpos.x.." "..fpos.y.." "..fpos.z)
+	if length(fpos)>0 then
+		local userascii2 = {ign(30),ign(31)}
+		user=""
+		if userascii2[1]>=1000000 and userascii2[1]>=1000000 then
+			userascii = tostring(userascii2[1]):sub(2,7)..tostring(userascii2[2]):sub(2,7)
+			for i=1, #userascii, 3 do
+				user = user..string.char(userascii:sub(i,i+3-1))
+			end
+		else
+			user = "XXXX"
+		end
+		friendlies[user]=fpos
+	end
+	--output my ASCII on radio
+	myuserascii = ""
+	for i=1, #vicmyuser do
+		myuserascii = myuserascii..string.format("%03d", vicmyuser:byte(i))
+	end
+	osn(5,tonumber("1"..myuserascii:sub(1,6)))
+	osn(6,tonumber("1"..myuserascii:sub(7,12)))
+	--increment freq scan
+	viccurrentfreq=viccurrentfreq==vicendf and vicstartfreq or viccurrentfreq+1
+	if viccurrentfreq==vicuserf then 
+		viccurrentfreq=viccurrentfreq==vicendf and vicstartfreq or viccurrentfreq+1 
+	end
+	osn(4,viccurrentfreq)
+	
+
+	---- MSLLINK ----
+	
+
+
     --get targets
 	
 end
