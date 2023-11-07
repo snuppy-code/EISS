@@ -149,3 +149,14 @@ function onTick()
 	13	gimbal pivot
 	]]
 end
+
+--[[
+start
+589340
+used
+friendly1 589341 AAA1
+friendly2 589345 BBB2
+me	  589349 CCC3
+end
+589352
+]]
