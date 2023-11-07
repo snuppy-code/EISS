@@ -5,31 +5,54 @@
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 1414 (1748 with comment) chars
+-- Minimized Size: 1879 (2213 with comment) chars
+aB="1"
+aA=""
 
-C=property
-e,G,F,B,S,Y,ai=math,input,output,C,screen,true,false
-r,aj,R,V=G.getNumber,F.setNumber,G.getBool,F.setBool
-i,ar=B.getNumber,B.getBool
-abs,cos,sin,floor,atan=e.abs,e.cos,e.sin,e.floor,e.atan
-pi=e.pi
-af=pi*2
-function f(b,c,d)return{b=b or 0,c=c or 0,d=d or 0}end
-function v(_,a)return f(_.b+a.b,_.c+a.c,_.d+a.d)end
-function ah(_,a)return f(_.b*a.b,_.c*a.c,_.d*a.d)end
-function h(_,g)return f(_.b*g,_.c*g,_.d*g)end
-function I(_)return h(_,-1)end
-function U(_,a)return v(_,I(a))end
-function M(_)return e.sqrt(_.b*_.b+_.c*_.c+_.d*_.d)end
-function L(_,g)return h(_,1/g)end
-function ae(_)return L(_,M(_))end
-function s(_,a)return _.b*a.b+_.c*a.c+_.d*a.d
+J=tonumber
+I=string
+M=tostring
+K=property
+f,i,S,G,af,an,az=math,input,output,K,screen,true,false
+e,r,av,ai=i.getNumber,S.setNumber,i.getBool,S.setBool
+k,aj=G.getNumber,G.getBool
+abs,cos,sin,floor,atan=f.abs,f.cos,f.sin,f.floor,f.atan
+pi=f.pi
+at=pi*2
+function g(d,b,c)return{d=d or 0,b=b or 0,c=c or 0}end
+function A(_,a)return g(_.d+a.d,_.b+a.b,_.c+a.c)end
+function au(_,a)return g(_.d*a.d,_.b*a.b,_.c*a.c)end
+function j(_,l)return g(_.d*l,_.b*l,_.c*l)end
+function W(_)return j(_,-1)end
+function aq(_,a)return A(_,W(a))end
+function P(_)return f.sqrt(_.d*_.d+_.b*_.b+_.c*_.c)end
+function ac(_,l)return j(_,1/l)end
+function ad(_)return ac(_,P(_))end
+function B(_,a)return _.d*a.d+_.b*a.b+_.c*a.c
 end
-function K(_,a)return f(_.c*a.d-_.d*a.c,_.d*a.b-_.b*a.d,_.b*a.c-_.c*a.b)end
-function W(z,k,j)local j=j or 1
-return f(e.sin(z)*e.cos(k)*j,e.cos(z)*e.cos(k)*j,e.sin(k)*j)end
-function ab(_,n,p,u)return f(s(n,_),s(p,_),s(u,_))end
-function ad(_,n,p,u)return v(v(h(n,_.b),h(p,_.c)),h(u,_.d))end
-function an(E,a)if not _ then _={}_[a]={t=0,m=0}elseif not _[a]then _[a]={t=0,m=0}end;_[a].m=E-_[a].t;_[a].t=E;return _[a].m end
-function ap(_,min,max)return e.max(min,e.min(_,max))end
-al=i("VL Strt Frq")Q=i("VL You Frq")am=i("VL End Frq")X=C.getText("VL User")ak=i("ML Strt Frq")aq=i("ML End Frq")O={}aa={}ag={}Z={}function onTick()H,D,y=r(T),r(P),r(ao)x,o,q=cos(H),cos(D),cos(y)A,w,l=sin(H),sin(D),sin(y)N=f(o*q,-w,o*l)J=f(A*l+x*w*q,x*o,-A*q+x*w*l)ac=K(N,J)end
+function Z(_,a)return g(_.b*a.c-_.c*a.b,_.c*a.d-_.d*a.c,_.d*a.b-_.b*a.d)end
+function aw(T,s,m)local m=m or 1
+return g(f.sin(T)*f.cos(s)*m,f.cos(T)*f.cos(s)*m,f.sin(s)*m)end
+function as(_,q,E,x)return g(B(q,_),B(E,_),B(x,_))end
+function ag(_,q,E,x)return A(A(j(q,_.d),j(E,_.b)),j(x,_.c))end
+function ao(O,a)if not _ then _={}_[a]={y=0,t=0}elseif not _[a]then _[a]={y=0,t=0}end;_[a].t=O-_[a].y;_[a].y=O;return _[a].t end
+function ay(_,min,max)return f.max(min,f.min(_,max))end
+v=k("VL Strt Frq")ab=k("VL You Frq")N=k("VL End Frq")V=K.getText("VL User")h=v
+ar=k("ML Strt Frq")am=k("ML End Frq")ap={}ax={}ae={}X={}ah={}function onTick()ak=g(e(1),e(3),e(2))U,H,Q=e(e(4)),e(e(5)),e(e(6))z,w,D=cos(U),cos(H),cos(Q)R,C,u=sin(U),sin(H),sin(Q)aa=g(w*D,-C,w*u)Y=g(R*u+z*C*D,z*w,-R*D+z*C*u)al=Z(aa,Y)L=g(e(7),e(8),e(9))if P(L)>0 then
+local n={e(10),e(11)}p=aA
+if n[1]>=1000000 and n[1]>=1000000 then
+F=M(n[1]):sub(2,7)..M(n[2]):sub(2,7)for i=1,#F,3 do
+p=p..I.char(F:sub(i,i+3-1))end
+else
+p="XXXX"
+end
+X[p]=L
+end
+o=aA
+for i=1,#V do
+o=o..I.format("%03d",V:byte(i))end
+r(1,J(aB..o:sub(1,6)))r(2,J(aB..o:sub(7,12)))h=h==N and v or h+1
+if h==ab then
+h=h==N and v or h+1
+end
+r(3,h)end

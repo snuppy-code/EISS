@@ -115,20 +115,20 @@ function onTick()
 	for i=1, #vicmyuser do
 		myuserascii = myuserascii..string.format("%03d", vicmyuser:byte(i))
 	end
-	osn(5,tonumber("1"..myuserascii:sub(1,6)))
-	osn(6,tonumber("1"..myuserascii:sub(7,12)))
+	osn(1,tonumber("1"..myuserascii:sub(1,6)))
+	osn(2,tonumber("1"..myuserascii:sub(7,12)))
 	--increment freq scan
 	viccurrentfreq=viccurrentfreq==vicendf and vicstartfreq or viccurrentfreq+1
 	if viccurrentfreq==vicuserf then 
 		viccurrentfreq=viccurrentfreq==vicendf and vicstartfreq or viccurrentfreq+1 
 	end
-	osn(4,viccurrentfreq)
-	
+	osn(3,viccurrentfreq)
 
 	---- MSLLINK ----
 	--since we don't have username, we rely on the cycle speed being constant. the data for each index will be outdated/mismatched but we don't care
+	--output read freq on comp 4
 
-
+	
     --get targets
 	
 

@@ -70,35 +70,94 @@ vicstartfreq = pgn("VL Strt Frq")
 vicuserf = pgn("VL You Frq")
 vicendf = pgn("VL End Frq")
 vicmyuser = property.getText("VL User")
+viccurrentfreq=vicstartfreq
 
 --MSLLINK (missile datalink)
 mslstartfreq = pgn("ML Strt Frq")
 mslendf = pgn("ML End Frq")
 
-rawtargets = {}
+raw_ets_targets = {}
+rawradartargets = {}
 targetfiles = {}
 friendlyfiles = {}
 missilefiles = {}
 
-
 function onTick()
+	--my position vector
+	mpos = vec(ign(1),ign(3),ign(2))
 
-	--facing vectors--need rotx roty rotz
-	rx,ry,rz=ign(rotx),ign(roty),ign(rotz)
+	--facing vectors
+	rx,ry,rz=ign(ign(4)),ign(ign(5)),ign(ign(6))
 	cx,cy,cz=cos(rx),cos(ry),cos(rz)
 	sx,sy,sz=sin(rx),sin(ry),sin(rz)
 	right = vec(cy*cz, -sy, cy*sz)
 	fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
 	up = cross(right,fwd)
-    
-	--get friendlies
 
+	---- VICLINK ----
+	--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlyfiles table at index of their ASCII
+	fpos = vec(ign(7),ign(8),ign(9))
+	--debug.log(fpos.x.." "..fpos.y.." "..fpos.z)
+	if length(fpos)>0 then
+		local userascii2 = {ign(10),ign(11)}
+		user=""
+		if userascii2[1]>=1000000 and userascii2[1]>=1000000 then
+			userascii = tostring(userascii2[1]):sub(2,7)..tostring(userascii2[2]):sub(2,7)
+			for i=1, #userascii, 3 do
+				user = user..string.char(userascii:sub(i,i+3-1))
+			end
+		else
+			user = "XXXX"
+		end
+		friendlyfiles[user]=fpos
+	end
+	--output my ASCII on radio
+	myuserascii = ""
+	for i=1, #vicmyuser do
+		myuserascii = myuserascii..string.format("%03d", vicmyuser:byte(i))
+	end
+	osn(1,tonumber("1"..myuserascii:sub(1,6)))
+	osn(2,tonumber("1"..myuserascii:sub(7,12)))
+	--increment freq scan
+	viccurrentfreq=viccurrentfreq==vicendf and vicstartfreq or viccurrentfreq+1
+	if viccurrentfreq==vicuserf then 
+		viccurrentfreq=viccurrentfreq==vicendf and vicstartfreq or viccurrentfreq+1 
+	end
+	osn(3,viccurrentfreq)
+
+	---- MSLLINK ----
+	--since we don't have username, we rely on the cycle speed being constant. the data for each index will be outdated/mismatched but we don't care
+	--output read freq on comp 4
 
 	
-	--get missiles
-
-
-
     --get targets
 	
+
+
+	--[[output
+	1	my username 1
+	2	my username 2
+	3	viclink receive freq
+	4	msllink receive freq
+	5	file verify new radar elevation slew
+	6	file verify new radar azimuth slew speed
+	7	file verify old radar Y slew
+	8	file verify old radar X slew
+	9	file verify old radar Y FOV
+	10	file verify old radar X FOV
+	11	gimbal FOV
+	12	gimbal pitch
+	13	gimbal pivot
+	]]
 end
+
+--[[
+start
+589340
+used
+friendly1 589341 AAA1
+friendly2 589345 BBB2
+me	  589349 CCC3
+end
+589352
+]]
