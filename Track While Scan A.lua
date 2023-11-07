@@ -81,7 +81,6 @@ targetfiles = {}
 friendlyfiles = {}
 missilefiles = {}
 
-
 function onTick()
 	--my position vector
 	mpos = vec(ign(1),ign(3),ign(2))
@@ -95,11 +94,11 @@ function onTick()
 	up = cross(right,fwd)
 
 	---- VICLINK ----
-	--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlies table at index of their ASCII
-	fpos = vec(ign(27),ign(28),ign(29))
+	--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlyfiles table at index of their ASCII
+	fpos = vec(ign(7),ign(8),ign(9))
 	--debug.log(fpos.x.." "..fpos.y.." "..fpos.z)
 	if length(fpos)>0 then
-		local userascii2 = {ign(30),ign(31)}
+		local userascii2 = {ign(10),ign(11)}
 		user=""
 		if userascii2[1]>=1000000 and userascii2[1]>=1000000 then
 			userascii = tostring(userascii2[1]):sub(2,7)..tostring(userascii2[2]):sub(2,7)
@@ -109,7 +108,7 @@ function onTick()
 		else
 			user = "XXXX"
 		end
-		friendlies[user]=fpos
+		friendlyfiles[user]=fpos
 	end
 	--output my ASCII on radio
 	myuserascii = ""
@@ -128,8 +127,12 @@ function onTick()
 
 	---- MSLLINK ----
 	--since we don't have username, we rely on the cycle speed being constant. the data for each index will be outdated/mismatched but we don't care
-	
+
 
     --get targets
+	
+
+
+	--output
 	
 end
