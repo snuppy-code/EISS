@@ -129,7 +129,9 @@ function onTick()
 	--output read freq on comp 4
 
 	
-    --get targets
+    ---- Raw Radar Targets ----
+	--we are only using target 1 from 2/4 scanning radars so I to store them simply
+	rawradartargets[]
 	
 
 
