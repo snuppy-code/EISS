@@ -37,10 +37,10 @@
     ],
     "Lua.runtime.pathStrict": true,
     "Lua.workspace.library": [
-        "c:/Users/Squingle/Desktop/!folders/! d-github/EISS/",
-        "c:/Users/Squingle/.vscode/extensions/nameouschangey.lifeboatapi-0.0.33/assets/lua/Common/",
-        "c:/Users/Squingle/.vscode/extensions/nameouschangey.lifeboatapi-0.0.33/assets/lua/Microcontroller/",
-        "c:/Users/Squingle/Desktop/!folders/! d-github/EISS/_build/libs/"
+        "c:/Users/Skage/OneDrive/Skrivebord/! github/EISS/",
+        "c:/Users/Skage/.vscode/extensions/nameouschangey.lifeboatapi-0.0.33/assets/lua/Common/",
+        "c:/Users/Skage/.vscode/extensions/nameouschangey.lifeboatapi-0.0.33/assets/lua/Microcontroller/",
+        "c:/Users/Skage/OneDrive/Skrivebord/! github/EISS/_build/libs/"
     ],
     "lifeboatapi.stormworks.libs.gitLibraries": [
         {
