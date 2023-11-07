@@ -69,21 +69,25 @@ vicstartfreq = pgn("VL Strt Frq")
 vicuserf = pgn("VL You Frq")
 vicendf = pgn("VL End Frq")
 vicmyuser = property.getText("VL User")
+viccurrentfreq=vicstartfreq
 
 --MSLLINK (missile datalink)
 mslstartfreq = pgn("ML Strt Frq")
 mslendf = pgn("ML End Frq")
 
-rawtargets = {}
+raw_ets_targets = {}
+rawradartargets = {}
 targetfiles = {}
 friendlyfiles = {}
 missilefiles = {}
 
 
 function onTick()
+	--my position vector
+	mpos = vec(ign(1),ign(3),ign(2))
 
-	--facing vectors--need rotx roty rotz
-	rx,ry,rz=ign(rotx),ign(roty),ign(rotz)
+	--facing vectors
+	rx,ry,rz=ign(ign(4)),ign(ign(5)),ign(ign(6))
 	cx,cy,cz=cos(rx),cos(ry),cos(rz)
 	sx,sy,sz=sin(rx),sin(ry),sin(rz)
 	right = vec(cy*cz, -sy, cy*sz)
@@ -123,8 +127,8 @@ function onTick()
 	
 
 	---- MSLLINK ----
+	--since we don't have username, we rely on the cycle speed being constant. the data for each index will be outdated/mismatched but we don't care
 	
-
 
     --get targets
 	
