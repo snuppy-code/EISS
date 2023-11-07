@@ -133,6 +133,19 @@ function onTick()
 	
 
 
-	--output
-	
+	--[[output
+	1	my username 1
+	2	my username 2
+	3	viclink receive freq
+	4	msllink receive freq
+	5	file verify new radar elevation slew
+	6	file verify new radar azimuth slew speed
+	7	file verify old radar Y slew
+	8	file verify old radar X slew
+	9	file verify old radar Y FOV
+	10	file verify old radar X FOV
+	11	gimbal FOV
+	12	gimbal pitch
+	13	gimbal pivot
+	]]
 end
