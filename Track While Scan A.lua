@@ -96,6 +96,7 @@ friendlyfiles = {}
 missilefiles = {}
 
 selectedtgt,tgtcycletouch = 0,0
+enemytrans1index,friendlytransindex,missiletransindex=0,0,0
 
 function onTick()
 	--my position vector
@@ -208,8 +209,49 @@ function onTick()
 		end
 	end
 	
-	--output selected tgt
-	for k,v in ipairs(targetfiles) do
+	---- OUTPUTS ----
+	--4 loops using these index variables to output one thing at a time each tick
+
+	--targets
+	if targetfiles[i] then
+		osn(14,targetfiles[enemytransindex].pos.x)
+		osn(15,targetfiles[enemytransindex].pos.y)
+		osn(16,targetfiles[enemytransindex].pos.z)
+	end
+	if targetfiles[i+1] then
+		osn(17,targetfiles[enemytransindex+1].pos.x)
+		osn(18,targetfiles[enemytransindex+1].pos.y)
+		osn(19,targetfiles[enemytransindex+1].pos.z)
+	end
+	enemytransindex = enemytransindex + 2
+	if enemytransindex > #targetfiles then
+		enemytransindex = 1
+	end
+
+	--friendlies
+	if friendlyfiles[i] then
+		osn(14,friendlyfiles[friendlytransindex].pos.x)
+		osn(15,friendlyfiles[friendlytransindex].pos.y)
+		osn(16,friendlyfiles[friendlytransindex].pos.z)
+	end
+	friendlytransindex = friendlytransindex + 1
+	if friendlytransindex > #friendlyfiles then
+		friendlytransindex = 1
+	end
+	
+	--missiles
+	if missilefiles[i] then
+		osn(14,missilefiles[missiletransindex].pos.x)
+		osn(15,missilefiles[missiletransindex].pos.y)
+		osn(16,missilefiles[missiletransindex].pos.z)
+	end
+	missiletransindex = missiletransindex + 1
+	if missiletransindex > #missilefiles then
+		missiletransindex = 1
+	end
+
+	--selected tgt
+	for k,v in ipairs(targetfiles) do--99% sure this can be just targetfiles[selectedtgt]
 		if k == selectedtgt then
 			osn(1,v.pos.x)
 			osn(2,v.pos.y)
