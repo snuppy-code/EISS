@@ -251,7 +251,7 @@ function onTick()
 	end
 
 	--selected tgt
-	for k,v in ipairs(targetfiles) do--99% sure this can be just targetfiles[selectedtgt]
+	for k,v in ipairs(targetfiles) do--99% sure this can be just targetfiles[selectedtgt] but this is what I wrote earlier and im not changing that shit until I have tested more
 		if k == selectedtgt then
 			osn(1,v.pos.x)
 			osn(2,v.pos.y)
