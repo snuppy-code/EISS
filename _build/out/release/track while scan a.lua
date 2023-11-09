@@ -5,122 +5,117 @@
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 3137 (3471 with comment) chars
-aZ="1"
-aY=""
+-- Minimized Size: 3326 (3660 with comment) chars
+b_="1"
+aZ=""
 
-E=ipairs
-au=tonumber
-aq=string
-al=tostring
-ab=property
-V=table.remove
-j,p,ad,at,aP,aJ,aX=math,input,output,ab,screen,true,false
-c,e,aL,aW=p.getNumber,ad.setNumber,p.getBool,ad.setBool
-s,aI=at.getNumber,at.getBool
-abs,cos,sin,floor,atan=j.abs,j.cos,j.sin,j.floor,j.atan
-pi=j.pi
-ac=pi*2
-function i(f,g,d)return{f=f or 0,g=g or 0,d=d or 0}end
-function D(_,a)return i(_.f+a.f,_.g+a.g,_.d+a.d)end
-function aO(_,a)return i(_.f*a.f,_.g*a.g,_.d*a.d)end
-function z(_,x)return i(_.f*x,_.g*x,_.d*x)end
-function az(_)return z(_,-1)end
-function M(_,a)return D(_,az(a))end
-function u(_)return j.sqrt(_.f*_.f+_.g*_.g+_.d*_.d)end
-function aw(_,x)return z(_,1/x)end
-function aR(_)return aw(_,u(_))end
-function S(_,a)return _.f*a.f+_.g*a.g+_.d*a.d
+F=ipairs
+ax=tonumber
+ar=string
+an=tostring
+at=property
+U=table.remove
+A=debug.log
+k,r,al,au,aM,aP,aL=math,input,output,at,screen,true,false
+b,e,aT,aW=r.getNumber,al.setNumber,r.getBool,al.setBool
+s,aU=au.getNumber,au.getBool
+abs,cos,sin,floor,atan=k.abs,k.cos,k.sin,k.floor,k.atan
+pi=k.pi
+v=pi*2
+function i(f,g,c)return{f=f or 0,g=g or 0,c=c or 0}end
+function K(_,a)return i(_.f+a.f,_.g+a.g,_.c+a.c)end
+function aR(_,a)return i(_.f*a.f,_.g*a.g,_.c*a.c)end
+function B(_,C)return i(_.f*C,_.g*C,_.c*C)end
+function aE(_)return B(_,-1)end
+function J(_,a)return K(_,aE(a))end
+function t(_)return k.sqrt(_.f*_.f+_.g*_.g+_.c*_.c)end
+function aH(_,C)return B(_,1/C)end
+function aY(_)return aH(_,t(_))end
+function Y(_,a)return _.f*a.f+_.g*a.g+_.c*a.c
 end
-function aC(_,a)return i(_.g*a.d-_.d*a.g,_.d*a.f-_.f*a.d,_.f*a.g-_.g*a.f)end
-function aF(aj,Q,y)local y=y or 1
-return i(j.sin(aj)*j.cos(Q)*y,j.cos(aj)*j.cos(Q)*y,j.sin(Q)*y)end
-function aM(_,v,T,L)return i(S(v,_),S(T,_),S(L,_))end
-function av(_,v,T,L)return D(D(z(v,_.f),z(T,_.g)),z(L,_.d))end
-function aS(Z,a)if not _ then _={}_[a]={X=0,P=0}elseif not _[a]then _[a]={X=0,P=0}end;_[a].P=Z-_[a].X;_[a].X=Z;return _[a].P end
-function aN(_,min,max)return j.max(min,j.min(_,max))end
-function af(aB,ay,an)if an>0 then
-return D(av(aF(aB*ac,ay*ac,an),ap,ah,aE),aA)else
+function aB(_,a)return i(_.g*a.c-_.c*a.g,_.c*a.f-_.f*a.c,_.f*a.g-_.g*a.f)end
+function N(az,Q,y)local y=y or 1
+return i(k.sin(az)*k.cos(Q)*y,k.cos(az)*k.cos(Q)*y,k.sin(Q)*y)end
+function aK(_,z,aa,R)return i(Y(z,_),Y(aa,_),Y(R,_))end
+function ac(_,z,aa,R)return K(K(B(z,_.f),B(aa,_.g)),B(R,_.c))end
+function aI(ak,a)if not _ then _={}_[a]={af=0,W=0}elseif not _[a]then _[a]={af=0,W=0}end;_[a].W=ak-_[a].af;_[a].af=ak;return _[a].W end
+function aS(_,min,max)return k.max(min,k.min(_,max))end
+function aN(aj,aG,aA)if aj>0 then
+return K(ac(N(aG*v,aA*v,aj),I,E,Z),as)else
 return i()end
 end
-Y=s("VL Strt Frq")aD=s("VL You Frq")aa=s("VL End Frq")ao=ab.getText("VL User")q=Y
-aT=s("ML Strt Frq")aV=s("ML End Frq")I=s("Merge Dist")aG=s("Cull Time")aU={}m={}h={}t={}w={}U,aH=0,0
-aK,o,n=0,0,0
-function onTick()aA=i(c(1),c(3),c(2))ar,as,ag=c(c(4)),c(c(5)),c(c(6))N,W,K=cos(ar),cos(as),cos(ag)ai,O,J=sin(ar),sin(as),sin(ag)ap=i(W*K,-O,W*J)ah=i(ai*J+N*O*K,N*W,-ai*K+N*O*J)aE=aC(ap,ah)do
-ak=i(c(7),c(8),c(9))if u(ak)>0 then
-local C={c(10),c(11)}H=aY
-if C[1]>=1000000 and C[1]>=1000000 then
-ae=al(C[1]):sub(2,7)..al(C[2]):sub(2,7)for p=1,#ae,3 do
-H=H..aq.char(ae:sub(p,p+3-1))end
+X=s("VL Strt Frq")aD=s("VL You Frq")am=s("VL End Frq")ao=at.getText("VL User")q=X
+aV=s("ML Strt Frq")aQ=s("ML End Frq")T=s("Merge Dist")aC=s("Cull Time")aX={}m={}h={}u={}x={}V,aJ=0,0
+j,n,o=0,0,0
+function onTick()A("ontick called")as=i(b(1),b(2),b(3))ag,ai,aq=b(b(4)),b(b(5)),b(b(6))O,S,P=cos(ag),cos(ai),cos(aq)ap,ab,ad=sin(ag),sin(ai),sin(aq)I=i(S*P,-ab,S*ad)E=i(ap*ad+O*ab*P,O*S,-ap*P+O*ab*ad)Z=aB(I,E)av=i(b(7),b(8),b(9))if t(av)>0 then
+local D={b(10),b(11)}H=aZ
+if D[1]>=1000000 and D[1]>=1000000 then
+aw=an(D[1]):sub(2,7)..an(D[2]):sub(2,7)for r=1,#aw,3 do
+H=H..ar.char(aw:sub(r,r+3-1))end
 else
 H="XXXX"
 end
-t[H]=ak
+u[H]=av
 end
-F=aY
-for p=1,#ao do
-F=F..aq.format("%03d",ao:byte(p))end
-e(1,au(aZ..F:sub(1,6)))e(2,au(aZ..F:sub(7,12)))q=q==aa and Y or q+1
+L=aZ
+for r=1,#ao do
+L=L..ar.format("%03d",ao:byte(r))end
+e(1,ax(b_..L:sub(1,6)))e(2,ax(b_..L:sub(7,12)))q=q==am and X or q+1
 if q==aD then
-q=q==aa and Y or q+1
+q=q==am and X or q+1
 end
-e(3,q)end
-do
-end
-do
-m[1]={}m[1].b=i(c(15),c(16),c(17))m[1].R=0
-m[2]={}m[2].b=af(c(18),c(19),c(20))m[2].R=c(31)m[3]={}m[3].b=af(c(24),c(25),c(26))m[3].R=c(31)for r,l in E(m)do
-if(u(l.b)>0)and not(l.R>0)then
-local B=l.b
-local match=0
-for G,am in E(h)do
-if not match==0 then
-if u(M(am.b,B))<=I then
-match=G
-h[G]={b=B,ax=i(),A=0}end
+e(3,q)A("pos,rot,viclink done")m[1]={}m[1].ay=J(i(b(15),b(16),b(17)),as)m[1].ae=0
+m[2]={}m[2].ay=ac(N(b(19)*v,b(20)*v,b(18)),I,E,Z)m[2].ae=b(31)m[3]={}m[2].ay=ac(N(b(25)*v,b(26)*v,b(24)),I,E,Z)m[3].ae=b(31)for p,l in F(m)do
+A("for "..p..","..type(l).." in ipairs(rawradartargets) do")if(t(l.d)>0)and not(l.ae>0)then
+local G=l.d
+A("valid tgt")local match=0
+for w,ah in F(h)do
+A("filindex: "..w.." match: "..match)if not match==0 then
+if t(J(ah.d,G))<=T then
+match=w
+h[w]={d=G,aF=i(),M=0}end
 else
-if u(M(am.b,B))<=I and not(G==U)then
-V(h,G)end
+if t(J(ah.d,G))<=T and not(w==V)then
+U(h,w)end
 end
 end
 if match==0 then
-h[#h+1]={b=B,ax=i(),A=0}end
+h[#h+1]={d=G,aF=i(),M=0}end
 end
 end
-for r,l in E(h)do
-h[r].A=l.A+1
-if(l.A>=aG)and not(r==U)then
-V(h,r)elseif l.b.d<=-1 then
-h[r].b.d=5
+for p,l in F(h)do
+h[p].M=l.M+1
+if(l.M>=aC)and not(p==V)then
+U(h,p)elseif l.d.c<=-1 then
+h[p].d.c=5
 end
-for p,v in pairs(aQ)do
-if u(M(v,l.b))<=I then
-V(h,r)end
+for r,z in pairs(aO)do
+if t(J(z,l.d))<=T then
+U(h,p)end
 end
 end
+if h[j]then
+e(14,h[j].d.f)e(15,h[j].d.g)e(16,h[j].d.c)end
+if h[j+1]then
+e(17,h[j+1].d.f)e(18,h[j+1].d.g)e(19,h[j+1].d.c)end
+e(26,j)e(27,j+1)j=j+2
+if j>#h then
+j=1
 end
-if h[k]then
-e(14,h[k].b.f)e(15,h[k].b.g)e(16,h[k].b.d)end
-if h[k+1]then
-e(17,h[k+1].b.f)e(18,h[k+1].b.g)e(19,h[k+1].b.d)end
-e(26,k)e(27,k+1)k=k+2
-if k>#h then
-k=1
-end
-if t[o]then
-e(20,t[o].b.f)e(21,t[o].b.g)e(22,t[o].b.d)end
-e(28,o)o=o+1
-if o>#t then
-o=1
-end
-if w[n]then
-e(23,w[n].b.f)e(24,w[n].b.g)e(25,w[n].b.d)end
-e(29,n)n=n+1
-if n>#w then
+if u[n]then
+e(20,u[n].d.f)e(21,u[n].d.g)e(22,u[n].d.c)end
+e(28,n)n=n+1
+if n>#u then
 n=1
 end
-for r,l in E(h)do
-if r==U then
-e(1,l.b.f)e(2,l.b.g)e(3,l.b.d)end
+if x[o]then
+e(23,x[o].d.f)e(24,x[o].d.g)e(25,x[o].d.c)end
+e(29,o)o=o+1
+if o>#x then
+o=1
+end
+for p,l in F(h)do
+if p==V then
+e(1,l.d.f)e(2,l.d.g)e(3,l.d.c)end
 end
 end

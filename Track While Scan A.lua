@@ -66,7 +66,7 @@ function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]th
 function clamp(a, min, max) return m.max(min, m.min(a, max)) end
 
 --functional functions
-function stoctoglobal(azim,elev,dist)
+function stoctoglobal(dist,azim,elev)
 	if dist > 0 then
 		return add(torelative( stoc(azim*pi2, elev*pi2, dist) , right, fwd, up), mpos)
 	else
@@ -96,11 +96,12 @@ friendlyfiles = {}
 missilefiles = {}
 
 selectedtgt,tgtcycletouch = 0,0
-enemytrans1index,friendlytransindex,missiletransindex=0,0,0
+enemytransindex,friendlytransindex,missiletransindex=0,0,0
 
 function onTick()
+	debug.log("ontick called")
 	--my position vector
-	mpos = vec(ign(1),ign(3),ign(2))
+	mpos = vec(ign(1),ign(2),ign(3))
 
 	--facing vectors
 	rx,ry,rz=ign(ign(4)),ign(ign(5)),ign(ign(6))
@@ -143,34 +144,41 @@ function onTick()
 	end
 	osn(3,viccurrentfreq)
 
+	debug.log("pos,rot,viclink done")
+
 	---- MSLLINK ----
 	--since we don't have username, we rely on the cycle speed being constant. the data for each index will be outdated/mismatched but we don't care
 	--output read freq on comp 4
 	--use missilefiles table
+	--12,13,14
 
-
+	
     ---- Raw Radar Targets to TWS ----
 	--store targets in raw table we loop through for actual logic
 	rawradartargets[1] = {}
-	rawradartargets[1].pos = vec(ign(15),ign(16),ign(17))				--verold r tgt xyz 15,16,17
-	rawradartargets[1].tsd = 0
-	rawradartargets[2] = {}											--tsd: X
-	rawradartargets[2].pos = stoctoglobal(ign(18),ign(19),ign(20))		--new1 r tgt d,a,e 18,19,20
-	rawradartargets[2].tsd = ign(31)									--tsd: 31
+	rawradartargets[1].rel = subt(vec(ign(15),ign(16),ign(17)),mpos)						--verold r tgt xyz 15,16,17
+	rawradartargets[1].tsd = 0																--tsd: X
+
+	rawradartargets[2] = {}
+	rawradartargets[2].rel = torelative(stoc(ign(19)*pi2,ign(20)*pi2,ign(18)),right,fwd,up)	--new1 r tgt d,a,e 18,19,20
+	rawradartargets[2].tsd = ign(31)														--tsd: 31
+
 	rawradartargets[3] = {}
-	rawradartargets[3].pos = stoctoglobal(ign(24),ign(25),ign(26))		--new3 r tgt d,a,e 24,25,26
-	rawradartargets[3].tsd = ign(31)									--tsd: 31
+	rawradartargets[2].rel = torelative(stoc(ign(25)*pi2,ign(26)*pi2,ign(24)),right,fwd,up)	--new3 r tgt d,a,e 24,25,26
+	rawradartargets[3].tsd = ign(31)														--tsd: 31
+
 	--rawradartargets[4] = {}
 	--rawradartargets[4] = stoctoglobal(ign(27),ign(28),ign(29))		--vernew r tgt d,a,e 27,28,29, 30..
 	--rawradartargets[4].tsd = ign(32)									--tsd: 32
 	
 	for k,v in ipairs(rawradartargets) do
-		if (length(v.pos) > 0) and not (v.tsd > 0) then--there is actually a target and its on tick 1 of info
+		debug.log("for "..k..","..type(v).." in ipairs(rawradartargets) do")
+		if (length(v.rel) > 0) and not (v.tsd > 0) then--there is actually a target and its on tick 1 of info
 			local tgtpos = v.pos
-			
-			--try to match to existing target file
+			debug.log("valid tgt")
 			local match = 0 --no match with a target file found yet
 			for fileindex,file in ipairs(targetfiles) do
+				debug.log("filindex: "..fileindex.." match: "..match)
 				if not match == 0 then--we already have a match? ❌CHANGE THIS❌ !!! I think its causing issues
 					if length(subt(file.pos,tgtpos)) <= mergedist then--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found
 						match = fileindex
