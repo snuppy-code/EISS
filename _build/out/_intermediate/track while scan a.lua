@@ -174,7 +174,7 @@ function onTick()
 	
 	for k,v in ipairs(rawradartargets) do
 		debug.log("for "..k..","..type(v).." in ipairs(rawradartargets) do")
-		if (length(v.pos) > 0) and not (v.tsd > 0) then--there is actually a target and its on tick 1 of info
+		if (length(v.rel) > 0) and not (v.tsd > 0) then--there is actually a target and its on tick 1 of info
 			local tgtpos = v.pos
 			debug.log("valid tgt")
 			local match = 0 --no match with a target file found yet
