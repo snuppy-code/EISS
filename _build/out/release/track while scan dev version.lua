@@ -9,62 +9,62 @@
 az=" y: "
 ay=" z: "
 
-u=ipairs
-K=math
-W=table.remove
-n=debug.log
-J=K.sin
-F=K.cos
-f,U,T,Z,as,ar,an=K,input,output,property,screen,true,false
-j,aq,au,am=U.getNumber,T.setNumber,U.getBool,T.setBool
-y,av=Z.getNumber,Z.getBool
+v=ipairs
+E=math
+ab=table.remove
+m=debug.log
+B=E.sin
+J=E.cos
+f,V,aa,N,aw,as,au=E,input,output,property,screen,true,false
+j,av,ao,am=V.getNumber,aa.setNumber,V.getBool,aa.setBool
+y,ax=N.getNumber,N.getBool
 abs,cos,sin,floor,atan=f.abs,f.cos,f.sin,f.floor,f.atan
 pi=f.pi
-P=pi*2
-function i(d,c,b)return{d=d or 0,c=c or 0,b=b or 0}end
-function x(_,e)return i(_.d+e.d,_.c+e.c,_.b+e.b)end
-function aw(_,e)return i(_.d*e.d,_.c*e.c,_.b*e.b)end
-function s(_,o)return i(_.d*o,_.c*o,_.b*o)end
-function ah(_)return s(_,-1)end
-function N(_,e)return x(_,ah(e))end
-function p(_)return f.sqrt(_.d*_.d+_.c*_.c+_.b*_.b)end
+X=pi*2
+function i(c,e,b)return{c=c or 0,e=e or 0,b=b or 0}end
+function x(_,d)return i(_.c+d.c,_.e+d.e,_.b+d.b)end
+function aq(_,d)return i(_.c*d.c,_.e*d.e,_.b*d.b)end
+function s(_,o)return i(_.c*o,_.e*o,_.b*o)end
+function ak(_)return s(_,-1)end
+function Q(_,d)return x(_,ak(d))end
+function p(_)return f.sqrt(_.c*_.c+_.e*_.e+_.b*_.b)end
 function ag(_,o)return s(_,1/o)end
-function ao(_)return ag(_,p(_))end
-function D(_,e)return _.d*e.d+_.c*e.c+_.b*e.b
+function an(_)return ag(_,p(_))end
+function F(_,d)return _.c*d.c+_.e*d.e+_.b*d.b
 end
-function ae(_,e)return i(_.c*e.b-_.b*e.c,_.b*e.d-_.d*e.b,_.d*e.c-_.c*e.d)end
-function ad(S,C,r)local r=r or 1
-return i(f.sin(S)*f.cos(C)*r,f.cos(S)*f.cos(C)*r,f.sin(C)*r)end
-function ap(_,L,H,B)return i(D(L,_),D(H,_),D(B,_))end
-function al(_,L,H,B)return x(x(s(L,_.d),s(H,_.c)),s(B,_.b))end
-function at(_,min,max)return f.max(min,f.min(_,max))end
-ab=y("Merge Dist")ac=y("Cull Time")ax=y("Self ignore dist")l={{}}h={}function onTick()af=i(j(1),j(2),j(3))X,R,V=j(4),j(5),j(6)G,z,E=F(X),F(R),F(V)aa,I,A=J(X),J(R),J(V)Y=i(z*E,-I,z*A)Q=i(aa*A+G*I*E,G*z,-aa*E+G*I*A)ak=ae(Y,Q)n("pos,rot done")l[1].v=ad(j(19)*P,j(20)*P,j(18))l[1].m=al(l[1].v,Y,Q,ak)l[1].g=x(l[1].m,af)l[1].O=j(31)for k,a in u(l)do
-n("for k:"..k..",type:"..type(a).." ipairs(rawradartargets) do\nlength(v.rel) = "..p(a.m).." v.tsd = "..a.O)if(p(a.m)>10)and not(a.O>0)then
+function ah(_,d)return i(_.e*d.b-_.b*d.e,_.b*d.c-_.c*d.b,_.c*d.e-_.e*d.c)end
+function ae(Y,I,r)local r=r or 1
+return i(f.sin(Y)*f.cos(I)*r,f.cos(Y)*f.cos(I)*r,f.sin(I)*r)end
+function at(_,D,K,L)return i(F(D,_),F(K,_),F(L,_))end
+function al(_,D,K,L)return x(x(s(D,_.c),s(K,_.e)),s(L,_.b))end
+function ar(_,min,max)return f.max(min,f.min(_,max))end
+P=y("Merge Dist")ad=y("Cull Time")ap=y("Self ignore dist")l={{}}h={}function onTick()aj=i(j(1),j(2),j(3))M,O,T=j(4),j(5),j(6)G,z,C=J(M),J(O),J(T)S,H,A=B(M),B(O),B(T)R=i(z*C,-H,z*A)W=i(S*A+G*H*C,G*z,-S*C+G*H*A)ac=ah(R,W)m("pos,rot done")l[1].t=ae(j(19)*X,j(20)*X,j(18))l[1].n=al(l[1].t,R,W,ac)l[1].g=x(l[1].n,aj)l[1].U=j(31)for k,a in v(l)do
+m("for k:"..k..",type:"..type(a).." ipairs(rawradartargets) do\nlength(v.rel) = "..p(a.n).." v.tsd = "..a.U)if(p(a.n)>10)and not(a.U>0)then
 local w=a.g
-n("loc x: "..a.v.d..az..a.v.c..ay..a.v.b.."\nrel x: "..a.m.d..az..a.m.c..ay..a.m.b.."\nglo x: "..a.g.d..az..a.g.c..ay..a.g.b)local match=0
-for q,M in u(h)do
-n("filindex: "..q.." match: "..match)if not match==0 then
-if p(N(M.g,w))<=ab then
+m("loc x: "..a.t.c..az..a.t.e..ay..a.t.b.."\nrel x: "..a.n.c..az..a.n.e..ay..a.n.b.."\nglo x: "..a.g.c..az..a.g.e..ay..a.g.b)local match=0
+for q,Z in v(h)do
+m("filindex: "..q.." match: "..match)if not match==0 then
+if p(Q(Z.g,w))<=P then
 match=q
-h[q]={g=w,aj=i(),t=0}end
+h[q]={g=w,af=i(),u=0}end
 else
-if p(N(M.g,w))<=ab and not(q==ai)then
-W(h,q)end
+if p(Q(Z.g,w))<=P and not(q==ai)then
+ab(h,q)end
 end
 end
 if match==0 then
-h[#h+1]={g=w,aj=i(),t=0}end
+h[#h+1]={g=w,af=i(),u=0}end
 end
 end
-for k,a in u(h)do
-h[k].t=a.t+1
-if(a.t>=ac)and not(k==ai)then
-W(h,k)elseif a.g.b<=-1 then
+for k,a in v(h)do
+h[k].u=a.u+1
+if(a.u>=ad)and not(k==ai)then
+ab(h,k)elseif a.g.b<=-1 then
 h[k].g.b=5
 end
 end
-n(#h.." target files")for k,a in u(h)do
+m(#h.." target files")for k,a in v(h)do
 if k<=3 then
-n("x: "..a.g.d..az..a.g.c..ay..a.g.b)end
+m("x: "..a.g.c..az..a.g.e..ay..a.g.b)end
 end
 end

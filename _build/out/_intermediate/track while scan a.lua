@@ -51,7 +51,7 @@ end
 --return subt(a, multf(reject(a, b), factor or 2))
 --end
 function stoc(hor,ver,d)
-local d=d or 1
+stocd=stocd or 1
 return vec(m.sin(hor)*m.cos(ver)*d, m.cos(hor)*m.cos(ver)*d, m.sin(ver)*d)
 end
 function tolocal(a,r,f,u)
@@ -76,42 +76,12 @@ function topindex(input)
     end
     return highest
 end
-function nexttopindex(table)
-    local highest,secondhighest = nil,nil
-    for k, _ in pairs(table) do
-        if highest == nil or k > highest then
-            secondhighest = highest
-            highest = k
-        elseif secondhighest == nil or k > secondhighest then
-            secondhighest = k
-        end
-    end
-    return secondhighest
-end
 function lastpos(tgt)
 	------debug.log("->"..tgt)
 	------debug.log("->"..type(targetfiles[tgt]))
 	------debug.log("->"..type(targetfiles[tgt].poss))
 	------debug.log("->"..type(targetfiles[tgt].poss[topindex(targetfiles[tgt].poss)]))
 	return targetfiles[tgt].poss[topindex(targetfiles[tgt].poss)]
-end
-function specificpos(tgt,time)
-	return targetfiles[tgt].poss[time]
-end
-function tbllength(tbl)
-    local count = 0
-    for _ in pairs(tbl) do
-        count = count + 1
-    end
-    return count
-end
-function findFirstLessThan(table, number)
-    for key, value in pairs(table) do
-        if type(key) == "number" and key < number then
-            return key, value
-        end
-    end
-    return nil
 end
 
 --VICLINK (vehicle datalink)
@@ -128,6 +98,7 @@ mslendf = pgn("ML End Frq")
 --radar & tgt handling info
 mergedist = pgn("Merge Dist")
 culltime = pgn("Cull Time")
+minextrapdist = pgn("Min extrap dist delta")
 
 rawemissiontargets = {}
 rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
@@ -242,6 +213,28 @@ function onTick()
 						--update found existing tgt file with raw tgt
 						targetfiles[fileindex].poss[existedticks] = rawtgt.pos
 						targetfiles[fileindex].t = 0
+
+						--update velocity vector 1
+						thresholdvec = nil
+						thresholdindex = -1
+						for pastposindex, pastpos in pairs(targetfiles[fileindex].poss) do
+							thresholddistance = length(subt(pastpos, lastpos(fileindex)))
+							
+							if thresholddistance >= minextrapdist and pastposindex > thresholdindex then
+								thresholdvec = pastpos
+								
+								thresholdindex = pastposindex
+							end
+						end
+						--update velocity vector 2
+						if thresholdvec ~= nil then
+							timediff = topindex(targetfiles[fileindex].poss) - thresholdindex
+							if timediff > 0 then  -- Prevent division by zero
+								targetfiles[fileindex].veltick = divf(subt(lastpos(fileindex), thresholdvec), timediff)
+							end
+						else
+							targetfiles[fileindex].veltick = vec()
+						end
 					end
 				else--we already have a match
 					if length(subt(lastpos(fileindex),rawtgt.pos)) <= mergedist then
@@ -256,22 +249,12 @@ function onTick()
 			end
 		end
 	end
-	--target file culling
-	debug.log("targetfiles loop start")
-	for k,v in ipairs(targetfiles) do
-		targetfiles[k].t = existedticks-topindex(targetfiles[k].poss)
-		--while we're iterating we might as well also do velocity and extrap. This is being calculated each tick, maybe do something about that later...
-		--debug.log("->k: "..k.."\n->t: "..targetfiles[k].t.."\n->vel x: "..targetfiles[k].veltick.x.."\n->#poss: "..tbllength(targetfiles[k].poss))
-
-		if tbllength(targetfiles[k].poss) >= 10 then
-			oldindex,oldpos = findFirstLessThan(targetfiles[k].poss, 20)
-			targetfiles[k].veltick = divf(
-				subt(lastpos(k),oldpos),
-				topindex(targetfiles[k].poss)-oldindex)
-		end
-		debug.log("v x: "..type(targetfiles[k].veltick.x))
-		targetfiles[k].extrpos = add(lastpos(k),multf(targetfiles[k].veltick,targetfiles[k].t))
+	-- target file culling
+	for k, v in ipairs(targetfiles) do
+		targetfiles[k].t = existedticks - topindex(targetfiles[k].poss)
 		
+		--also extrapolation teehee
+		targetfiles[k].extrpos = add(lastpos(k), multf(targetfiles[k].veltick, targetfiles[k].t))
 
 		if (v.t >= culltime) and not (k == selectedtgt) then
 			table.remove(targetfiles,k)
