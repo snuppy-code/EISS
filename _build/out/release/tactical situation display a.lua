@@ -5,79 +5,80 @@
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 2751 (3085 with comment) chars
+-- Minimized Size: 2868 (3202 with comment) chars
 
-aj=screen
-L=map.mapToScreen
-f,l,ah,an,d,aV,aP=math,input,output,property,aj,true,false
-n,aL,aR,aZ=l.getNumber,ah.setNumber,l.getBool,ah.setBool
-X,az=an.getNumber,an.getBool
-abs,cos,sin,floor,atan=f.abs,f.cos,f.sin,f.floor,f.atan
-pi=f.pi
-ak=pi*2
-d=aj
-ba,aI,aM,aW,at,q,av,b_,aY,o=d.drawText,d.drawTextBox,d.drawTriangle,d.drawTriangleF,d.drawRect,d.drawRectF,d.drawCircle,d.drawCircleF,d.drawClear,d.setColor
-function y(af,aq,as,aA)u=as-af
-A=aA-aq
-if abs(u)>=abs(A)then
-F=abs(u)else
-F=abs(A)end
-u=u/F
-A=A/F
-a=af
-b=aq
-l=0
-while(l<=F)do
-q(a,b,1,1)a=a+u
-b=b+A
-l=l+1
+aq=screen
+F=map.mapToScreen
+h,o,af,at,c,aT,aM=math,input,output,property,aq,true,false
+k,aX,aU,aV=o.getNumber,af.setNumber,o.getBool,af.setBool
+R,av=at.getNumber,at.getBool
+abs,cos,sin,floor,atan=h.abs,h.cos,h.sin,h.floor,h.atan
+pi=h.pi
+ai=pi*2
+c=aq
+aW,b_,aO,aS,az,s,aC,aJ,aK,p=c.drawText,c.drawTextBox,c.drawTriangle,c.drawTriangleF,c.drawRect,c.drawRectF,c.drawCircle,c.drawCircleF,c.drawClear,c.setColor
+function r(ar,ap,aE,aA)D=aE-ar
+C=aA-ap
+if abs(D)>=abs(C)then
+L=abs(D)else
+L=abs(C)end
+D=D/L
+C=C/L
+a=ar
+b=ap
+o=0
+while(o<=L)do
+s(a,b,1,1)a=a+D
+b=b+C
+o=o+1
 end
 end
-function m(a,b,e)return{a=a or 0,b=b or 0,e=e or 0}end
-function Y(_,c)return m(_.a+c.a,_.b+c.b,_.e+c.e)end
-function aU(_,c)return m(_.a*c.a,_.b*c.b,_.e*c.e)end
-function v(_,z)return m(_.a*z,_.b*z,_.e*z)end
-function aC(_)return v(_,-1)end
-function aK(_,c)return Y(_,aC(c))end
-function ay(_)return f.sqrt(_.a*_.a+_.b*_.b+_.e*_.e)end
-function aF(_,z)return v(_,1/z)end
-function aT(_)return aF(_,ay(_))end
-function Z(_,c)return _.a*c.a+_.b*c.b+_.e*c.e
+function l(a,b,f)return{a=a or 0,b=b or 0,f=f or 0}end
+function X(_,d)return l(_.a+d.a,_.b+d.b,_.f+d.f)end
+function aN(_,d)return l(_.a*d.a,_.b*d.b,_.f*d.f)end
+function z(_,B)return l(_.a*B,_.b*B,_.f*B)end
+function aH(_)return z(_,-1)end
+function aP(_,d)return X(_,aH(d))end
+function aB(_)return h.sqrt(_.a*_.a+_.b*_.b+_.f*_.f)end
+function aF(_,B)return z(_,1/B)end
+function aY(_)return aF(_,aB(_))end
+function aa(_,d)return _.a*d.a+_.b*d.b+_.f*d.f
 end
-function aE(_,c)return m(_.b*c.e-_.e*c.b,_.e*c.a-_.a*c.e,_.a*c.b-_.b*c.a)end
-function aO(al,aa,C)local C=C or 1
-return m(f.sin(al)*f.cos(aa)*C,f.cos(al)*f.cos(aa)*C,f.sin(aa)*C)end
-function aS(_,Q,S,N)return m(Z(Q,_),Z(S,_),Z(N,_))end
-function aJ(_,Q,S,N)return Y(Y(v(Q,_.a),v(S,_.b)),v(N,_.e))end
-function ag(_,min,max)return f.max(min,f.min(_,max))end
-function ab(a)return floor(a+.5)end
-au=az("Mode")ax=X("R Max Rng")w=X("X FOV")*pi
-s=X("Swep Lim")*ak+w
-aw={}aD={}j,p=.5,0
-function onTick()r=m(n(21),n(23),n(22))M=-n(20)*ak
-ad,ac,am=n(24),n(25),n(26)T,P,U=cos(ad),cos(ac),cos(am)ai,W,R=sin(ad),sin(ac),sin(am)aH=m(P*U,-W,P*R)V=m(ai*R+T*W*U,T*P,-ai*U+T*W*R)aQ=aE(aH,V)D=n(32)if D<.01 and D>-.01 then
-p=p-p/5
+function ax(_,d)return l(_.b*d.f-_.f*d.b,_.f*d.a-_.a*d.f,_.a*d.b-_.b*d.a)end
+function bb(aj,V,w)local w=w or 1
+return l(h.sin(aj)*h.cos(V)*w,h.cos(aj)*h.cos(V)*w,h.sin(V)*w)end
+function ba(_,S,P,O)return l(aa(S,_),aa(P,_),aa(O,_))end
+function aR(_,S,P,O)return X(X(z(S,_.a),z(P,_.b)),z(O,_.f))end
+function al(_,min,max)return h.max(min,h.min(_,max))end
+function an(a)return floor(a+.5)end
+aw=av("Mode")ay=R("R Max Rng")n=R("X FOV")*pi
+u=R("Swep Lim")*ai+n
+ak={[1]={T=l()}}aD={}m,q=7,0
+function onTick()t=l(k(1),k(2),k(3))A=-k(27)*ai
+E=A+pi
+ak[1].T=l(k(23),k(24),k(25))as,ad,ao=k(4),k(5),k(6)ac,Y,Q=cos(as),cos(ad),cos(ao)am,Z,U=sin(as),sin(ad),sin(ao)aI=l(Y*Q,-Z,Y*U)W=l(am*U+ac*Z*Q,ac*Y,-am*Q+ac*Z*U)aZ=ax(aI,W)H=k(26)if H<.01 and H>-.01 then
+q=q-q/5
 else
-p=ag((p+D/160),-.1,.1)end
-if j>=50 then p=0 end
-j=ag(j+(D/55*j/2.4)+p*j/2.4,.1,50)k=-atan(V.a,V.b)+pi
-t,B=r.a,r.b
+q=al((q+H/160),-.1,.1)end
+if m>=50 then q=0 end
+m=al(m+(H/55*m/2.4)+q*m/2.4,.1,50)j=-atan(W.a,W.b)+pi
+v,x=t.a,t.b
 end
-function onDraw()K,J=d.getWidth(),d.getHeight()d.setMapColorOcean(0,0,0)d.setMapColorShallows(2,2,2)d.setMapColorLand(7,7,7)d.setMapColorGrass(8,10,8)d.setMapColorSand(6,6,4)d.setMapColorSnow(25,25,26)d.drawMap(t,B,j)i,h=L(t,B,j,K,J,r.a,r.b)aN,aB=L(t,B+ax,j,K,J,r.a,r.b)g=f.abs(aB-h)o(80,255,0,38)y(i,h,i+sin(M+k-w)*g,h+cos(M+k-w)*g)y(i,h,i+sin(M+k+w)*g,h+cos(M+k+w)*g)if au then
-o(0,180,0,23)y(i,h,i+sin(-s+k)*g,h+cos(-s+k)*g)y(i,h,i+sin(s+k)*g,h+cos(s+k)*g)do
-O=-k-s+pi/2
-ar=(-k+s+pi/2-O)/18
-for l=1,18 do
-ao=O+ar*l
-ap=O+ar*(l-1)y(i+cos(ao)*g,h+sin(ao)*g,i+cos(ap)*g,h+sin(ap)*g)end
+function onDraw()I,K=c.getWidth(),c.getHeight()c.setMapColorOcean(0,0,0)c.setMapColorShallows(2,2,2)c.setMapColorLand(7,7,7)c.setMapColorGrass(8,10,8)c.setMapColorSand(6,6,4)c.setMapColorSnow(25,25,26)c.drawMap(v,x,m)i,g=F(v,x,m,I,K,t.a,t.b)aL,aG=F(v,x+ay,m,I,K,t.a,t.b)e=h.abs(aG-g)p(80,255,0,38)r(i,g,i+sin(A+j-n)*e,g+cos(A+j-n)*e)r(i,g,i+sin(A+j+n)*e,g+cos(A+j+n)*e)r(i,g,i+sin(E+j-n)*e,g+cos(E+j-n)*e)r(i,g,i+sin(E+j+n)*e,g+cos(E+j+n)*e)if aw then
+p(0,180,0,23)r(i,g,i+sin(-u+j)*e,g+cos(-u+j)*e)r(i,g,i+sin(u+j)*e,g+cos(u+j)*e)do
+ab=-j-u+pi/2
+ae=(-j+u+pi/2-ab)/18
+for o=1,18 do
+ah=ab+ae*o
+ag=ab+ae*(o-1)r(i+cos(ah)*e,g+sin(ah)*e,i+cos(ag)*e,g+sin(ag)*e)end
 end
 else
-o(0,255,0,8)av(i,h,g)end
-for ae,x in ipairs(aw)do
-H,I=L(t,B,j,K,J,x.aG.a,x.aG.b)H,I=ab(H),ab(I)if aX==ae then
-o(90,2,5)q(H-2,I-3,5,1)o(99,20,3)else
-o(80,13,1)end
-at(H-1,I-1,2,2)end
-o(0,40,255)for ae,x in pairs(aD)do
-local E,G=L(t,B,j,K,J,x.a,x.b)q(E,G-1,1,1)q(E+1,G,1,1)q(E,G+1,1,1)q(E-1,G,1,1)end
+p(0,255,0,8)aC(i,g,e)end
+for au,y in ipairs(ak)do
+M,J=F(v,x,m,I,K,y.T.a,y.T.b)M,J=an(M),an(J)if aQ==au then
+p(90,2,5)s(M-2,J-3,5,1)p(99,20,3)else
+p(80,13,1)end
+az(M-1,J-1,2,2)end
+p(0,40,255)for au,y in pairs(aD)do
+local N,G=F(v,x,m,I,K,y.a,y.b)s(N,G-1,1,1)s(N+1,G,1,1)s(N,G+1,1,1)s(N-1,G,1,1)end
 end

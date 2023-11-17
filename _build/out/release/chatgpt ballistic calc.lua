@@ -7,36 +7,36 @@
 --      By Nameous Changey
 -- Minimized Size: 1814 (2148 with comment) chars
 
-b,S,N,E=math,input,output,property
-h,K,aA,ap=S.getNumber,N.setNumber,S.getBool,N.setBool
-aB,aD=E.getNumber,E.getBool
+b,L,Q,F=math,input,output,property
+h,N,aB,as=L.getNumber,Q.setNumber,L.getBool,Q.setBool
+az,au=F.getNumber,F.getBool
 abs,cos,sin,acos,asin,tan,atan=b.abs,b.cos,b.sin,b.acos,b.asin,b.tan,b.atan
 pi=b.pi
-aw=pi*2
-function f(d,c,e)return{d=d or 0,c=c or 0,e=e or 0}end
-function g(_,l)return f(_.d*l,_.c*l,_.e*l)end
-function al(_)return g(_,-1)end
-function as(_,l)return g(_,1/l)end
-function n(_,a)return f(_.d+a.d,_.c+a.c,_.e+a.e)end
-function m(_,a)return n(_,al(a))end
-function O(_)return b.sqrt(_.d*_.d+_.c*_.c+_.e*_.e)end
-function j(_)return g(_,1/O(_))end
-function V(_,a)return f(_.c*a.e-_.e*a.c,_.e*a.d-_.d*a.e,_.d*a.c-_.c*a.d)end
-function k(_,a)return _.d*a.d+_.c*a.c+_.e*a.e
+ay=pi*2
+function f(c,d,e)return{c=c or 0,d=d or 0,e=e or 0}end
+function g(_,l)return f(_.c*l,_.d*l,_.e*l)end
+function ak(_)return g(_,-1)end
+function aw(_,l)return g(_,1/l)end
+function m(_,a)return f(_.c+a.c,_.d+a.d,_.e+a.e)end
+function n(_,a)return m(_,ak(a))end
+function O(_)return b.sqrt(_.c*_.c+_.d*_.d+_.e*_.e)end
+function k(_)return g(_,1/O(_))end
+function aa(_,a)return f(_.d*a.e-_.e*a.d,_.e*a.c-_.c*a.e,_.c*a.d-_.d*a.c)end
+function j(_,a)return _.c*a.c+_.d*a.d+_.e*a.e
 end
-function aq(_,a)return g(j(a),k(_,j(a)))end
-function X(_,a)return m(_,g(j(a),k(_,j(a))))end
-function ar(_,a,ab)return m(_,g(X(_,a),ab or 2))end
-function au(P,q,i)local i=i or 1
-return f(b.sin(P)*b.cos(q)*i,b.cos(P)*b.cos(q)*i,b.sin(q)*i)end
-function ax(_,o,w,v)return f(k(o,_),k(w,_),k(v,_))end
-function at(_,o,w,v)return n(n(g(o,_.d),g(w,_.c)),g(v,_.e))end
-function ao(af,min,max)return b.min(max,b.max(af,min))end
-function Z(U,ad)return acos(k(j(U),j(ad)))end
-function ae(ag,A)return ag/A
+function ap(_,a)return g(k(a),j(_,k(a)))end
+function ag(_,a)return n(_,g(k(a),j(_,k(a))))end
+function ar(_,a,ae)return n(_,g(ag(_,a),ae or 2))end
+function aD(K,o,i)local i=i or 1
+return f(b.sin(K)*b.cos(o)*i,b.cos(K)*b.cos(o)*i,b.sin(o)*i)end
+function ao(_,v,r,t)return f(j(v,_),j(r,_),j(t,_))end
+function av(_,v,r,t)return m(m(g(v,_.c),g(r,_.d)),g(t,_.e))end
+function at(T,min,max)return b.min(max,b.max(T,min))end
+function ah(W,an)return acos(j(k(W),k(an)))end
+function af(am,D)return am/D
 end
-function ah(ac,aa,Y,z)return n(n(ac,g(aa,z)),g(Y,z*z*.5))end
-function aC(G,a)if not _ then _={}_[a]={x=0,r=0}elseif not _[a]then _[a]={x=0,r=0}end;_[a].r=G-_[a].x;_[a].x=G;return _[a].r end
-function J(i,a)if not _ then _={}_[a]={t=f(),B=f()}elseif not _[a]then _[a]={t=f(),B=f()}end;_[a].B=m(i,_[a].t)_[a].t=i;return _[a].B end
-function onTick()H=f(h(1),h(3),h(2))M=f(h(7),h(8),h(9))Q,I,L=h(4),h(5),h(6)y,C,D=cos(Q),cos(I),cos(L)R,s,p=sin(Q),sin(I),sin(L)W=f(C*D,-s,C*p)am=f(R*p+y*s*D,y*C,-R*D+y*s*p)ay=V(W,am)F=J(av,"tgtvel")T=J(F,"tgtacc")A=500
-an=ae(O(m(M,H)),A)ai=ah(M,F,T,an)u=m(ai,H)aj=az(u.c,u.d)ak=Z(u,f(1,0,0))K(1,aj)K(2,ak)end
+function X(Y,ab,U,w)return m(m(Y,g(ab,w)),g(U,w*w*.5))end
+function aC(E,a)if not _ then _={}_[a]={p=0,x=0}elseif not _[a]then _[a]={p=0,x=0}end;_[a].x=E-_[a].p;_[a].p=E;return _[a].x end
+function R(i,a)if not _ then _={}_[a]={B=f(),u=f()}elseif not _[a]then _[a]={B=f(),u=f()}end;_[a].u=n(i,_[a].B)_[a].B=i;return _[a].u end
+function onTick()M=f(h(1),h(3),h(2))S=f(h(7),h(8),h(9))J,G,H=h(4),h(5),h(6)q,C,A=cos(J),cos(G),cos(H)P,s,y=sin(J),sin(G),sin(H)ai=f(C*A,-s,C*y)al=f(P*y+q*s*A,q*C,-P*A+q*s*y)aq=aa(ai,al)I=R(ax,"tgtvel")Z=R(I,"tgtacc")D=500
+ad=af(O(n(S,M)),D)V=X(S,I,Z,ad)z=n(V,M)aj=aA(z.d,z.c)ac=ah(z,f(1,0,0))N(1,aj)N(2,ac)end

@@ -271,29 +271,9 @@ function onTick()
 	end
 	--DEBUG START
 	if targetfiles[1] then
-		osn(24,targetfiles[1].extrpos.x)
-		osn(25,targetfiles[1].extrpos.y)
-		osn(26,targetfiles[1].extrpos.z)
-	else
-		osn(24,0)
-		osn(25,0)
-		osn(26,0)
-	end
-
-	if targetfiles[2] then
-		osn(27,targetfiles[2].extrpos.x)
-		osn(28,targetfiles[2].extrpos.y)
-		osn(29,targetfiles[2].extrpos.z)
-	else
-		osn(27,0)
-		osn(28,0)
-		osn(29,0)
-	end
-
-	if targetfiles[3] then
-		osn(30,targetfiles[3].extrpos.x)
-		osn(31,targetfiles[3].extrpos.y)
-		osn(32,targetfiles[3].extrpos.z)
+		osn(30,targetfiles[1].extrpos.x)
+		osn(31,targetfiles[1].extrpos.y)
+		osn(32,targetfiles[1].extrpos.z)
 	else
 		osn(30,0)
 		osn(31,0)

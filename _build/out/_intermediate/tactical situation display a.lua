@@ -92,17 +92,20 @@ rangelim = pgn("R Max Rng")
 xfov = pgn("X FOV")*pi
 sweeplim = pgn("Swep Lim")*pi2+xfov
 
-tgtfiles = {}
+tgtfiles = {[1]={pos=vec()}}
 friendlies = {}
 
-zoom,zoominteg=0.5,0
+zoom,zoominteg=7,0
 function onTick()
 	--some inputs
-	mpos = vec(ign(21),ign(23),ign(22))
-	forwangle = -ign(20)*pi2
+	mpos = vec(ign(1),ign(2),ign(3))
+	forwangle = -ign(27)*pi2
+	rearangle = forwangle+pi
+	
+	tgtfiles[1].pos = vec(ign(23),ign(24),ign(25))--bandaid :yum:
 
 	--facing vectors
-	rx,ry,rz=ign(24),ign(25),ign(26)
+	rx,ry,rz=ign(4),ign(5),ign(6)
 	cx,cy,cz=cos(rx),cos(ry),cos(rz)
 	sx,sy,sz=sin(rx),sin(ry),sin(rz)
 	right = vec(cy*cz, -sy, cy*sz)
@@ -110,7 +113,7 @@ function onTick()
 	up = cross(right,fwd)
 	
 	--Zooming functionality, assumes 100% sens -1 to 1
-	zoomkey=ign(32)
+	zoomkey=ign(26)
 	if zoomkey < 0.01 and zoomkey > -0.01 then
 		zoominteg = zoominteg-zoominteg/5
 	else
@@ -118,7 +121,6 @@ function onTick()
 	end
 	if zoom >= 50 then zoominteg = 0 end
 	zoom=clamp(zoom+(zoomkey/55*zoom/2.4)+zoominteg*zoom/2.4,0.1,50)
-
 
 	heading = -atan(fwd.x,fwd.y)+pi
 
@@ -149,6 +151,9 @@ function onDraw()
 	line(mpixelx,mpixely,mpixelx + sin(forwangle+heading-xfov)*maxrangepixels, mpixely + cos(forwangle+heading-xfov)*maxrangepixels)
 	line(mpixelx,mpixely,mpixelx + sin(forwangle+heading+xfov)*maxrangepixels, mpixely + cos(forwangle+heading+xfov)*maxrangepixels)
 	
+	line(mpixelx,mpixely,mpixelx + sin(rearangle+heading-xfov)*maxrangepixels, mpixely + cos(rearangle+heading-xfov)*maxrangepixels)
+	line(mpixelx,mpixely,mpixelx + sin(rearangle+heading+xfov)*maxrangepixels, mpixely + cos(rearangle+heading+xfov)*maxrangepixels)
+
 	if radartype then
 		--radar borders for SWEEP
 		setcolor(0,180,0,23)
