@@ -66,21 +66,21 @@ function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]th
 function clamp(a, min, max) return m.max(min, m.min(a, max)) end
 
 --functional functions
-function topindex(input)
-    local highest = nil
+function edgeindex(input,findtop)
+    local edge = nil
     for k, _ in pairs(input) do
-        if highest == nil or k > highest then
-            highest = k
+        if edge == nil or (k > edge and findtop) or (k < edge and not findtop) then
+            edge = k
         end
     end
-    return highest
+    return edge
 end
 function lastpos(tgt)
 	------debug.log("->"..tgt)
 	------debug.log("->"..type(targetfiles[tgt]))
 	------debug.log("->"..type(targetfiles[tgt].poss))
-	------debug.log("->"..type(targetfiles[tgt].poss[topindex(targetfiles[tgt].poss)]))
-	return targetfiles[tgt].poss[topindex(targetfiles[tgt].poss)]
+	------debug.log("->"..type(targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]))
+	return targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]
 end
 
 --VICLINK (vehicle datalink)
@@ -102,6 +102,7 @@ minextrapdist = pgn("Min extrap dist delta")
 rawemissiontargets = {}
 rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
 	{},
+	{},
 	{}
 }
 
@@ -111,8 +112,9 @@ missilefiles = {}
 
 selectedtgt,tgtcycletouch = 0,0
 enemytransindex,friendlytransindex,missiletransindex=0,0,0
-existedticks = 0
+existedticks,possculltimer = 0,0
 function onTick()
+	possculltimer = possculltimer + 1
 	existedticks = existedticks + 1
 	--my position vector
 	mpos = vec(ign(1),ign(2),ign(3))
@@ -167,20 +169,6 @@ function onTick()
 	--12,13,14
 
     ---- Raw Radar Targets to TWS ----
-	--data from old radar
-	rawradartargets[1].pos = vec(ign(15),ign(16),ign(17))
-	debug.log("x: "..ign(15))
-	--if ign(18) > 0 then
-	--	
-	--	rawradartargets[1].rel = subt(mpos,rawradartargets[1].pos)			--verold r tgt xyz 15,16,17
-	--	rawradartargets[1].loc = 
-	--else
-	--	rawradartargets[1].loc = vec()
-	--	rawradartargets[1].rel = vec()
-	--	rawradartargets[1].pos = vec()
-	--end
-	--rawradartargets[1].tsd = 0												--tsd: X
-
 	--data from new radar 1
 	if ign(18) > 0 then
 		rawradartargets[1].loc = stoc(ign(19)*pi2,ign(20)*pi2,ign(18))
@@ -209,6 +197,18 @@ function onTick()
 	--rawradartargets[4] = stoctoglobal(ign(27),ign(28),ign(29))		--vernew r tgt d,a,e 27,28,29, 30..
 	--rawradartargets[4].tsd = ign(32)									--tsd: 32
 
+	--data from old radar
+	rawradartargets[3].pos = vec(ign(15),ign(16),ign(17))
+	if length(rawradartargets[3].pos) > 0 then
+		rawradartargets[3].rel = subt(mpos,rawradartargets[3].pos)			--verold r tgt xyz 15,16,17
+		rawradartargets[3].loc = tolocal(rawradartargets[3].rel,right,fwd,up)
+	else
+		rawradartargets[3].loc = vec()
+		rawradartargets[3].rel = vec()
+		rawradartargets[3].pos = vec()
+	end
+	rawradartargets[3].tsd = 0												--tsd: X
+
 	--raw tgts to target files
 	for k,rawtgt in ipairs(rawradartargets) do
 		if (length(rawtgt.rel) > 0) and not (rawtgt.tsd > 0) then--there is actually a target and its on tick 1 of info
@@ -236,7 +236,7 @@ function onTick()
 						end
 						--update velocity vector 2
 						if thresholdvec ~= nil then
-							timediff = topindex(targetfiles[fileindex].poss) - thresholdindex
+							timediff = edgeindex(targetfiles[fileindex].poss,true) - thresholdindex
 							if timediff > 0 then  -- Prevent division by zero
 								targetfiles[fileindex].veltick = divf(subt(lastpos(fileindex), thresholdvec), timediff)
 							end
@@ -259,7 +259,20 @@ function onTick()
 	end
 	-- target file culling
 	for k, v in ipairs(targetfiles) do
-		targetfiles[k].t = existedticks - topindex(targetfiles[k].poss)
+		if possculltimer > 120 then
+			local culled = 0
+			local length = 0
+			for k,_ in pairs(targetfiles[k].poss) do
+				length = length + 1
+			end
+			while length > 40 do
+				targetfiles[k].poss[edgeindex(targetfiles[k].poss,false)] = nil
+				length = length - 1
+				culled = culled + 1
+			end
+			debug.log("culled "..culled.." positions of target "..k)
+		end
+		targetfiles[k].t = existedticks - edgeindex(targetfiles[k].poss,true)
 		
 		--also extrapolation teehee
 		targetfiles[k].extrpos = add(lastpos(k), multf(targetfiles[k].veltick, targetfiles[k].t))
@@ -268,7 +281,7 @@ function onTick()
 			table.remove(targetfiles,k)
 		else
 			if lastpos(k).z <= -1 then
-				targetfiles[k].poss[topindex(targetfiles[k].poss)].z = 5
+				targetfiles[k].poss[edgeindex(targetfiles[k].poss,true)].z = 5
 			end
 			for i,r in pairs(friendlyfiles) do
 				if length(subt(r,lastpos(k)))<=mergedist then
