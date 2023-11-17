@@ -36,11 +36,6 @@ local _builder = LifeBoatAPI.Tools.Builder:new(rootDirs, outputDir, luaDocsMCPat
 
 if onLBBuildStarted then onLBBuildStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]])) end
 
-if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Track While Scan Dev Version.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan Dev Version.lua]])) end
-
-local combinedText, outText, outFile = _builder:buildMicrocontroller([[Track While Scan Dev Version.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan Dev Version.lua]]), params)
-if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Track While Scan Dev Version.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan Dev Version.lua]]), outFile, combinedText, outText) end
-
 if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Track While Scan A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua]])) end
 
 local combinedText, outText, outFile = _builder:buildMicrocontroller([[Track While Scan A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua]]), params)

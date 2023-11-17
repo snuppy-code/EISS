@@ -167,11 +167,20 @@ function onTick()
 	--12,13,14
 
     ---- Raw Radar Targets to TWS ----
-	--store targets in raw table we loop through for actual logic
-	--rawradartargets[1].rel = subt(mpos,vec(ign(15),ign(16),ign(17)))			--verold r tgt xyz 15,16,17
-	--rawradartargets[1].pos = add(rawradartargets[1].rel, mpos)
+	--data from old radar
+	rawradartargets[1].pos = vec(ign(15),ign(16),ign(17))
+	debug.log("x: "..ign(15))
+	--if ign(18) > 0 then
+	--	
+	--	rawradartargets[1].rel = subt(mpos,rawradartargets[1].pos)			--verold r tgt xyz 15,16,17
+	--	rawradartargets[1].loc = 
+	--else
+	--	rawradartargets[1].loc = vec()
+	--	rawradartargets[1].rel = vec()
+	--	rawradartargets[1].pos = vec()
+	--end
 	--rawradartargets[1].tsd = 0												--tsd: X
-	
+
 	--data from new radar 1
 	if ign(18) > 0 then
 		rawradartargets[1].loc = stoc(ign(19)*pi2,ign(20)*pi2,ign(18))
