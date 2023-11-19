@@ -111,7 +111,7 @@ targetfiles = {}
 friendlyfiles = {}
 missilefiles = {}
 
-selectedtgt,tgtcycletouch = 0,0
+selectedtgt,tgtcycletouch = 1,0
 enemytransindex,friendlytransindex,missiletransindex=0,0,0
 existedticks,possculltimer = 0,0
 function onTick()
@@ -194,11 +194,12 @@ function onTick()
 	end
 	rawradartargets[2].tsd = ign(31)											--tsd: 31
 
+	----THIS will be the long range STT radar
 	--rawradartargets[4] = {}
 	--rawradartargets[4] = stoctoglobal(ign(27),ign(28),ign(29))		--vernew r tgt d,a,e 27,28,29, 30..
 	--rawradartargets[4].tsd = ign(32)									--tsd: 32
 
-	--data from old radar
+	--data from old radar / short range STT radar
 	rawradartargets[3].pos = vec(ign(15),ign(16),ign(17))
 	if length(rawradartargets[3].pos) > 0 then
 		rawradartargets[3].rel = subt(mpos,rawradartargets[3].pos)			--verold r tgt xyz 15,16,17
@@ -259,11 +260,11 @@ function onTick()
 		end
 	end
 	-- target file culling
+	culled = 0
 	for k, v in ipairs(targetfiles) do
 		if possculltimer > 120 then
-			local culled = 0
 			local length = 0
-			for k,_ in pairs(targetfiles[k].poss) do
+			for _ in pairs(targetfiles[k].poss) do
 				length = length + 1
 			end
 			while length > 40 do
@@ -291,17 +292,8 @@ function onTick()
 			end
 		end
 	end
-	--DEBUG START
-	if targetfiles[1] then
-		osn(30,targetfiles[1].extrpos.x)
-		osn(31,targetfiles[1].extrpos.y)
-		osn(32,targetfiles[1].extrpos.z)
-	else
-		osn(30,0)
-		osn(31,0)
-		osn(32,0)
-	end
-	--DEBUG END
+	if culled > 0 then possculltimer = 0 end
+
 	---- OUTPUTS ----
 	--targets
 	if targetfiles[enemytransindex] then
@@ -345,70 +337,29 @@ function onTick()
 		missiletransindex = 1
 	end
 
-	--selected tgt
-	--for k,v in ipairs(targetfiles) do--99% sure this can be just targetfiles[selectedtgt] but this is what I wrote earlier and im not changing that shit until I have tested more
-	--	if k == selectedtgt then
-	--		osn(30,v.pos.x)
-	--		osn(31,v.pos.y)
-	--		osn(32,v.pos.z)
-	--	end
-	--end
+	--output selected tgt
+	if targetfiles[selectedtgt] then
+		osn(30,targetfiles[selectedtgt].extrpos.x)
+		osn(31,targetfiles[selectedtgt].extrpos.y)
+		osn(32,targetfiles[selectedtgt].extrpos.z)
+		osn(11,targetfiles[selectedtgt].t)
+	else
+		osn(30,0)
+		osn(31,0)
+		osn(32,0)
+		osn(11,0)
+	end
 	
+	--new check radar slew
+	osn(5,0)
+	osn(6,0)
+	--old radar slew
+	osn(7,0)
+	osn(8,0)
 	--old radar fov
 	osn(9,1)
 	osn(10,1)
 end
-
---[[inputs
-1	my x						ME XYZ
-2	my y						ME XYZ
-3	my z						ME XYZ
-4	rx
-5	ry
-6	rz
-7	friend x					FRIEND XYZ
-8	friend y					FRIEND XYZ
-9	friend z					FRIEND XYZ
-10	friend user1
-11	friend user2
-12	msl x						MISSILE XYZ
-13	msl y						MISSILE XYZ
-14	msl z						MISSILE XYZ
-15	old r x						RADAR XYZ
-16	old r y						RADAR XYZ
-17	old r z						RADAR XYZ
-18	new 1 dist					RADAR RAW
-19	new 1 azim					RADAR RAW
-20	new 1 elev					RADAR RAW
-21	select x
-22	select y
-23	select z
-24	new 3 dist					RADAR RAW
-25	new 3 azim					RADAR RAW
-26	new 3 elev					RADAR RAW
-27	new check dist				RADAR RAW
-28	new check azim				RADAR RAW
-29	new check elev				RADAR RAW
-30	new check current azim		RADAR RAW AZIM
-31	time since detected scan	
-32	time since detected new check
-]]
-
---[[outputs
-1	my username 1
-2	my username 2
-3	viclink receive freq
-4	msllink receive freq
-5	file verify new radar elevation slew
-6	file verify new radar azimuth slew speed
-7	file verify old radar Y slew
-8	file verify old radar X slew
-9	file verify old radar Y FOV
-10	file verify old radar X FOV
-11	gimbal FOV
-12	gimbal pitch
-13	gimbal pivot
-]]
 
 --[[frequencies
 start:
@@ -422,102 +373,27 @@ end:
 ]]
 
 --[[
-targetfiles = {
-	[1] = {
-		poss = {
-			[235] = vec(),
-			[381] = vec(),
-			[435] = vec(),
-			[563] = vec()
-		},
-		veltick = vec(),
-		extrpos = vec(),
-		t = 127
-	},
-	[2] = {
-		poss = {
-			[246] = vec(),
-			[373] = vec(),
-			[517] = vec(),
-			[674] = vec()
-		},
-		veltick = vec(),
-		extrpos = vec(),
-		t = 16
-	}
-}
-targetfiles[1].extrpos = add(lastpos(1),multf(veltick,targetfiles[1].t))
-]]
+--debug.log("TWS\nraw radar target loop start")
+--debug.log("->k: "..k)
+debug.log("k:"..k..",type:"..type(rawtgt).."\nlength(rawtgt.rel) = "..length(rawtgt.rel).." rawtgt.tsd = "..rawtgt.tsd)
+--debug.log("->there is actually a target and it's on tick 1 of info")
+debug.log("loc x: "..rawtgt.loc.x.." y: "..rawtgt.loc.y.." z: "..rawtgt.loc.z.."\nrel x: "..rawtgt.rel.x.." y: "..rawtgt.rel.y.." z: "..rawtgt.rel.z.."\nglo x: "..rawtgt.pos.x.." y: "..rawtgt.pos.y.." z: "..rawtgt.pos.z)
+--debug.log("->target file loop start")
+--debug.log("-->k: "..fileindex.."\n-->match: "..match)
+--debug.log("-->yes, match == 0")
+--debug.log("-->rel vec of rawtgt to tgtfile <= mergedist, match found\n-->targetfiles["..fileindex.."] set to rawtgt.pos")
+--debug.log("-->no, match ~= 0")
+--debug.log("-->rel vec of rawtgt to tgtfile <= mergedist, match found\n-->targetfiles["..fileindex.."] removed")
+--debug.log("->no match for rawtgt.pos found, added as new tgt at end of targetfiles table")
+--debug.log("#targetfiles is now: "..(#targetfiles))
 
---[[
-radar shit with a fuckton of debuglogs that I dont want to go to waste but am not using:
-
---raw tgts to target files
-	------debug.log("TWS\nraw radar target loop start")
-	for k,rawtgt in ipairs(rawradartargets) do
-		------debug.log("->k: "..k)
-		--debug.log("k:"..k..",type:"..type(rawtgt).."\nlength(rawtgt.rel) = "..length(rawtgt.rel).." rawtgt.tsd = "..rawtgt.tsd)
-		if (length(rawtgt.rel) > 0) and not (rawtgt.tsd > 0) then--there is actually a target and its on tick 1 of info
-			------debug.log("->there is actually a target and it's on tick 1 of info")
-			--debug.log("loc x: "..rawtgt.loc.x.." y: "..rawtgt.loc.y.." z: "..rawtgt.loc.z.."\nrel x: "..rawtgt.rel.x.." y: "..rawtgt.rel.y.." z: "..rawtgt.rel.z.."\nglo x: "..rawtgt.pos.x.." y: "..rawtgt.pos.y.." z: "..rawtgt.pos.z)
-			local match = 0 --no match with a target file found yet
-			------debug.log("->target file loop start")
-			for fileindex,file in ipairs(targetfiles) do
-				------debug.log("-->k: "..fileindex.."\n-->match: "..match)
-				if match == 0 then--we havent matched something
-					------debug.log("-->yes, match == 0")
-					if length(subt(file.pos,rawtgt.pos)) <= mergedist then
-						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found
-						------debug.log("-->rel vec of rawtgt to tgtfile <= mergedist, match found\n-->targetfiles["..fileindex.."] set to rawtgt.pos")
-						match = fileindex
-						--update found existing tgt file with raw tgt
-						targetfiles[fileindex].pos = rawtgt.pos
-						targetfiles[fileindex].t = 0
-					end
-				else--we already have a match
-					------debug.log("-->no, match ~= 0")
-					if length(subt(file.pos,rawtgt.pos)) <= mergedist then
-						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found
-						------debug.log("-->rel vec of rawtgt to tgtfile <= mergedist, match found\n-->targetfiles["..fileindex.."] removed")
-						--also not a selected target
-						table.remove(targetfiles,fileindex)--we already matched raw tgt to a file so we will delete this one
-					end
-				end
-			end
-			if match == 0 then
-				--create target file
-				------debug.log("->no match for rawtgt.pos found, added as new tgt at end of targetfiles table")
-				targetfiles[#targetfiles+1] = {pos=rawtgt.pos,vel=vec(),t=0}
-				------debug.log("#targetfiles is now: "..(#targetfiles))
-			end
-		end
-	end
-	--target file culling
-	------debug.log("culling:\ntargetfiles loop start")
-	for k,v in ipairs(targetfiles) do
-		------debug.log("->k: "..k)
-		targetfiles[k].t = v.t+1
-		if (v.t >= culltime) and not (k == selectedtgt) then
-			table.remove(targetfiles,k)
-			------debug.log("->timeout culled tgt: "..k)
-		elseif v.pos.z <= -1 then
-			targetfiles[k].pos.z = 5
-			------debug.log("->updated tgtfiles["..k.."] z to 5")
-		end
-		--debug.log("tgt: "..k.." alt: "..v.pos.z)
-		------debug.log("->friendlies loop start")
-		for i,r in pairs(friendlyfiles) do
-			if length(subt(r,v.pos))<=mergedist then
-				------debug.log("-->friendly proximity culled tgt: "..k)
-				table.remove(targetfiles,k)-- this might cause issues with table.remove() getting called twice, idk, if its both greater than cull time and on a friendly... smart to add a check for this
-			end
-		end
-	end
-	debug.log(#targetfiles.." target files")
-	for k,v in ipairs(targetfiles) do
-		if k <= 3 then
-			debug.log("x: "..v.pos.x.." y: "..v.pos.y.." z: "..v.pos.z)
-		end
-	end
-
+--debug.log("culling:\ntargetfiles loop start")
+--debug.log("->k: "..k)
+--debug.log("->timeout culled tgt: "..k)
+--debug.log("->updated tgtfiles["..k.."] z to 5")
+debug.log("tgt: "..k.." alt: "..v.pos.z)
+--debug.log("->friendlies loop start")
+--debug.log("-->friendly proximity culled tgt: "..k)
+debug.log(#targetfiles.." target files")
+debug.log("x: "..v.pos.x.." y: "..v.pos.y.." z: "..v.pos.z)
 ]]

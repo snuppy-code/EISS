@@ -7,9 +7,9 @@ pi = m.pi
 pi2 = pi*2
 
 s = screen
-text,textbox,triangl,trianglF,rect,rectF,circl,circlF,clear,setcolor = s.drawText,s.drawTextBox,s.drawTriangle,s.drawTriangleF,s.drawRect,s.drawRectF,s.drawCircle,s.drawCircleF,s.drawClear,s.setColor
+text,textbox,line,triangl,trianglF,rect,rectF,circl,circlF,clear,setcolor = s.drawText,s.drawTextBox,s.drawLine,s.drawTriangle,s.drawTriangleF,s.drawRect,s.drawRectF,s.drawCircle,s.drawCircleF,s.drawClear,s.setColor
 
-function line(x1,y1,x2,y2)
+function line2(x1,y1,x2,y2)
 	dx=x2-x1
 	dy=y2-y1
 	if abs(dx) >= abs(dy) then
@@ -95,15 +95,22 @@ sweeplim = pgn("Swep Lim")*pi2+xfov
 tgtfiles = {[1]={pos=vec()}}
 friendlies = {}
 
+touch,drawmap=false,true
 zoom,zoominteg=7,0
 function onTick()
 	--some inputs
-	mpos = vec(ign(1),ign(2),ign(3))
+	mpos = vec(ign(1),ign(3),ign(2))
 	forwangle = -ign(27)*pi2
 	rearangle = forwangle+pi
 	
-	tgtfiles[1].pos = vec(ign(23),ign(24),ign(25))--bandaid :yum:
+	monitorpressed = ign(30) > 0
+    tap=monitorpressed~=touch and monitorpressed
+    touch=monitorpressed
+	if tap then
+		drawmap = not drawmap
+	end
 
+	tgtfiles[1].pos = vec(ign(23),ign(24),ign(25))--bandaid :yum:
 	--facing vectors
 	rx,ry,rz=ign(4),ign(5),ign(6)
 	cx,cy,cz=cos(rx),cos(ry),cos(rz)
@@ -113,7 +120,12 @@ function onTick()
 	up = cross(right,fwd)
 	
 	--Zooming functionality, assumes 100% sens -1 to 1
-	zoomkey=ign(26)
+	SOI = ign(29) == 1
+	if SOI then
+		zoomkey=ign(26)
+	else
+		zoomkey=0
+	end
 	if zoomkey < 0.01 and zoomkey > -0.01 then
 		zoominteg = zoominteg-zoominteg/5
 	else
@@ -122,6 +134,7 @@ function onTick()
 	if zoom >= 50 then zoominteg = 0 end
 	zoom=clamp(zoom+(zoomkey/55*zoom/2.4)+zoominteg*zoom/2.4,0.1,50)
 
+
 	heading = -atan(fwd.x,fwd.y)+pi
 
 	viewedx,viewedy=mpos.x,mpos.y--will change to let you pan the map
@@ -129,22 +142,29 @@ end
 function onDraw()
 	w,h = s.getWidth(),s.getHeight()
 
-	--map colors
-	s.setMapColorOcean(0,0,0)
-	s.setMapColorShallows(2,2,2)
-	s.setMapColorLand(7,7,7)
-	s.setMapColorGrass(8,10,8)
-	s.setMapColorSand(6,6,4)
-	s.setMapColorSnow(25,25,26)
-	--s.setMapColorRock(3,3,3)
-	--s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
-	
-	s.drawMap(viewedx,viewedy,zoom)
-
+	if drawmap then
+		--map colors
+		s.setMapColorOcean(0,0,0)
+		s.setMapColorShallows(2,2,2)
+		s.setMapColorLand(7,7,7)
+		s.setMapColorGrass(8,10,8)
+		s.setMapColorSand(6,6,4)
+		s.setMapColorSnow(25,25,26)
+		--s.setMapColorRock(3,3,3)
+		--s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
+		
+		s.drawMap(viewedx,viewedy,zoom)
+	end
 	--find my position on the map and the size of the radar circle on the map
 	mpixelx, mpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,mpos.x,mpos.y)
 	maxrangex, maxrangey = map.mapToScreen(viewedx,viewedy+rangelim,zoom,w,h,mpos.x,mpos.y)
 	maxrangepixels = m.abs(maxrangey-mpixely)
+	eachpixelkm = zoom/w
+	--range shit
+	setcolor(255,255,255,6)
+	for i = 0,2 do
+		circl(mpixelx,mpixely,(5+10*i)/eachpixelkm)
+	end
 
 	--lines for current radar look angles
 	setcolor(80,255,0,38)
@@ -208,14 +228,21 @@ function onDraw()
 		--	linex3,liney3 = rotate2(0,1,ang)
 		--	linex4,liney4 = rotate2(0,floor(m.max(spd,100)/100),ang)
 		--
-		--	line(fpixelx+linex1, fpixely+liney1, fpixelx+linex2, fpixely+liney2)--alt line
-		--	line(fpixelx+linex3, fpixely+liney3, fpixelx+linex4, fpixely+liney4)--spd line
+		--	line2(fpixelx+linex1, fpixely+liney1, fpixelx+linex2, fpixely+liney2)--alt line
+		--	line2(fpixelx+linex3, fpixely+liney3, fpixelx+linex4, fpixely+liney4)--spd line
 		--end
 		rectF(fpixelx,fpixely-1,1,1)
 		rectF(fpixelx+1,fpixely,1,1)
 		rectF(fpixelx,fpixely+1,1,1)
 		rectF(fpixelx-1,fpixely,1,1)
 	end
+
+	if SOI then
+        screen.setColor(1,1,1,200)
+	    screen.drawRectF(13,2,12,5)
+        screen.setColor(85,160,35)
+        screen.drawText(13,2,"SOI")
+    end
 	
 	--missile
 	--setcolor(255,0,0)
