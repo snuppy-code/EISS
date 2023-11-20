@@ -97,18 +97,38 @@ friendlies = {}
 
 touch,drawmap=false,true
 zoom,zoominteg=7,0
+rwr = {}
+rwrbuffer = {false, false, false, false}
 function onTick()
 	--some inputs
 	mpos = vec(ign(1),ign(3),ign(2))
 	forwangle = -ign(27)*pi2
 	rearangle = forwangle+pi
-	
+
 	monitorpressed = ign(30) > 0
     tap=monitorpressed~=touch and monitorpressed
     touch=monitorpressed
 	if tap then
 		drawmap = not drawmap
 	end
+
+	--rwr
+	rwrraw = ign(31)
+	rwrraw = rwrraw - 1
+	rwr.middle = (rwrraw & 8) == 0
+	rwr.rear = (rwrraw & 4) == 0
+	rwr.left = (rwrraw & 2) == 0
+	rwr.right = (rwrraw & 1) == 0
+	pinged = rwr.middle-- or rwr.rear or rwr.left or rwr.right
+	-- Shift the buffer to the left and add the new pinged state at the end.
+    table.remove(rwrbuffer, 1)
+    table.insert(rwrbuffer, pinged)
+
+    if (rwrbuffer[4] and rwrbuffer[3] and rwrbuffer[2]) or (rwrbuffer[4] and not rwrbuffer[3] and not rwrbuffer[2] and not rwrbuffer[1]) then
+        tracked = true
+    else
+        tracked = false
+    end
 
 	tgtfiles[1].pos = vec(ign(23),ign(24),ign(25))--bandaid :yum:
 	--facing vectors
@@ -141,123 +161,140 @@ function onTick()
 end
 function onDraw()
 	w,h = s.getWidth(),s.getHeight()
+	if w > 32 then--drawing on tsd monitor
+		if drawmap then
+			--map colors
+			s.setMapColorOcean(0,0,0)
+			s.setMapColorShallows(2,2,2)
+			s.setMapColorLand(7,7,7)
+			s.setMapColorGrass(8,10,8)
+			s.setMapColorSand(6,6,4)
+			s.setMapColorSnow(25,25,26)
+			--s.setMapColorRock(3,3,3)
+			--s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
+			
+			s.drawMap(viewedx,viewedy,zoom)
+		end
+		--find my position on the map and the size of the radar circle on the map
+		mpixelx, mpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,mpos.x,mpos.y)
+		eachpixelkm = zoom/w
+		zoomnorm = zoom/50
+		maxrangepixels = (rangelim/1000)/eachpixelkm
+		--range circles & text
+		for i = 0,2 do
+			rangeloopkm = 5+10*i
+			setcolor(255,255,255,7-zoomnorm*3)
+			circl(mpixelx,mpixely,rangeloopkm/eachpixelkm)
+			setcolor(255,255,255,11-zoomnorm*2)
+			text(mpixelx+rangeloopkm/eachpixelkm-(5*(#tostring(rangeloopkm))),mpixely,rangeloopkm)
+		end
+		--heading lines
+		setcolor(255,255,255,4-zoomnorm*2)
+		for i = 1,8 do
+			line(mpixelx,mpixely,mpixelx+sin(i*pi2/8)*120/eachpixelkm,mpixely+cos(i*pi2/8)*120/eachpixelkm)
+		end
 
-	if drawmap then
-		--map colors
-		s.setMapColorOcean(0,0,0)
-		s.setMapColorShallows(2,2,2)
-		s.setMapColorLand(7,7,7)
-		s.setMapColorGrass(8,10,8)
-		s.setMapColorSand(6,6,4)
-		s.setMapColorSnow(25,25,26)
-		--s.setMapColorRock(3,3,3)
-		--s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
+		--lines for current radar look angles
+		setcolor(80,255,0,38)
+		line(mpixelx,mpixely,mpixelx + sin(forwangle+heading-xfov)*maxrangepixels, mpixely + cos(forwangle+heading-xfov)*maxrangepixels)
+		line(mpixelx,mpixely,mpixelx + sin(forwangle+heading+xfov)*maxrangepixels, mpixely + cos(forwangle+heading+xfov)*maxrangepixels)
 		
-		s.drawMap(viewedx,viewedy,zoom)
-	end
-	--find my position on the map and the size of the radar circle on the map
-	mpixelx, mpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,mpos.x,mpos.y)
-	maxrangex, maxrangey = map.mapToScreen(viewedx,viewedy+rangelim,zoom,w,h,mpos.x,mpos.y)
-	maxrangepixels = m.abs(maxrangey-mpixely)
-	eachpixelkm = zoom/w
-	--range shit
-	setcolor(255,255,255,6)
-	for i = 0,2 do
-		circl(mpixelx,mpixely,(5+10*i)/eachpixelkm)
-	end
+		line(mpixelx,mpixely,mpixelx + sin(rearangle+heading-xfov)*maxrangepixels, mpixely + cos(rearangle+heading-xfov)*maxrangepixels)
+		line(mpixelx,mpixely,mpixelx + sin(rearangle+heading+xfov)*maxrangepixels, mpixely + cos(rearangle+heading+xfov)*maxrangepixels)
 
-	--lines for current radar look angles
-	setcolor(80,255,0,38)
-	line(mpixelx,mpixely,mpixelx + sin(forwangle+heading-xfov)*maxrangepixels, mpixely + cos(forwangle+heading-xfov)*maxrangepixels)
-	line(mpixelx,mpixely,mpixelx + sin(forwangle+heading+xfov)*maxrangepixels, mpixely + cos(forwangle+heading+xfov)*maxrangepixels)
-	
-	line(mpixelx,mpixely,mpixelx + sin(rearangle+heading-xfov)*maxrangepixels, mpixely + cos(rearangle+heading-xfov)*maxrangepixels)
-	line(mpixelx,mpixely,mpixelx + sin(rearangle+heading+xfov)*maxrangepixels, mpixely + cos(rearangle+heading+xfov)*maxrangepixels)
-
-	if radartype then
-		--radar borders for SWEEP
-		setcolor(0,180,0,23)
-		line(mpixelx,mpixely,mpixelx + sin(-sweeplim+heading)*maxrangepixels, mpixely + cos(-sweeplim+heading)*maxrangepixels)
-		line(mpixelx,mpixely,mpixelx + sin(sweeplim+heading)*maxrangepixels, mpixely + cos(sweeplim+heading)*maxrangepixels)
-	    do
-		    bordercurvestart = -heading-sweeplim+pi/2
-		    step2 = (-heading+sweeplim+pi/2 - bordercurvestart) / 18
-		    for i = 1, 18 do
-		        ang1 = bordercurvestart + step2 * i
-		        ang2 = bordercurvestart + step2 * (i - 1)
-		        line(mpixelx + cos(ang1) * maxrangepixels,
-				mpixely + sin(ang1) * maxrangepixels,
-				mpixelx + cos(ang2) * maxrangepixels,
-				mpixely + sin(ang2) * maxrangepixels)
-		    end
-		end
-	else
-		--radar borders for CIRCLE
-		setcolor(0,255,0,8)
-		circl(mpixelx,mpixely,maxrangepixels)
-		--setcolor(0,255,0,4)
-		--circl(mpixelx,mpixely,maxrangepixels-0.6)
-		--setcolor(0,255,0,2)
-		--circl(mpixelx,mpixely,maxrangepixels-1.2)
-	end
-
-	--draw actual target files
-	for k,v in ipairs(tgtfiles) do
-		tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
-		tgtpixelx,tgtpixely = round(tgtpixelx),round(tgtpixely)
-		if selectedtgt == k then
-			setcolor(90,2,5)
-			rectF(tgtpixelx-2,tgtpixely-3,5,1)
-			setcolor(99,20,3)
+		if radartype then
+			--radar borders for SWEEP
+			setcolor(0,180,0,23)
+			line(mpixelx,mpixely,mpixelx + sin(-sweeplim+heading)*maxrangepixels, mpixely + cos(-sweeplim+heading)*maxrangepixels)
+			line(mpixelx,mpixely,mpixelx + sin(sweeplim+heading)*maxrangepixels, mpixely + cos(sweeplim+heading)*maxrangepixels)
+			do
+				bordercurvestart = -heading-sweeplim+pi/2
+				step2 = (-heading+sweeplim+pi/2 - bordercurvestart) / 18
+				for i = 1, 18 do
+					ang1 = bordercurvestart + step2 * i
+					ang2 = bordercurvestart + step2 * (i - 1)
+					line(mpixelx + cos(ang1) * maxrangepixels,
+					mpixely + sin(ang1) * maxrangepixels,
+					mpixelx + cos(ang2) * maxrangepixels,
+					mpixely + sin(ang2) * maxrangepixels)
+				end
+			end
 		else
-			setcolor(80,13,1)
+			--radar borders for CIRCLE
+			setcolor(0,255,0,8)
+			circl(mpixelx,mpixely,maxrangepixels)
+			--setcolor(0,255,0,4)
+			--circl(mpixelx,mpixely,maxrangepixels-0.6)
+			--setcolor(0,255,0,2)
+			--circl(mpixelx,mpixely,maxrangepixels-1.2)
 		end
-		rect(tgtpixelx-1,tgtpixely-1,2,2)
+
+		--draw actual target files
+		for k,v in ipairs(tgtfiles) do
+			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
+			tgtpixelx,tgtpixely = round(tgtpixelx),round(tgtpixely)
+			if selectedtgt == k then
+				setcolor(90,2,5)
+				rectF(tgtpixelx-2,tgtpixely-3,5,1)
+				setcolor(99,20,3)
+			else
+				setcolor(80,13,1)
+			end
+			rect(tgtpixelx-1,tgtpixely-1,2,2)
+		end
+
+		--friendlies
+		setcolor(0,40,255)
+		for k,v in pairs(friendlies) do
+			--debug.log("v.x: "..v.x.." v.y: "..v.y.." v.z: "..v.z)
+			local fpixelx, fpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.x,v.y)
+			--ang,spd,alt
+			--if ang then
+			--	linex1,liney1 = rotate2((m.ceil(m.min(alt/1000,4))),1.5,ang)
+			--	linex2,liney2 = rotate2(-(m.ceil(m.min(alt/1000,4))),1.5,ang)
+			--
+			--	linex3,liney3 = rotate2(0,1,ang)
+			--	linex4,liney4 = rotate2(0,floor(m.max(spd,100)/100),ang)
+			--
+			--	line2(fpixelx+linex1, fpixely+liney1, fpixelx+linex2, fpixely+liney2)--alt line
+			--	line2(fpixelx+linex3, fpixely+liney3, fpixelx+linex4, fpixely+liney4)--spd line
+			--end
+			rectF(fpixelx,fpixely-1,1,1)
+			rectF(fpixelx+1,fpixely,1,1)
+			rectF(fpixelx,fpixely+1,1,1)
+			rectF(fpixelx-1,fpixely,1,1)
+		end
+
+		if SOI then
+			screen.setColor(1,1,1,200)
+			screen.drawRectF(13,2,12,5)
+			screen.setColor(85,160,35)
+			screen.drawText(13,2,"SOI")
+		end
+		
+		--missile
+		--setcolor(255,0,0)
+		--line(50,50,52,52)
+		--line(50,49,49,50)
+
+		--my target
+		--setcolor(80,13,1)
+		--rect(1,1,2,2)
+		
+		--friend target
+		--setcolor(90,26,1)
+		--rect(1,5,2,2)
+
+		--debug text
+		--setcolor(255,255,255)
+		--text(5,5,"tgts: "..#tgtfiles)
+	else--drawing on RWR monitor
+		if tracked then
+			setcolor(255,0,0)
+			rectF(0,0,32,32)
+		elseif pinged then
+			setcolor(160,15,170)
+			rectF(0,0,32,32)
+		end
 	end
-
-	--friendlies
-	setcolor(0,40,255)
-	for k,v in pairs(friendlies) do
-		--debug.log("v.x: "..v.x.." v.y: "..v.y.." v.z: "..v.z)
-		local fpixelx, fpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.x,v.y)
-		--ang,spd,alt
-		--if ang then
-		--	linex1,liney1 = rotate2((m.ceil(m.min(alt/1000,4))),1.5,ang)
-		--	linex2,liney2 = rotate2(-(m.ceil(m.min(alt/1000,4))),1.5,ang)
-		--
-		--	linex3,liney3 = rotate2(0,1,ang)
-		--	linex4,liney4 = rotate2(0,floor(m.max(spd,100)/100),ang)
-		--
-		--	line2(fpixelx+linex1, fpixely+liney1, fpixelx+linex2, fpixely+liney2)--alt line
-		--	line2(fpixelx+linex3, fpixely+liney3, fpixelx+linex4, fpixely+liney4)--spd line
-		--end
-		rectF(fpixelx,fpixely-1,1,1)
-		rectF(fpixelx+1,fpixely,1,1)
-		rectF(fpixelx,fpixely+1,1,1)
-		rectF(fpixelx-1,fpixely,1,1)
-	end
-
-	if SOI then
-        screen.setColor(1,1,1,200)
-	    screen.drawRectF(13,2,12,5)
-        screen.setColor(85,160,35)
-        screen.drawText(13,2,"SOI")
-    end
-	
-	--missile
-	--setcolor(255,0,0)
-	--line(50,50,52,52)
-	--line(50,49,49,50)
-
-	--my target
-	--setcolor(80,13,1)
-	--rect(1,1,2,2)
-	
-	--friend target
-	--setcolor(90,26,1)
-	--rect(1,5,2,2)
-
-	--debug text
-	--setcolor(255,255,255)
-	--text(5,5,"tgts: "..#tgtfiles)
 end
