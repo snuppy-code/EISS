@@ -1,10 +1,10 @@
-19/11/2023 09:23:07 Launching, time stamp.
-19/11/2023 09:23:07 Opening connection on port 14238
-19/11/2023 09:23:07 Now Accepting TCP clients
-19/11/2023 09:23:07 MainWindow Initialized and running
-19/11/2023 09:23:07 Client accepted - Client Connected: True, beginning Message Loop
+21/11/2023 05:32:50 Launching, time stamp.
+21/11/2023 05:32:50 Opening connection on port 14238
+21/11/2023 05:32:50 Now Accepting TCP clients
+21/11/2023 05:32:50 MainWindow Initialized and running
+21/11/2023 05:32:50 Client accepted - Client Connected: True, beginning Message Loop
 
-19/11/2023 09:23:07 SocketReadTask - Exception - Closing Pipe - Client Connected: False - System.IO.IOException: Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host. ---> System.Net.Sockets.SocketException: An existing connection was forcibly closed by the remote host
+21/11/2023 05:32:52 SocketReadTask - Exception - Closing Pipe - Client Connected: False - System.IO.IOException: Unable to read data from the transport connection: An established connection was aborted by the software in your host machine. ---> System.Net.Sockets.SocketException: An established connection was aborted by the software in your host machine
    at System.Net.Sockets.Socket.Receive(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
    at System.Net.Sockets.NetworkStream.Read(Byte[] buffer, Int32 offset, Int32 size)
    --- End of inner exception stack trace ---
@@ -12,5 +12,16 @@
    at STORMWORKS_Simulator.SocketConnection.<.ctor>b__13_0() in C:\Workspaces\stormworks\vscode_extension\CsharpSimulator\STORMWORKS_Simulator\src\SocketConnection.cs:line 87
 
 
-19/11/2023 09:23:07 Pipe_OnPipeClosed - Closing Application
+21/11/2023 05:32:52 Pipe_OnPipeClosed - Closing Application
+
+
+21/11/2023 05:32:52 SocketConnection - SendMessage (ALIVE) - Exception - Closing Pipe - System.IO.IOException: Unable to write data to the transport connection: An established connection was aborted by the software in your host machine. ---> System.Net.Sockets.SocketException: An established connection was aborted by the software in your host machine
+   at System.Net.Sockets.Socket.Send(Byte[] buffer, Int32 offset, Int32 size, SocketFlags socketFlags)
+   at System.Net.Sockets.NetworkStream.Write(Byte[] buffer, Int32 offset, Int32 size)
+   --- End of inner exception stack trace ---
+   at System.Net.Sockets.NetworkStream.Write(Byte[] buffer, Int32 offset, Int32 size)
+   at STORMWORKS_Simulator.SocketConnection.SendMessage(String commandName, Object[] args) in C:\Workspaces\stormworks\vscode_extension\CsharpSimulator\STORMWORKS_Simulator\src\SocketConnection.cs:line 122
+
+
+21/11/2023 05:32:52 Pipe_OnPipeClosed - Closing Application
 

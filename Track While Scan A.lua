@@ -296,18 +296,22 @@ function onTick()
 	---- OUTPUTS ----
 	--targets
 	if targetfiles[enemytransindex] then
-		--osn(14,targetfiles[enemytransindex].pos.x)
-		--osn(15,targetfiles[enemytransindex].pos.y)
-		--osn(16,targetfiles[enemytransindex].pos.z)
+		osn(14,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].x)
+		osn(15,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].y)
+		osn(16,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].z)
 	end
-	if targetfiles[enemytransindex+1] then
-		--osn(17,targetfiles[enemytransindex+1].pos.x)
-		--osn(18,targetfiles[enemytransindex+1].pos.y)
-		--osn(19,targetfiles[enemytransindex+1].pos.z)
-	end
-	--osn(26,enemytransindex)
+	--if targetfiles[enemytransindex+1] then
+	--	osn(17,targetfiles[enemytransindex+1].pos.x)
+	--	osn(18,targetfiles[enemytransindex+1].pos.y)
+	--	osn(19,targetfiles[enemytransindex+1].pos.z)
+	--end
+	osn(26,enemytransindex)
 	--osn(27,enemytransindex+1)
-	enemytransindex = enemytransindex + 2
+	--enemytransindex = enemytransindex + 2
+	--if enemytransindex > #targetfiles then
+	--	enemytransindex = 1
+	--end
+	enemytransindex = enemytransindex + 1
 	if enemytransindex > #targetfiles then
 		enemytransindex = 1
 	end

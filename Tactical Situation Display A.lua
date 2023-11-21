@@ -6,7 +6,7 @@ pi = m.pi
 pi2 = pi*2
 
 s = screen
-text,textbox,line,triangl,trianglF,rect,rectF,circl,circlF,clear,setcolor = s.drawText,s.drawTextBox,s.drawLine,s.drawTriangle,s.drawTriangleF,s.drawRect,s.drawRectF,s.drawCircle,s.drawCircleF,s.drawClear,s.setColor
+text,textbox,line,rect,rectF,circl,clear,setcolor = s.drawText,s.drawTextBox,s.drawLine,s.drawRect,s.drawRectF,s.drawCircle,s.drawClear,s.setColor
 
 function line2(x1,y1,x2,y2)
 	dx=x2-x1
@@ -31,54 +31,8 @@ end
 function vec(x,y,z)
 return {x=x or 0,y=y or 0,z=z or 0}
 end
-function add(a,b)
-return vec(a.x+b.x, a.y+b.y, a.z+b.z)
-end
-function mult(a,b)
-return vec(a.x*b.x, a.y*b.y, a.z*b.z)
-end
-function multf(a,n)
-return vec(a.x*n, a.y*n, a.z*n)
-end
-function invert(a)
-return multf(a,-1)
-end
-function subt(a,b)
-return add(a,invert(b))
-end
-function length(a)
-return m.sqrt(a.x*a.x+a.y*a.y+a.z*a.z)
-end
-function divf(a,n)
-return multf(a,1/n)
-end
-function norm(a)
-return divf(a,length(a))
-end
-function dot(a,b)
-return a.x*b.x+a.y*b.y+a.z*b.z
-end
 function cross(a,b)
 return vec(a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x)
-end
---function project(a,b)
---return multf(norm(b), dot(a, norm(b)))
---end
---function reject(a,b)
---return subt(a, multf(norm(b), dot(a, norm(b))))
---end
---function reflect(a,b,factor)
---return subt(a, multf(reject(a, b), factor or 2))
---end
-function stoc(hor,ver,d)
-local d=d or 1
-return vec(m.sin(hor)*m.cos(ver)*d, m.cos(hor)*m.cos(ver)*d, m.sin(ver)*d)
-end
-function tolocal(a,r,f,u)
-return vec(dot(r,a),dot(f,a),dot(u,a))
-end
-function torelative(a,r,f,u)
-return add(add(multf(r,a.x), multf(f,a.y)), multf(u,a.z))
 end
 
 --function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]then a[b]={oldVar=0,deltaVar=0}end;a[b].deltaVar=c-a[b].oldVar;a[b].oldVar=c;return a[b].deltaVar end
@@ -91,13 +45,16 @@ rangelim = pgn("R Max Rng")
 xfov = pgn("X FOV")*pi
 sweeplim = pgn("Swep Lim")*pi2+xfov
 
-tgtfiles = {[1]={pos=vec()}}
 friendlies = {}
+tgtfiles = {}
 
-touch,drawmap=false,true
+drawmap=true
 zoom,zoominteg=7,0
-rwr = {}
-rwrbuffer = {false, false, false, false}
+rwrbuffer = {}
+for i = 1,100 do
+	rwrbuffer[i] = false
+end
+targetfiles = {}
 function onTick()
 	--some inputs
 	mpos = vec(ign(1),ign(3),ign(2))
@@ -111,25 +68,57 @@ function onTick()
 		drawmap = not drawmap
 	end
 
-	--rwr
+	---- RWR ----
+	--get and decompress
 	rwrraw = ign(31)
 	rwrraw = rwrraw - 1
-	rwr.middle = (rwrraw & 8) == 0
-	rwr.rear = (rwrraw & 4) == 0
-	rwr.left = (rwrraw & 2) == 0
-	rwr.right = (rwrraw & 1) == 0
-	pinged = rwr.middle-- or rwr.rear or rwr.left or rwr.right
-	-- Shift the buffer to the left and add the new pinged state at the end.
-    table.remove(rwrbuffer, 1)
+	pingedmiddle = (rwrraw & 8) == 0
+	pingedrear = (rwrraw & 4) == 0
+	pingedleft = (rwrraw & 2) == 0
+	pingedright = (rwrraw & 1) == 0
+	pinged = pingedmiddle
+	
+	table.remove(rwrbuffer, 1)
     table.insert(rwrbuffer, pinged)
+	
+	--check for missile
+	pingcountingvar = 0
+	for i = 1,6 do
+		if rwrbuffer[i] then
+			pingcountingvar = pingcountingvar + 1
+		end
+	end
+	if pingcountingvar >= 2 then
+		missileincoming = true
+	else
+		missileincoming = false
+	end
+	--check for being tracked
+	pingcountingvar = 0
+	for i = 1,26 do
+		if rwrbuffer[i] then
+			pingcountingvar = pingcountingvar + 1
+		end
+	end
+	if pingcountingvar >= 2 then--should be or <= 7 then but idkkkk
+		tracked = true
+	else
+		tracked = false
+	end
+	--check for being rapidly scanned
+	pingcountingvar = 0
+	for i = 1,100 do
+		if rwrbuffer[i] then
+			pingcountingvar = pingcountingvar + 1
+		end
+	end
+	if pingcountingvar >= 2 then
+		rapidscanned = true
+	else
+		rapidscanned = false
+	end
 
-    if (rwrbuffer[4] and rwrbuffer[3] and rwrbuffer[2]) or (rwrbuffer[4] and not rwrbuffer[3] and not rwrbuffer[2] and not rwrbuffer[1]) then
-        tracked = true
-    else
-        tracked = false
-    end
-
-	tgtfiles[1].pos = vec(ign(23),ign(24),ign(25))--bandaid :yum:
+	--tgtfiles[1].pos = vec(ign(23),ign(24),ign(25))--bandaid :yum:
 	--facing vectors
 	rx,ry,rz=ign(4),ign(5),ign(6)
 	cx,cy,cz=cos(rx),cos(ry),cos(rz)
@@ -138,6 +127,9 @@ function onTick()
 	fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
 	up = cross(right,fwd)
 	
+	inindex = ign(19)
+	tgtfiles[inindex] = vec(ign(7),ign(8),ign(9))
+
 	--Zooming functionality, assumes 100% sens -1 to 1
 	SOI = ign(29) == 1
 	if SOI then
@@ -152,7 +144,6 @@ function onTick()
 	end
 	if zoom >= 50 then zoominteg = 0 end
 	zoom=clamp(zoom+(zoomkey/55*zoom/2.4)+zoominteg*zoom/2.4,0.1,50)
-
 
 	heading = -atan(fwd.x,fwd.y)+pi
 
@@ -202,22 +193,22 @@ function onDraw()
 		line(mpixelx,mpixely,mpixelx + sin(rearangle+heading+xfov)*maxrangepixels, mpixely + cos(rearangle+heading+xfov)*maxrangepixels)
 
 		if radartype then
-			--radar borders for SWEEP
-			setcolor(0,180,0,23)
-			line(mpixelx,mpixely,mpixelx + sin(-sweeplim+heading)*maxrangepixels, mpixely + cos(-sweeplim+heading)*maxrangepixels)
-			line(mpixelx,mpixely,mpixelx + sin(sweeplim+heading)*maxrangepixels, mpixely + cos(sweeplim+heading)*maxrangepixels)
-			do
-				bordercurvestart = -heading-sweeplim+pi/2
-				step2 = (-heading+sweeplim+pi/2 - bordercurvestart) / 18
-				for i = 1, 18 do
-					ang1 = bordercurvestart + step2 * i
-					ang2 = bordercurvestart + step2 * (i - 1)
-					line(mpixelx + cos(ang1) * maxrangepixels,
-					mpixely + sin(ang1) * maxrangepixels,
-					mpixelx + cos(ang2) * maxrangepixels,
-					mpixely + sin(ang2) * maxrangepixels)
-				end
-			end
+			----radar borders for SWEEP
+			--setcolor(0,180,0,23)
+			--line(mpixelx,mpixely,mpixelx + sin(-sweeplim+heading)*maxrangepixels, mpixely + cos(-sweeplim+heading)*maxrangepixels)
+			--line(mpixelx,mpixely,mpixelx + sin(sweeplim+heading)*maxrangepixels, mpixely + cos(sweeplim+heading)*maxrangepixels)
+			--do
+			--	bordercurvestart = -heading-sweeplim+pi/2
+			--	step2 = (-heading+sweeplim+pi/2 - bordercurvestart) / 18
+			--	for i = 1, 18 do
+			--		ang1 = bordercurvestart + step2 * i
+			--		ang2 = bordercurvestart + step2 * (i - 1)
+			--		line(mpixelx + cos(ang1) * maxrangepixels,
+			--		mpixely + sin(ang1) * maxrangepixels,
+			--		mpixelx + cos(ang2) * maxrangepixels,
+			--		mpixely + sin(ang2) * maxrangepixels)
+			--	end
+			--end
 		else
 			--radar borders for CIRCLE
 			setcolor(0,255,0,8)
@@ -230,7 +221,7 @@ function onDraw()
 
 		--draw actual target files
 		for k,v in ipairs(tgtfiles) do
-			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
+			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.x,v.y)
 			tgtpixelx,tgtpixely = round(tgtpixelx),round(tgtpixely)
 			if selectedtgt == k then
 				setcolor(90,2,5)
@@ -265,10 +256,10 @@ function onDraw()
 		end
 
 		if SOI then
-			screen.setColor(1,1,1,200)
-			screen.drawRectF(13,2,12,5)
-			screen.setColor(85,160,35)
-			screen.drawText(13,2,"SOI")
+			setcolor(1,1,1,200)
+			rectF(13,2,12,5)
+			setcolor(85,160,35)
+			text(13,2,"SOI")
 		end
 		
 		--missile
@@ -288,12 +279,25 @@ function onDraw()
 		--setcolor(255,255,255)
 		--text(5,5,"tgts: "..#tgtfiles)
 	else--drawing on RWR monitor
-		if tracked then
+		awdtext = ""
+		if missileincoming then
 			setcolor(255,0,0)
+			awdtext = "MSSLE"
+		elseif tracked then
+			setcolor(239,38,0)
+			awdtext = "TRACK"
+		elseif rapidscanned then
+			setcolor(255,135,0)
+			awdtext = "WARN"
+		end
+		if missileincoming or tracked or rapidscanned then
 			rectF(0,0,32,32)
-		elseif pinged then
-			setcolor(160,15,170)
-			rectF(0,0,32,32)
+			setcolor(230,230,230)
+			text(4,12,awdtext)
+		end
+		if pinged then
+			setcolor(230,230,230)
+			text(6,2,"PING")
 		end
 	end
 end
