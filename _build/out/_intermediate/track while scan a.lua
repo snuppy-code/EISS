@@ -98,7 +98,6 @@ mslendf = pgn("ML End Frq")
 --radar & tgt handling info
 mergedist = pgn("Merge Dist")
 culltime = pgn("Cull Time")
-minextrapdist = pgn("Min extrap dist delta")
 
 rawemissiontargets = {}
 rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
@@ -111,7 +110,7 @@ targetfiles = {}
 friendlyfiles = {}
 missilefiles = {}
 
-selectedtgt,tgtcycletouch = 1,0
+selectedtgt,tgtcycletouch = 0,0
 enemytransindex,friendlytransindex,missiletransindex=0,0,0
 existedticks,possculltimer = 0,0
 function onTick()
@@ -230,7 +229,7 @@ function onTick()
 						for pastposindex, pastpos in pairs(targetfiles[fileindex].poss) do
 							thresholddistance = length(subt(pastpos, lastpos(fileindex)))
 							
-							if thresholddistance >= minextrapdist and pastposindex > thresholdindex then
+							if thresholddistance >= 50 and pastposindex > thresholdindex then --50 is minextrapdist
 								thresholdvec = pastpos
 								
 								thresholdindex = pastposindex
@@ -272,14 +271,17 @@ function onTick()
 				length = length - 1
 				culled = culled + 1
 			end
-			debug.log("culled "..culled.." positions of target "..k)
+			--debug.log("culled "..culled.." positions of target "..k)
 		end
-		targetfiles[k].t = existedticks - edgeindex(targetfiles[k].poss,true)
 		
+		targetfiles[k].t = targetfiles[k].t + 1
+
+
 		--also extrapolation teehee
 		targetfiles[k].extrpos = add(lastpos(k), multf(targetfiles[k].veltick, targetfiles[k].t))
 
-		if (v.t >= culltime) and not (k == selectedtgt) then
+		if (v.t >= culltime) then--and not (k == selectedtgt) then
+			--debug.log("tmdout "..k)
 			table.remove(targetfiles,k)
 		else
 			if lastpos(k).z <= -1 then
@@ -287,6 +289,7 @@ function onTick()
 			end
 			for i,r in pairs(friendlyfiles) do
 				if length(subt(r,lastpos(k)))<=mergedist then
+					--debug.log("friendly killed "..k)
 					table.remove(targetfiles,k)
 				end
 			end
@@ -297,22 +300,19 @@ function onTick()
 	---- OUTPUTS ----
 	--targets
 	if targetfiles[enemytransindex] then
+		debug.log(enemytransindex.." age "..targetfiles[enemytransindex].t)
 		osn(14,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].x)
 		osn(15,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].y)
 		osn(16,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].z)
 	end
-	--if targetfiles[enemytransindex+1] then
-	--	osn(17,targetfiles[enemytransindex+1].pos.x)
-	--	osn(18,targetfiles[enemytransindex+1].pos.y)
-	--	osn(19,targetfiles[enemytransindex+1].pos.z)
-	--end
+	if targetfiles[enemytransindex+1] then
+		osn(17,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].x)
+		osn(18,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].y)
+		osn(19,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].z)
+	end
 	osn(26,enemytransindex)
-	--osn(27,enemytransindex+1)
-	--enemytransindex = enemytransindex + 2
-	--if enemytransindex > #targetfiles then
-	--	enemytransindex = 1
-	--end
-	enemytransindex = enemytransindex + 1
+	osn(27,enemytransindex+1)
+	enemytransindex = enemytransindex + 2
 	if enemytransindex > #targetfiles then
 		enemytransindex = 1
 	end
@@ -323,7 +323,7 @@ function onTick()
 		--osn(21,friendlyfiles[friendlytransindex].pos.y)
 		--osn(22,friendlyfiles[friendlytransindex].pos.z)
 	end
-	--osn(28,friendlytransindex)
+	osn(28,friendlytransindex)
 	friendlytransindex = friendlytransindex + 1
 	if friendlytransindex > #friendlyfiles then
 		friendlytransindex = 1

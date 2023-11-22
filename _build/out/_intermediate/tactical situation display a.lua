@@ -35,6 +35,9 @@ end
 function cross(a,b)
 return vec(a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x)
 end
+function length(a)
+	return m.sqrt(a.x*a.x+a.y*a.y+a.z*a.z)
+end
 
 --function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]then a[b]={oldVar=0,deltaVar=0}end;a[b].deltaVar=c-a[b].oldVar;a[b].oldVar=c;return a[b].deltaVar end
 function clamp(a, min, max) return m.max(min, m.min(a, max)) end
@@ -45,6 +48,7 @@ radartype = pgb("Mode")--assuming sweep is true
 rangelim = pgn("R Max Rng")
 xfov = pgn("X FOV")*pi
 sweeplim = pgn("Swep Lim")*pi2+xfov
+culltime = pgn("Cull Time")
 
 friendlies = {}
 tgtfiles = {}
@@ -129,8 +133,27 @@ function onTick()
 	up = cross(right,fwd)
 	
 	inindex = ign(19)
-	tgtfiles[inindex] = vec(ign(7),ign(8),ign(9))
+	
+	intgt = vec(ign(7),ign(8),ign(9))
+	if length(intgt) > 0 then
+		debug.log("upd "..inindex)
+		tgtfiles[inindex] = {pos=intgt,t=0}
+	end
+	intgt = vec(ign(10),ign(11),ign(12))
+	if length(intgt) > 0 then
+		debug.log("upd "..(inindex+1))
+		tgtfiles[inindex+1] = {pos=intgt,t=0}
+	end
 
+	--cull/timeout
+	for k,_ in pairs(tgtfiles) do
+		tgtfiles[k].t = tgtfiles[k].t + 1
+		debug.log(k.." is "..tgtfiles[k].t)
+		if tgtfiles[k].t >= culltime then 
+			tgtfiles[k] = nil
+			debug.log("tgt "..k.." culled in TSD")
+		end
+	end
 	--Zooming functionality, assumes 100% sens -1 to 1
 	SOI = ign(29) == 1
 	if SOI then
@@ -222,7 +245,7 @@ function onDraw()
 
 		--draw actual target files
 		for k,v in ipairs(tgtfiles) do
-			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.x,v.y)
+			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
 			tgtpixelx,tgtpixely = round(tgtpixelx),round(tgtpixely)
 			if selectedtgt == k then
 				setcolor(90,2,5)

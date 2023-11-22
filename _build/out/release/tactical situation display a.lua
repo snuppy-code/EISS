@@ -5,145 +5,159 @@
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 2943 (3277 with comment) chars
+-- Minimized Size: 3300 (3634 with comment) chars
+bj="upd "
 
-t=230
-f=255
-au=table
-F=false
-x=true
-am=screen
-aa=map.mapToScreen
-m,_,at,az,a,aN,aU=math,input,output,property,am,x,F
-e,aZ,aO,aV=_.getNumber,at.setNumber,_.getBool,at.setBool
-ai,aJ=az.getNumber,az.getBool
-abs,cos,sin,floor,atan=m.abs,m.cos,m.sin,m.floor,m.atan
-pi=m.pi
-I=pi*2
-a=am
-S,aP,z,aM,n,aq,aS,c=a.drawText,a.drawTextBox,a.drawLine,a.drawRect,a.drawRectF,a.drawCircle,a.drawClear,a.setColor
-function aW(as,av,aL,aK)B=aL-as
-A=aK-av
-if abs(B)>=abs(A)then
-T=abs(B)else
-T=abs(A)end
-B=B/T
-A=A/T
-b=as
-d=av
-_=0
-while(_<=T)do
-n(b,d,1,1)b=b+B
-d=d+A
-_=_+1
+y=230
+g=255
+aD=pairs
+ax=table
+E=false
+K=true
+aC=screen
+ag=map.mapToScreen
+S=debug.log
+o,a,as,at,c,aZ,aX=math,input,output,property,aC,K,E
+b,bc,aU,bi=a.getNumber,as.setNumber,a.getBool,as.setBool
+Z,aN=at.getNumber,at.getBool
+abs,cos,sin,floor,atan=o.abs,o.cos,o.sin,o.floor,o.atan
+pi=o.pi
+T=pi*2
+c=aC
+N,aY,J,aM,q,ay,bg,e=c.drawText,c.drawTextBox,c.drawLine,c.drawRect,c.drawRectF,c.drawCircle,c.drawClear,c.setColor
+function bf(av,aG,aJ,aH)z=aJ-av
+I=aH-aG
+if abs(z)>=abs(I)then
+P=abs(z)else
+P=abs(I)end
+z=z/P
+I=I/P
+_=av
+d=aG
+a=0
+while(a<=P)do
+q(_,d,1,1)_=_+z
+d=d+I
+a=a+1
 end
 end
-function w(b,d,r)return{b=b or 0,d=d or 0,r=r or 0}end
-function aG(p,v)return w(p.d*v.r-p.r*v.d,p.r*v.b-p.b*v.r,p.b*v.d-p.d*v.b)end
-function al(p,min,max)return m.max(min,m.min(p,max))end
-function ar(b)return floor(b+.5)end
-aD=aJ("Mode")aA=ai("R Max Rng")k=ai("X FOV")*pi
-aR=ai("Swep Lim")*I+k
-aH={}ax={}X=x
-i,q=7,0
-u={}for _=1,100 do
-u[_]=F
+function x(_,d,r)return{_=_ or 0,d=d or 0,r=r or 0}end
+function aO(f,v)return x(f.d*v.r-f.r*v.d,f.r*v._-f._*v.r,f._*v.d-f.d*v._)end
+function az(f)return o.sqrt(f._*f._+f.d*f.d+f.r*f.r)end
+function aF(f,min,max)return o.max(min,o.min(f,max))end
+function aq(_)return floor(_+.5)end
+aT=aN("Mode")aQ=Z("R Max Rng")p=Z("X FOV")*pi
+ba=Z("Swep Lim")*T+p
+aK=Z("Cull Time")aL={}n={}al=K
+k,t=7,0
+u={}for a=1,100 do
+u[a]=E
 end
-aX={}function onTick()L=w(e(1),e(3),e(2))D=-e(27)*I
-H=D+pi
-af=e(30)>0
-aF=af~=aC and af
-aC=af
-if aF then
-X=not X
+bd={}function onTick()W=x(b(1),b(3),b(2))D=-b(27)*T
+R=D+pi
+ai=b(30)>0
+aP=ai~=aR and ai
+aR=ai
+if aP then
+al=not al
 end
-s=e(31)s=s-1
-aB=(s & 8)==0
-ba=(s & 4)==0
-aQ=(s & 2)==0
-b_=(s & 1)==0
-ay=aB
-au.remove(u,1)au.insert(u,ay)j=0
-for _=1,6 do
-if u[_]then
+w=b(31)w=w-1
+aI=(w & 8)==0
+aV=(w & 4)==0
+bh=(w & 2)==0
+bb=(w & 1)==0
+aE=aI
+ax.remove(u,1)ax.insert(u,aE)j=0
+for a=1,6 do
+if u[a]then
 j=j+1
 end
 end
 if j>=2 then
-ad=x
+ah=K
 else
-ad=F
+ah=E
 end
 j=0
-for _=1,26 do
-if u[_]then
+for a=1,26 do
+if u[a]then
 j=j+1
 end
 end
 if j>=2 then
-Y=x
+ac=K
 else
-Y=F
+ac=E
 end
 j=0
-for _=1,100 do
-if u[_]then
+for a=1,100 do
+if u[a]then
 j=j+1
 end
 end
 if j>=2 then
-ac=x
+aj=K
 else
-ac=F
+aj=E
 end
-an,ak,aw=e(4),e(5),e(6)V,ae,ab=cos(an),cos(ak),cos(aw)ao,U,W=sin(an),sin(ak),sin(aw)aE=w(ae*ab,-U,ae*W)ah=w(ao*W+V*U*ab,V*ae,-ao*ab+V*U*W)aT=aG(aE,ah)aI=e(19)ax[aI]=w(e(7),e(8),e(9))ap=e(29)==1
-if ap then
-y=e(26)else
-y=0
+au,aB,ar=b(4),b(5),b(6)ak,am,ao=cos(au),cos(aB),cos(ar)aw,af,ap=sin(au),sin(aB),sin(ar)aS=x(am*ao,-af,am*ap)ab=x(aw*ap+ak*af*ao,ak*am,-aw*ao+ak*af*ap)aW=aO(aS,ab)O=b(19)H=x(b(7),b(8),b(9))if az(H)>0 then
+S(bj..O)n[O]={ad=H,G=0}end
+H=x(b(10),b(11),b(12))if az(H)>0 then
+S(bj..(O+1))n[O+1]={ad=H,G=0}end
+for l,be in aD(n)do
+n[l].G=n[l].G+1
+S(l.." is "..n[l].G)if n[l].G>=aK then
+n[l]=nil
+S("tgt "..l.." culled in TSD")end
 end
-if y<.01 and y>-.01 then
-q=q-q/5
-else
-q=al((q+y/160),-.1,.1)end
-if i>=50 then q=0 end
-i=al(i+(y/55*i/2.4)+q*i/2.4,.1,50)o=-atan(ah.b,ah.d)+pi
-M,R=L.b,L.d
+aA=b(29)==1
+if aA then
+C=b(26)else
+C=0
 end
-function onDraw()G,ag=a.getWidth(),a.getHeight()if G>32 then
-if X then
-a.setMapColorOcean(0,0,0)a.setMapColorShallows(2,2,2)a.setMapColorLand(7,7,7)a.setMapColorGrass(8,10,8)a.setMapColorSand(6,6,4)a.setMapColorSnow(25,25,26)a.drawMap(M,R,i)end
-g,h=aa(M,R,i,G,ag,L.b,L.d)C=i/G
-Z=i/50
-l=(aA/1000)/C
-for _=0,2 do
-O=5+10*_
-c(f,f,f,7-Z*3)aq(g,h,O/C)c(f,f,f,11-Z*2)S(g+O/C-(5*(#tostring(O))),h,O)end
-c(f,f,f,4-Z*2)for _=1,8 do
-z(g,h,g+sin(_*I/8)*120/C,h+cos(_*I/8)*120/C)end
-c(80,f,0,38)z(g,h,g+sin(D+o-k)*l,h+cos(D+o-k)*l)z(g,h,g+sin(D+o+k)*l,h+cos(D+o+k)*l)z(g,h,g+sin(H+o-k)*l,h+cos(H+o-k)*l)z(g,h,g+sin(H+o+k)*l,h+cos(H+o+k)*l)if aD then
+if C<.01 and C>-.01 then
+t=t-t/5
 else
-c(0,f,0,8)aq(g,h,l)end
-for aj,E in ipairs(ax)do
-N,P=aa(M,R,i,G,ag,E.b,E.d)N,P=ar(N),ar(P)if aY==aj then
-c(90,2,5)n(N-2,P-3,5,1)c(99,20,3)else
-c(80,13,1)end
-aM(N-1,P-1,2,2)end
-c(0,40,f)for aj,E in pairs(aH)do
-local J,K=aa(M,R,i,G,ag,E.b,E.d)n(J,K-1,1,1)n(J+1,K,1,1)n(J,K+1,1,1)n(J-1,K,1,1)end
-if ap then
-c(1,1,1,200)n(13,2,12,5)c(85,160,35)S(13,2,"SOI")end
+t=aF((t+C/160),-.1,.1)end
+if k>=50 then t=0 end
+k=aF(k+(C/55*k/2.4)+t*k/2.4,.1,50)s=-atan(ab._,ab.d)+pi
+aa,L=W._,W.d
+end
+function onDraw()F,an=c.getWidth(),c.getHeight()if F>32 then
+if al then
+c.setMapColorOcean(0,0,0)c.setMapColorShallows(2,2,2)c.setMapColorLand(7,7,7)c.setMapColorGrass(8,10,8)c.setMapColorSand(6,6,4)c.setMapColorSnow(25,25,26)c.drawMap(aa,L,k)end
+h,i=ag(aa,L,k,F,an,W._,W.d)A=k/F
+ae=k/50
+m=(aQ/1000)/A
+for a=0,2 do
+X=5+10*a
+e(g,g,g,7-ae*3)ay(h,i,X/A)e(g,g,g,11-ae*2)N(h+X/A-(5*(#tostring(X))),i,X)end
+e(g,g,g,4-ae*2)for a=1,8 do
+J(h,i,h+sin(a*T/8)*120/A,i+cos(a*T/8)*120/A)end
+e(80,g,0,38)J(h,i,h+sin(D+s-p)*m,i+cos(D+s-p)*m)J(h,i,h+sin(D+s+p)*m,i+cos(D+s+p)*m)J(h,i,h+sin(R+s-p)*m,i+cos(R+s-p)*m)J(h,i,h+sin(R+s+p)*m,i+cos(R+s+p)*m)if aT then
 else
-Q=""
-if ad then
-c(f,0,0)Q="MSSLE"
-elseif Y then
-c(239,38,0)Q="TRACK"
+e(0,g,0,8)ay(h,i,m)end
+for l,B in ipairs(n)do
+Y,M=ag(aa,L,k,F,an,B.ad._,B.ad.d)Y,M=aq(Y),aq(M)if b_==l then
+e(90,2,5)q(Y-2,M-3,5,1)e(99,20,3)else
+e(80,13,1)end
+aM(Y-1,M-1,2,2)end
+e(0,40,g)for l,B in aD(aL)do
+local U,Q=ag(aa,L,k,F,an,B._,B.d)q(U,Q-1,1,1)q(U+1,Q,1,1)q(U,Q+1,1,1)q(U-1,Q,1,1)end
+if aA then
+e(1,1,1,200)q(13,2,12,5)e(85,160,35)N(13,2,"SOI")end
+else
+V=""
+if ah then
+e(g,0,0)V="MSSLE"
 elseif ac then
-c(f,135,0)Q="WARN"
+e(239,38,0)V="TRACK"
+elseif aj then
+e(g,135,0)V="WARN"
 end
-if ad or Y or ac then
-n(0,0,32,32)c(t,t,t)S(4,12,Q)end
-if ay then
-c(t,t,t)S(6,2,"PING")end
+if ah or ac or aj then
+q(0,0,32,32)e(y,y,y)N(4,12,V)end
+if aE then
+e(y,y,y)N(6,2,"PING")end
 end
 end
