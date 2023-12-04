@@ -152,13 +152,20 @@ function onTick()
 		friendlies[inindex] = {pos=intgt,t=0}
 	end
 
-	--cull/timeout
+	--cull/timeout targets
 	for k,_ in pairs(tgtfiles) do
 		tgtfiles[k].t = tgtfiles[k].t + 1
 		----debug.log(k.." is "..tgtfiles[k].t)
 		if tgtfiles[k].t >= culltime then 
 			tgtfiles[k] = nil
 			----debug.log("tgt "..k.." culled in TSD")
+		end
+	end
+	--cull/timeout friendlies
+	for k,_ in pairs(friendlies) do
+		friendlies[k].t = friendlies[k].t + 1
+		if friendlies[k].t >= culltime then 
+			friendlies[k] = nil
 		end
 	end
 	--Zooming functionality, assumes 100% sens -1 to 1
