@@ -145,6 +145,14 @@ function onTick()
 		tgtfiles[inindex+1] = {pos=intgt,t=0}
 	end
 
+	inindex = ign(21)
+
+	intgt = vec(ign(13),ign(14),ign(15))
+	if length(intgt) > 0 then
+		--debug.log("upd "..inindex)
+		friendlies[inindex] = {pos=intgt,t=0}
+	end
+
 	--cull/timeout
 	for k,_ in pairs(tgtfiles) do
 		tgtfiles[k].t = tgtfiles[k].t + 1
@@ -261,7 +269,7 @@ function onDraw()
 		setcolor(0,40,255)
 		for k,v in pairs(friendlies) do
 			--debug.log("v.x: "..v.x.." v.y: "..v.y.." v.z: "..v.z)
-			local fpixelx, fpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.x,v.y)
+			local fpixelx, fpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
 			--ang,spd,alt
 			--if ang then
 			--	linex1,liney1 = rotate2((m.ceil(m.min(alt/1000,4))),1.5,ang)

@@ -13,9 +13,6 @@ end
 function add(a,b)
 return vec(a.x+b.x, a.y+b.y, a.z+b.z)
 end
-function mult(a,b)
-return vec(a.x*b.x, a.y*b.y, a.z*b.z)
-end
 function multf(a,n)
 return vec(a.x*n, a.y*n, a.z*n)
 end
@@ -60,11 +57,6 @@ function torelative(a,r,f,u)
 return add(add(multf(r,a.x), multf(f,a.y)), multf(u,a.z))
 end
 
---basic functions
-function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]then a[b]={oldVar=0,deltaVar=0}end;a[b].deltaVar=c-a[b].oldVar;a[b].oldVar=c;return a[b].deltaVar end
---vector delta function goes here
-function clamp(a, min, max) return m.max(min, m.min(a, max)) end
-
 --functional functions
 function edgeindex(input,findtop)
     local edge = nil
@@ -76,10 +68,10 @@ function edgeindex(input,findtop)
     return edge
 end
 function lastpos(tgt)
-	------debug.log("->"..tgt)
-	------debug.log("->"..type(targetfiles[tgt]))
-	------debug.log("->"..type(targetfiles[tgt].poss))
-	------debug.log("->"..type(targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]))
+	--debug.log("->"..tgt)
+	--debug.log("->"..type(targetfiles[tgt]))
+	--debug.log("->"..type(targetfiles[tgt].poss))
+	--debug.log("->"..type(targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]))
 	return targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]
 end
 
@@ -108,6 +100,7 @@ rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" sto
 targetfiles = {}
 friendlyfiles = {}
 missilefiles = {}
+friendlyindex = {}
 
 selectedtgt,tgtcycletouch = 0,0
 enemytransindex,friendlytransindex,missiletransindex=0,0,0
@@ -128,9 +121,10 @@ function onTick()
 
 	---- VICLINK ----
 	--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlyfiles table at index of their ASCII
-	fpos = vec(ign(7),ign(8),ign(9))
+	fpos = vec(ign(7),ign(9),ign(8))
 	--debug.log(fpos.x.." "..fpos.y.." "..fpos.z)
 	if length(fpos)>0 then
+		--debug.log("valid user:"..fpos.x.." "..fpos.y.." "..fpos.z)
 		local userascii2 = {ign(10),ign(11)}
 		user=""
 		if userascii2[1]>=1000000 and userascii2[1]>=1000000 then
@@ -138,10 +132,21 @@ function onTick()
 			for i=1, #userascii, 3 do
 				user = user..string.char(userascii:sub(i,i+3-1))
 			end
+			--debug.log("valid user:"..user)
 		else
 			user = "XXXX"
 		end
 		friendlyfiles[user]=fpos
+		friendlymatch = nil
+		for k,v in ipairs(friendlyindex) do
+			if k == user then
+				friendlymatch = k
+			end
+		end
+		if friendlymatch then
+			friendlyindex[]
+			friendlyindex[#friendlyindex+1] = user
+		end
 	end
 	--put me in the friendlies table for the TWS :3
 	friendlyfiles[vicmyuser] = mpos
@@ -212,12 +217,12 @@ function onTick()
 	--raw tgts to target files
 	for k,rawtgt in ipairs(rawradartargets) do
 		if (length(rawtgt.rel) > 0) and not (rawtgt.tsd > 0) then--there is actually a target and its on tick 1 of info
-			local match = 0 --no match with a target file found yet
+			local rawradarmatch = 0 --no match with a target file found yet
 			for fileindex,file in ipairs(targetfiles) do
-				if match == 0 then--we havent matched something
+				if rawradarmatch == 0 then--we havent matched something
 					if length(subt(lastpos(fileindex),rawtgt.pos)) <= mergedist then
 						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found
-						match = fileindex
+						rawradarmatch = fileindex
 						--update found existing tgt file with raw tgt
 						targetfiles[fileindex].poss[existedticks] = rawtgt.pos
 						targetfiles[fileindex].t = 0
@@ -251,7 +256,7 @@ function onTick()
 					end
 				end
 			end
-			if match == 0 then
+			if rawradarmatch == 0 then
 				--create target file
 				targetfiles[#targetfiles+1] = {poss = {[existedticks] = rawtgt.pos},veltick = vec(),extrpos = vec(),t = 0}
 			end
@@ -260,6 +265,7 @@ function onTick()
 	-- target file culling
 	culled = 0
 	for k, v in ipairs(targetfiles) do
+		thisnotculled = true
 		if possculltimer > 120 then
 			local length = 0
 			for _ in pairs(targetfiles[k].poss) do
@@ -281,15 +287,23 @@ function onTick()
 
 		if (v.t >= culltime) then--and not (k == selectedtgt) then
 			--debug.log("tmdout "..k)
-			table.remove(targetfiles,k)
+			if thisnotculled then
+				table.remove(targetfiles,k)
+				thisnotculled = false
+			end
 		else
 			if lastpos(k).z <= -1 then
 				targetfiles[k].poss[edgeindex(targetfiles[k].poss,true)].z = 5
 			end
 			for i,r in pairs(friendlyfiles) do
-				if length(subt(r,lastpos(k)))<=mergedist then
-					--debug.log("friendly killed "..k)
-					table.remove(targetfiles,k)
+				if thisnotculled then
+					if length(subt(r,lastpos(k)))<=mergedist then
+						--debug.log("friendly killed "..k)
+						if thisnotculled then
+							table.remove(targetfiles,k)
+							thisnotculled = false
+						end
+					end
 				end
 			end
 		end
@@ -299,7 +313,7 @@ function onTick()
 	---- OUTPUTS ----
 	--targets
 	if targetfiles[enemytransindex] then
-		debug.log(enemytransindex.." age "..targetfiles[enemytransindex].t)
+		--debug.log(enemytransindex.." age "..targetfiles[enemytransindex].t)
 		osn(14,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].x)
 		osn(15,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].y)
 		osn(16,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].z)
@@ -317,28 +331,30 @@ function onTick()
 	end
 
 	--friendlies
+	debug.log("h: "..#friendlyindex)
+	yup = friendlyfiles[friendlyindex[friendlytransindex]]
 	if friendlyfiles[friendlytransindex] then
-		--osn(20,friendlyfiles[friendlytransindex].pos.x)
-		--osn(21,friendlyfiles[friendlytransindex].pos.y)
-		--osn(22,friendlyfiles[friendlytransindex].pos.z)
+		osn(20,yup.x)
+		osn(21,yup.y)
+		osn(22,yup.z)
 	end
 	osn(28,friendlytransindex)
 	friendlytransindex = friendlytransindex + 1
-	if friendlytransindex > #friendlyfiles then
+	if friendlytransindex > #friendlyindex then
 		friendlytransindex = 1
 	end
-	
+
 	--missiles
-	if missilefiles[missiletransindex] then
-		--osn(23,missilefiles[missiletransindex].pos.x)
-		--osn(24,missilefiles[missiletransindex].pos.y)
-		--osn(25,missilefiles[missiletransindex].pos.z)
-	end
-	--osn(29,missiletransindex)
-	missiletransindex = missiletransindex + 1
-	if missiletransindex > #missilefiles then
-		missiletransindex = 1
-	end
+	--if missilefiles[missiletransindex] then
+	--	--osn(23,missilefiles[missiletransindex].pos.x)
+	--	--osn(24,missilefiles[missiletransindex].pos.y)
+	--	--osn(25,missilefiles[missiletransindex].pos.z)
+	--end
+	----osn(29,missiletransindex)
+	--missiletransindex = missiletransindex + 1
+	--if missiletransindex > #missilefiles then
+	--	missiletransindex = 1
+	--end
 
 	--output selected tgt
 	if targetfiles[selectedtgt] then
