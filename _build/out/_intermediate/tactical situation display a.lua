@@ -136,12 +136,12 @@ function onTick()
 	
 	intgt = vec(ign(7),ign(8),ign(9))
 	if length(intgt) > 0 then
-		debug.log("upd "..inindex)
+		----debug.log("upd "..inindex)
 		tgtfiles[inindex] = {pos=intgt,t=0}
 	end
 	intgt = vec(ign(10),ign(11),ign(12))
 	if length(intgt) > 0 then
-		debug.log("upd "..(inindex+1))
+		----debug.log("upd "..(inindex+1))
 		tgtfiles[inindex+1] = {pos=intgt,t=0}
 	end
 
@@ -149,17 +149,17 @@ function onTick()
 
 	intgt = vec(ign(13),ign(14),ign(15))
 	if length(intgt) > 0 then
-		--debug.log("upd "..inindex)
+		----debug.log("upd "..inindex)
 		friendlies[inindex] = {pos=intgt,t=0}
 	end
 
 	--cull/timeout
 	for k,_ in pairs(tgtfiles) do
 		tgtfiles[k].t = tgtfiles[k].t + 1
-		debug.log(k.." is "..tgtfiles[k].t)
+		----debug.log(k.." is "..tgtfiles[k].t)
 		if tgtfiles[k].t >= culltime then 
 			tgtfiles[k] = nil
-			debug.log("tgt "..k.." culled in TSD")
+			----debug.log("tgt "..k.." culled in TSD")
 		end
 	end
 	--Zooming functionality, assumes 100% sens -1 to 1

@@ -139,12 +139,13 @@ function onTick()
 		friendlyfiles[user]=fpos
 		friendlymatch = nil
 		for k,v in ipairs(friendlyindex) do
-			if k == user then
+			if v == user then
 				friendlymatch = k
 			end
 		end
 		if friendlymatch then
-			friendlyindex[]
+			friendlyindex[friendlymatch] = user
+		else
 			friendlyindex[#friendlyindex+1] = user
 		end
 	end
@@ -331,13 +332,15 @@ function onTick()
 	end
 
 	--friendlies
-	debug.log("h: "..#friendlyindex)
+	--debug.log("h: "..#friendlyindex)
 	yup = friendlyfiles[friendlyindex[friendlytransindex]]
-	if friendlyfiles[friendlytransindex] then
+	if yup then
 		osn(20,yup.x)
 		osn(21,yup.y)
 		osn(22,yup.z)
+		--debug.log("l: "..yup.x)
 	end
+	--debug.log("k: "..friendlytransindex)
 	osn(28,friendlytransindex)
 	friendlytransindex = friendlytransindex + 1
 	if friendlytransindex > #friendlyindex then

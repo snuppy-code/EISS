@@ -138,7 +138,17 @@ function onTick()
 			user = "XXXX"
 		end
 		friendlyfiles[user]=fpos
-		friendlyindex[#friendlyindex+1] = user
+		friendlymatch = nil
+		for k,v in ipairs(friendlyindex) do
+			if v == user then
+				friendlymatch = k
+			end
+		end
+		if friendlymatch then
+			friendlyindex[friendlymatch] = user
+		else
+			friendlyindex[#friendlyindex+1] = user
+		end
 	end
 	--put me in the friendlies table for the TWS :3
 	friendlyfiles[vicmyuser] = mpos
@@ -209,12 +219,12 @@ function onTick()
 	--raw tgts to target files
 	for k,rawtgt in ipairs(rawradartargets) do
 		if (length(rawtgt.rel) > 0) and not (rawtgt.tsd > 0) then--there is actually a target and its on tick 1 of info
-			local match = 0 --no match with a target file found yet
+			local rawradarmatch = 0 --no match with a target file found yet
 			for fileindex,file in ipairs(targetfiles) do
-				if match == 0 then--we havent matched something
+				if rawradarmatch == 0 then--we havent matched something
 					if length(subt(lastpos(fileindex),rawtgt.pos)) <= mergedist then
 						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found
-						match = fileindex
+						rawradarmatch = fileindex
 						--update found existing tgt file with raw tgt
 						targetfiles[fileindex].poss[existedticks] = rawtgt.pos
 						targetfiles[fileindex].t = 0
@@ -248,7 +258,7 @@ function onTick()
 					end
 				end
 			end
-			if match == 0 then
+			if rawradarmatch == 0 then
 				--create target file
 				targetfiles[#targetfiles+1] = {poss = {[existedticks] = rawtgt.pos},veltick = vec(),extrpos = vec(),t = 0}
 			end
@@ -323,13 +333,15 @@ function onTick()
 	end
 
 	--friendlies
-	debug.log("h: "..#friendlyindex)
+	--debug.log("h: "..#friendlyindex)
 	yup = friendlyfiles[friendlyindex[friendlytransindex]]
-	if friendlyfiles[friendlytransindex] then
+	if yup then
 		osn(20,yup.x)
 		osn(21,yup.y)
 		osn(22,yup.z)
+		--debug.log("l: "..yup.x)
 	end
+	--debug.log("k: "..friendlytransindex)
 	osn(28,friendlytransindex)
 	friendlytransindex = friendlytransindex + 1
 	if friendlytransindex > #friendlyindex then
