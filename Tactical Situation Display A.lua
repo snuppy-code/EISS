@@ -35,7 +35,10 @@ function cross(a,b)
 return vec(a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x)
 end
 function length(a)
-	return m.sqrt(a.x*a.x+a.y*a.y+a.z*a.z)
+return m.sqrt(a.x*a.x+a.y*a.y+a.z*a.z)
+end
+function dist(a,b)
+return m.sqrt((a.x-b.x)^2+(a.y-b.y)^2+(a.z-b.z)^2)
 end
 
 --function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]then a[b]={oldVar=0,deltaVar=0}end;a[b].deltaVar=c-a[b].oldVar;a[b].oldVar=c;return a[b].deltaVar end
@@ -47,7 +50,7 @@ radartype = pgb("Mode")--assuming sweep is true
 rangelim = pgn("R Max Rng")
 xfov = pgn("X FOV")*pi
 sweeplim = pgn("Swep Lim")*pi2+xfov
-culltime = pgn("Cull Time")
+culltime = 50
 
 friendlies = {}
 tgtfiles = {}
@@ -73,14 +76,7 @@ function onTick()
 	end
 
 	---- RWR ----
-	--get and decompress
-	rwrraw = ign(31)
-	rwrraw = rwrraw - 1
-	pingedmiddle = (rwrraw & 8) == 0
-	pingedrear = (rwrraw & 4) == 0
-	pingedleft = (rwrraw & 2) == 0
-	pingedright = (rwrraw & 1) == 0
-	pinged = pingedmiddle
+	pinged = ign(31) == 1
 	
 	table.remove(rwrbuffer, 1)
     table.insert(rwrbuffer, pinged)
@@ -122,7 +118,8 @@ function onTick()
 		rapidscanned = false
 	end
 
-	--tgtfiles[1].pos = vec(ign(23),ign(24),ign(25))--bandaid :yum:
+	selectedtgt = vec(ign(23),ign(24),ign(25))
+
 	--facing vectors
 	rx,ry,rz=ign(4),ign(5),ign(6)
 	cx,cy,cz=cos(rx),cos(ry),cos(rz)
@@ -261,17 +258,28 @@ function onDraw()
 		for k,v in ipairs(tgtfiles) do
 			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
 			tgtpixelx,tgtpixely = round(tgtpixelx),round(tgtpixely)
-			if selectedtgt == k then
-				setcolor(90,2,5)
-				rectF(tgtpixelx-2,tgtpixely-3,5,1)
-				setcolor(99,20,3)
-			else
-				setcolor(80,13,1)
-			end
+			--if dist(v.pos,b) then
+			--	setcolor(90,2,5)
+			--	rectF(tgtpixelx-2,tgtpixely-3,5,1)
+			--	setcolor(99,20,3)
+			--else
+			--	setcolor(80,13,1)
+			--end
+			setcolor(80,13,1)
 			thistargetalt=v.pos.z
-			thistargetalt=m.max(m.min(thistargetalt/500,4),0)
+			thistargetalt=m.max(m.min(thistargetalt/500,5),0)
 			line(tgtpixelx-thistargetalt,tgtpixely-2,tgtpixelx+thistargetalt+1,tgtpixely-2)
 			rect(tgtpixelx-1,tgtpixely-1,2,2)
+		end
+		
+		----draw selected target marker
+		if length(selectedtgt) > 0 then
+			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,selectedtgt.x,selectedtgt.y)
+			tgtpixelx,tgtpixely = round(tgtpixelx),round(tgtpixely)
+			setcolor(46,0,25)
+			rectF(tgtpixelx-2,tgtpixely-2,1,5)
+			rectF(tgtpixelx+2,tgtpixely-2,1,5)
+			rectF(tgtpixelx,tgtpixely,1,1)
 		end
 
 		--friendlies
@@ -290,6 +298,9 @@ function onDraw()
 			--	line2(fpixelx+linex1, fpixely+liney1, fpixelx+linex2, fpixely+liney2)--alt line
 			--	line2(fpixelx+linex3, fpixely+liney3, fpixelx+linex4, fpixely+liney4)--spd line
 			--end
+			thistargetalt=v.pos.z
+			thistargetalt=m.max(m.min(thistargetalt/500,5),0)
+			line(fpixelx-thistargetalt,fpixely-2,fpixelx+thistargetalt+1,fpixely-2)
 
 			rectF(fpixelx,fpixely-1,1,1)
 			rectF(fpixelx+1,fpixely,1,1)

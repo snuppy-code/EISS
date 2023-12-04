@@ -1,101 +1,101 @@
--- Author: <Authorname> (Please change this in user settings, Ctrl+Comma)
+-- Author: judgementalbird on discord :3
 -- GitHub: <GithubLink>
 -- Workshop: <WorkshopLink>
 --
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 2888 (3255 with comment) chars
+-- Minimized Size: 2888 (3222 with comment) chars
 
-U=property
-Z=output
-am=input
-t=screen
-ac=t.setColor
-f=am.getNumber
-K=Z.setNumber
-aV=am.getBool
-aZ=Z.setBool
-M=U.getNumber
-aT=U.getBool
-bd=U.getText
+E=property
+ah=output
+ai=input
+u=screen
+an=u.setColor
+f=ai.getNumber
+K=ah.setNumber
+ba=ai.getBool
+b_=ah.setBool
+U=E.getNumber
+aR=E.getBool
+aT=E.getText
 b=math
 pi=b.pi
-B=pi*2
+R=pi*2
 sin=b.sin
 cos=b.cos
 tan=b.tan
 asin=b.asin
 acos=b.acos
 atan=b.atan
-function g(x,N,aC,aH)return{a=x
-or 0,c=N
-or 0,d=aC
-or 0,i=aH
+function g(t,B,aJ,av)return{a=t
+or 0,c=B
+or 0,d=aJ
+or 0,i=av
 or 0}end
 function z(_,e)return g(_.a+e.a,_.c+e.c,_.d+e.d)end
-function aW(_,e)return g(_.a*e.a,_.c*e.c,_.d*e.d)end
+function bb(_,e)return g(_.a*e.a,_.c*e.c,_.d*e.d)end
 function l(_,w)return g(_.a*w,_.c*w,_.d*w)end
-function aq(_)return l(_,-1)end
-function H(_,e)return z(_,aq(e))end
+function ar(_)return l(_,-1)end
+function S(_,e)return z(_,ar(e))end
 function s(_)return b.sqrt(_.a*_.a+_.c*_.c+_.d*_.d)end
-function aG(_,w)return l(_,1/w)end
-function aR(_)return aG(_,s(_))end
-function P(_,e)return _.a*e.a+_.c*e.c+_.d*e.d
+function aP(_,w)return l(_,1/w)end
+function bd(_)return aP(_,s(_))end
+function N(_,e)return _.a*e.a+_.c*e.c+_.d*e.d
 end
-function au(_,e)return g(_.c*e.d-_.d*e.c,_.d*e.a-_.a*e.d,_.a*e.c-_.c*e.a)end
-function bb(u,D,v)local v=v
+function aH(_,e)return g(_.c*e.d-_.d*e.c,_.d*e.a-_.a*e.d,_.a*e.c-_.c*e.a)end
+function aY(v,H,x)local x=x
 or 1
-return g(b.sin(u)*b.cos(D)*v,b.cos(u)*b.cos(D)*v,b.sin(D)*v)end
-function aE(_,o)if not n then
-n={}n[o]={T=g(),W=g()}elseif not n[o]then
-n[o]={T=g(),W=g()}end
-n[o].W=H(_,n[o].T)n[o].T=_
-return n[o].W
+return g(b.sin(v)*b.cos(H)*x,b.cos(v)*b.cos(H)*x,b.sin(H)*x)end
+function aC(_,o)if not m then
+m={}m[o]={D=g(),M=g()}elseif not m[o]then
+m[o]={D=g(),M=g()}end
+m[o].M=S(_,m[o].D)m[o].D=_
+return m[o].M
 end
-function aw(_,S,A,O)return g(P(S,_),P(A,_),P(O,_))end
-function aU(_,S,A,O)return z(z(l(S,_.a),l(A,_.c)),l(O,_.d))end
-function aD(_)return s(_),b.atan(_.a,_.c),b.asin(_.d/s(_))end
-function L(ak)local b={}for k=1,3 do
-b[k]={}for q=1,3 do
-b[k][q]=ak and ak[k*3-3+q]or 0
-end
-end
-return b
-end
-function y(av,p)local b={}for k=1,3 do
-b[k]={}for q=1,3 do
-b[k][q]=0
-for ad=1,3 do
-b[k][q]=b[k][q]+av[k][ad]*p[ad][q]end
+function au(_,F,A,Q)return g(N(F,_),N(A,_),N(Q,_))end
+function aS(_,F,A,Q)return z(z(l(F,_.a),l(A,_.c)),l(Q,_.d))end
+function aw(_)return s(_),b.atan(_.a,_.c),b.asin(_.d/s(_))end
+function O(ae)local b={}for k=1,3 do
+b[k]={}for r=1,3 do
+b[k][r]=ae and ae[k*3-3+r]or 0
 end
 end
 return b
 end
-function J(j,i)local a={}a.a=i.a*j[1][1]+i.c*j[2][1]+i.d*j[3][1]a.c=i.a*j[1][2]+i.c*j[2][2]+i.d*j[3][2]a.d=i.a*j[1][3]+i.c*j[2][3]+i.d*j[3][3]return a end
-function ae(x,min,max)return b.max(min,b.min(x,max))end
-function aN(x,N,p)return x*(1-p)+N*p end
-aF=g(M("CAM X offset"),M("CAM Y offset"),M("CAM Z offset"))p=4
-aY,b_=0,0
-ba,G,r,aX=.5,.88,0,0
-function onTick()Y,aj,ai=f(4),f(5),f(6)V,F,X=cos(Y),cos(aj),cos(ai)ar,R,C=sin(Y),sin(aj),sin(ai)af=g(F*X,-R,F*C)ah=g(ar*C+V*R*X,V*F,-ar*X+V*R*C)aJ=au(af,ah)az=aq(ah)I=l(g(f(10),f(12),f(11)),B/60)ao=aE(I,"angular_acc")an=l(I,p)aO=z(an,l(ao,.5*p^2))h=s(ao)>.001 and aO or(s(I)>.001 and an or g(0,0,0))ap=L({1,0,0,0,cos(h.a),-sin(h.a),0,sin(h.a),cos(h.a)})ab=L({cos(h.c),0,sin(h.c),0,1,0,-sin(h.c),0,cos(h.c)})ag=L({cos(h.d),-sin(h.d),0,sin(h.d),cos(h.d),0,0,0,1})at=y(y(ag,ab),ap)bc=y(y(ap,ab),ag)Q=at
-aP=J(Q,af)as=J(Q,aJ)aA=J(Q,az)aK=g(f(1),f(3),f(2))ax=g(f(13),f(14),f(15))al=H(ax,aK)aB=H(aw(al,aP,as,aA),aF)be,ay,aM=aD(aB)aa=f(16)==2
-aS=f(17)>0
-aQ=f(20)>0
-if aa then
-E=f(18)else
-E=0
+function y(as,q)local b={}for k=1,3 do
+b[k]={}for r=1,3 do
+b[k][r]=0
+for al=1,3 do
+b[k][r]=b[k][r]+as[k][al]*q[al][r]end
 end
-if aQ then
-G=ae(G+E*.004,.3,1)m=(atan(aN(tan(.0125),tan(1.1),G))-.0125)/(1.1-.0125)else
-aL=b.min(f(19),99)aI=s(al)r=ae(r+E*.001,-.1,.3)m=(.99/(1+.4*2.7^(-.014*aI)))if(r+m)>1 then
-r=1-m
-elseif(r+m)<0 then
-r=-m
 end
-m=m+r-aL/4000
+return b
 end
-K(1,-ay/B)K(2,aM/B*2.942+.7355)K(3,m)end
-function onDraw()i,u=t.getWidth(),t.getHeight()if aa then
-ac(1,1,1,200)t.drawRectF(2,u-6,12,5)ac(85,160,35)t.drawText(2,u-6,"SOI")end
+function X(j,i)local a={}a.a=i.a*j[1][1]+i.c*j[2][1]+i.d*j[3][1]a.c=i.a*j[1][2]+i.c*j[2][2]+i.d*j[3][2]a.d=i.a*j[1][3]+i.c*j[2][3]+i.d*j[3][3]return a end
+function am(t,min,max)return b.max(min,b.min(t,max))end
+function ax(t,B,q)return t*(1-q)+B*q end
+aB=g(U("CAM X offset"),U("CAM Y offset"),U("CAM Z offset"))q=4
+aX,aZ=0,0
+aU,G,p,aW=.5,.88,0,0
+function onTick()ac,ab,aj=f(4),f(5),f(6)P,W,J=cos(ac),cos(ab),cos(aj)Y,L,C=sin(ac),sin(ab),sin(aj)ag=g(W*J,-L,W*C)aq=g(Y*C+P*L*J,P*W,-Y*J+P*L*C)aE=aH(ag,aq)aA=ar(aq)I=l(g(f(10),f(12),f(11)),R/60)Z=aC(I,"angular_acc")ad=l(I,q)aK=z(ad,l(Z,.5*q^2))h=s(Z)>.001 and aK or(s(I)>.001 and ad or g(0,0,0))af=O({1,0,0,0,cos(h.a),-sin(h.a),0,sin(h.a),cos(h.a)})ao=O({cos(h.c),0,sin(h.c),0,1,0,-sin(h.c),0,cos(h.c)})aa=O({cos(h.d),-sin(h.d),0,sin(h.d),cos(h.d),0,0,0,1})aI=y(y(aa,ao),af)be=y(y(af,ao),aa)T=aI
+aD=X(T,ag)aF=X(T,aE)aM=X(T,aA)ay=g(f(1),f(3),f(2))aL=g(f(13),f(14),f(15))ap=S(aL,ay)aO=S(au(ap,aD,aF,aM),aB)aV,aN,aQ=aw(aO)ak=f(16)==2
+bc=f(17)>0
+at=f(20)>0
+if ak then
+V=f(18)else
+V=0
+end
+if at then
+G=am(G+V*.004,.3,1)n=(atan(ax(tan(.0125),tan(1.1),G))-.0125)/(1.1-.0125)else
+aG=b.min(f(19),99)az=s(ap)p=am(p+V*.001,-.1,.3)n=(.99/(1+.4*2.7^(-.014*az)))if(p+n)>1 then
+p=1-n
+elseif(p+n)<0 then
+p=-n
+end
+n=n+p-aG/4000
+end
+K(1,-aN/R)K(2,aQ/R*2.942+.7355)K(3,n)end
+function onDraw()i,v=u.getWidth(),u.getHeight()if ak then
+an(1,1,1,200)u.drawRectF(2,v-6,12,5)an(85,160,35)u.drawText(2,v-6,"SOI")end
 end

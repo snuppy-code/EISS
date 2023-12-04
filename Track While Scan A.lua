@@ -111,6 +111,15 @@ function onTick()
 	--my position vector
 	mpos = vec(ign(1),ign(2),ign(3))
 
+	touchin = ign(27) == 1
+	if touchin and not touch and (#targetfiles > 0) then
+		selectedtgt = selectedtgt%(#targetfiles)+1
+		--debug.log("judcycled: "..selectedtgt)
+	end
+	touch = touchin
+
+	ACM = ign(28) == 1
+
 	--facing vectors
 	rx,ry,rz=ign(4),ign(5),ign(6)
 	cx,cy,cz=cos(rx),cos(ry),cos(rz)
@@ -318,11 +327,17 @@ function onTick()
 		osn(14,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].x)
 		osn(15,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].y)
 		osn(16,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].z)
+		--osn(14,targetfiles[enemytransindex].extrpos.x)
+		--osn(15,targetfiles[enemytransindex].extrpos.y)
+		--osn(16,targetfiles[enemytransindex].extrpos.z)
 	end
 	if targetfiles[enemytransindex+1] then
 		osn(17,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].x)
 		osn(18,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].y)
 		osn(19,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].z)
+		--osn(17,targetfiles[enemytransindex+1].extrpos.x)
+		--osn(18,targetfiles[enemytransindex+1].extrpos.y)
+		--osn(19,targetfiles[enemytransindex+1].extrpos.z)
 	end
 	osn(26,enemytransindex)
 	osn(27,enemytransindex+1)
@@ -360,16 +375,25 @@ function onTick()
 	--end
 
 	--output selected tgt
-	if targetfiles[selectedtgt] then
-		osn(30,targetfiles[selectedtgt].extrpos.x)
-		osn(31,targetfiles[selectedtgt].extrpos.y)
-		osn(32,targetfiles[selectedtgt].extrpos.z)
-		osn(11,targetfiles[selectedtgt].t)
+	if ACM then
+		osn(30,rawradartargets[3].pos.x)
+		osn(31,rawradartargets[3].pos.y)
+		osn(32,rawradartargets[3].pos.z)
 	else
-		osn(30,0)
-		osn(31,0)
-		osn(32,0)
-		osn(11,0)
+		if targetfiles[selectedtgt] then
+			osn(30,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].x)
+			osn(31,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].y)
+			osn(32,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].z)
+			--osn(30,targetfiles[selectedtgt].extrpos.x)
+			--osn(31,targetfiles[selectedtgt].extrpos.y)
+			--osn(32,targetfiles[selectedtgt].extrpos.z)
+			osn(11,targetfiles[selectedtgt].t)
+		else
+			osn(30,0)
+			osn(31,0)
+			osn(32,0)
+			osn(11,0)
+		end
 	end
 	
 	--new check radar slew
