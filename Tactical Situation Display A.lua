@@ -268,6 +268,9 @@ function onDraw()
 			else
 				setcolor(80,13,1)
 			end
+			thistargetalt=v.pos.z
+			thistargetalt=m.max(m.min(thistargetalt/500,4),0)
+			line(tgtpixelx-thistargetalt,tgtpixely-2,tgtpixelx+thistargetalt+1,tgtpixely-2)
 			rect(tgtpixelx-1,tgtpixely-1,2,2)
 		end
 
@@ -287,6 +290,7 @@ function onDraw()
 			--	line2(fpixelx+linex1, fpixely+liney1, fpixelx+linex2, fpixely+liney2)--alt line
 			--	line2(fpixelx+linex3, fpixely+liney3, fpixelx+linex4, fpixely+liney4)--spd line
 			--end
+
 			rectF(fpixelx,fpixely-1,1,1)
 			rectF(fpixelx+1,fpixely,1,1)
 			rectF(fpixelx,fpixely+1,1,1)
