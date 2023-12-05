@@ -1,24 +1,24 @@
--- Author: judgementalbird on discord :3
+-- Author: <Authorname> (Please change this in user settings, Ctrl+Comma)
 -- GitHub: <GithubLink>
 -- Workshop: <WorkshopLink>
 --
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 270 (602 with comment) chars
+-- Minimized Size: 270 (635 with comment) chars
 
-d=output
+e=output
 c=input
-k,i,h,g=c.getBool,d.setBool,c.getNumber,d.setNumber
+j,i,f,k=c.getBool,e.setBool,c.getNumber,e.setNumber
 a=1
-b={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6,[8]=4,[9]=5}function onTick()e=k(1)if e and not f then
-a=a%(#b)+1
+_={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6,[8]=4,[9]=5}function onTick()d=j(1)if d and not g then
+a=a%(#_)+1
 end
-f=e
-i(b[a],true)_=0
-for j=1,(#b-1)do
-if not(h(j)==0)then
-_=_+1
+g=d
+i(_[a],true)b=0
+for h=1,(#_-1)do
+if not(f(h)==0)then
+b=b+1
 end
 end
-g(1,_)end
+k(1,b)end

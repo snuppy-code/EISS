@@ -1,101 +1,101 @@
--- Author: judgementalbird on discord :3
+-- Author: <Authorname> (Please change this in user settings, Ctrl+Comma)
 -- GitHub: <GithubLink>
 -- Workshop: <WorkshopLink>
 --
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 2888 (3222 with comment) chars
+-- Minimized Size: 2888 (3255 with comment) chars
 
-E=property
-ah=output
-ai=input
-u=screen
-an=u.setColor
-f=ai.getNumber
-K=ah.setNumber
-ba=ai.getBool
-b_=ah.setBool
-U=E.getNumber
-aR=E.getBool
-aT=E.getText
-b=math
-pi=b.pi
+D=property
+ao=output
+ah=input
+x=screen
+aq=x.setColor
+g=ah.getNumber
+H=ao.setNumber
+aZ=ah.getBool
+b_=ao.setBool
+Q=D.getNumber
+aY=D.getBool
+be=D.getText
+a=math
+pi=a.pi
 R=pi*2
-sin=b.sin
-cos=b.cos
-tan=b.tan
-asin=b.asin
-acos=b.acos
-atan=b.atan
-function g(t,B,aJ,av)return{a=t
-or 0,c=B
-or 0,d=aJ
-or 0,i=av
+sin=a.sin
+cos=a.cos
+tan=a.tan
+asin=a.asin
+acos=a.acos
+atan=a.atan
+function f(v,E,aB,aP)return{b=v
+or 0,d=E
+or 0,c=aB
+or 0,i=aP
 or 0}end
-function z(_,e)return g(_.a+e.a,_.c+e.c,_.d+e.d)end
-function bb(_,e)return g(_.a*e.a,_.c*e.c,_.d*e.d)end
-function l(_,w)return g(_.a*w,_.c*w,_.d*w)end
-function ar(_)return l(_,-1)end
-function S(_,e)return z(_,ar(e))end
-function s(_)return b.sqrt(_.a*_.a+_.c*_.c+_.d*_.d)end
-function aP(_,w)return l(_,1/w)end
-function bd(_)return aP(_,s(_))end
-function N(_,e)return _.a*e.a+_.c*e.c+_.d*e.d
+function y(_,e)return f(_.b+e.b,_.d+e.d,_.c+e.c)end
+function aV(_,e)return f(_.b*e.b,_.d*e.d,_.c*e.c)end
+function n(_,w)return f(_.b*w,_.d*w,_.c*w)end
+function ag(_)return n(_,-1)end
+function F(_,e)return y(_,ag(e))end
+function s(_)return a.sqrt(_.b*_.b+_.d*_.d+_.c*_.c)end
+function as(_,w)return n(_,1/w)end
+function aU(_)return as(_,s(_))end
+function T(_,e)return _.b*e.b+_.d*e.d+_.c*e.c
 end
-function aH(_,e)return g(_.c*e.d-_.d*e.c,_.d*e.a-_.a*e.d,_.a*e.c-_.c*e.a)end
-function aY(v,H,x)local x=x
+function ay(_,e)return f(_.d*e.c-_.c*e.d,_.c*e.b-_.b*e.c,_.b*e.d-_.d*e.b)end
+function aT(u,X,t)local t=t
 or 1
-return g(b.sin(v)*b.cos(H)*x,b.cos(v)*b.cos(H)*x,b.sin(H)*x)end
-function aC(_,o)if not m then
-m={}m[o]={D=g(),M=g()}elseif not m[o]then
-m[o]={D=g(),M=g()}end
-m[o].M=S(_,m[o].D)m[o].D=_
-return m[o].M
+return f(a.sin(u)*a.cos(X)*t,a.cos(u)*a.cos(X)*t,a.sin(X)*t)end
+function aH(_,r)if not m then
+m={}m[r]={M=f(),S=f()}elseif not m[r]then
+m[r]={M=f(),S=f()}end
+m[r].S=F(_,m[r].M)m[r].M=_
+return m[r].S
 end
-function au(_,F,A,Q)return g(N(F,_),N(A,_),N(Q,_))end
-function aS(_,F,A,Q)return z(z(l(F,_.a),l(A,_.c)),l(Q,_.d))end
-function aw(_)return s(_),b.atan(_.a,_.c),b.asin(_.d/s(_))end
-function O(ae)local b={}for k=1,3 do
-b[k]={}for r=1,3 do
-b[k][r]=ae and ae[k*3-3+r]or 0
-end
-end
-return b
-end
-function y(as,q)local b={}for k=1,3 do
-b[k]={}for r=1,3 do
-b[k][r]=0
-for al=1,3 do
-b[k][r]=b[k][r]+as[k][al]*q[al][r]end
+function aF(_,N,K,J)return f(T(N,_),T(K,_),T(J,_))end
+function bb(_,N,K,J)return y(y(n(N,_.b),n(K,_.d)),n(J,_.c))end
+function aE(_)return s(_),a.atan(_.b,_.d),a.asin(_.c/s(_))end
+function L(al)local a={}for j=1,3 do
+a[j]={}for q=1,3 do
+a[j][q]=al and al[j*3-3+q]or 0
 end
 end
-return b
+return a
 end
-function X(j,i)local a={}a.a=i.a*j[1][1]+i.c*j[2][1]+i.d*j[3][1]a.c=i.a*j[1][2]+i.c*j[2][2]+i.d*j[3][2]a.d=i.a*j[1][3]+i.c*j[2][3]+i.d*j[3][3]return a end
-function am(t,min,max)return b.max(min,b.min(t,max))end
-function ax(t,B,q)return t*(1-q)+B*q end
-aB=g(U("CAM X offset"),U("CAM Y offset"),U("CAM Z offset"))q=4
-aX,aZ=0,0
-aU,G,p,aW=.5,.88,0,0
-function onTick()ac,ab,aj=f(4),f(5),f(6)P,W,J=cos(ac),cos(ab),cos(aj)Y,L,C=sin(ac),sin(ab),sin(aj)ag=g(W*J,-L,W*C)aq=g(Y*C+P*L*J,P*W,-Y*J+P*L*C)aE=aH(ag,aq)aA=ar(aq)I=l(g(f(10),f(12),f(11)),R/60)Z=aC(I,"angular_acc")ad=l(I,q)aK=z(ad,l(Z,.5*q^2))h=s(Z)>.001 and aK or(s(I)>.001 and ad or g(0,0,0))af=O({1,0,0,0,cos(h.a),-sin(h.a),0,sin(h.a),cos(h.a)})ao=O({cos(h.c),0,sin(h.c),0,1,0,-sin(h.c),0,cos(h.c)})aa=O({cos(h.d),-sin(h.d),0,sin(h.d),cos(h.d),0,0,0,1})aI=y(y(aa,ao),af)be=y(y(af,ao),aa)T=aI
-aD=X(T,ag)aF=X(T,aE)aM=X(T,aA)ay=g(f(1),f(3),f(2))aL=g(f(13),f(14),f(15))ap=S(aL,ay)aO=S(au(ap,aD,aF,aM),aB)aV,aN,aQ=aw(aO)ak=f(16)==2
-bc=f(17)>0
-at=f(20)>0
-if ak then
-V=f(18)else
-V=0
+function z(aK,o)local a={}for j=1,3 do
+a[j]={}for q=1,3 do
+a[j][q]=0
+for ap=1,3 do
+a[j][q]=a[j][q]+aK[j][ap]*o[ap][q]end
 end
-if at then
-G=am(G+V*.004,.3,1)n=(atan(ax(tan(.0125),tan(1.1),G))-.0125)/(1.1-.0125)else
-aG=b.min(f(19),99)az=s(ap)p=am(p+V*.001,-.1,.3)n=(.99/(1+.4*2.7^(-.014*az)))if(p+n)>1 then
-p=1-n
-elseif(p+n)<0 then
-p=-n
 end
-n=n+p-aG/4000
+return a
 end
-K(1,-aN/R)K(2,aQ/R*2.942+.7355)K(3,n)end
-function onDraw()i,v=u.getWidth(),u.getHeight()if ak then
-an(1,1,1,200)u.drawRectF(2,v-6,12,5)an(85,160,35)u.drawText(2,v-6,"SOI")end
+function P(k,i)local b={}b.b=i.b*k[1][1]+i.d*k[2][1]+i.c*k[3][1]b.d=i.b*k[1][2]+i.d*k[2][2]+i.c*k[3][2]b.c=i.b*k[1][3]+i.d*k[2][3]+i.c*k[3][3]return b end
+function ac(v,min,max)return a.max(min,a.min(v,max))end
+function aN(v,E,o)return v*(1-o)+E*o end
+aL=f(Q("CAM X offset"),Q("CAM Y offset"),Q("CAM Z offset"))o=4
+aX,aR=0,0
+bc,G,p,aW=.5,.88,0,0
+function onTick()am,ak,aj=g(4),g(5),g(6)I,B,A=cos(am),cos(ak),cos(aj)ai,V,C=sin(am),sin(ak),sin(aj)ab=f(B*A,-V,B*C)ae=f(ai*C+I*V*A,I*B,-ai*A+I*V*C)au=ay(ab,ae)aA=ag(ae)U=n(f(g(10),g(12),g(11)),R/60)Y=aH(U,"angular_acc")ar=n(U,o)aD=y(ar,n(Y,.5*o^2))h=s(Y)>.001 and aD or(s(U)>.001 and ar or f(0,0,0))af=L({1,0,0,0,cos(h.b),-sin(h.b),0,sin(h.b),cos(h.b)})ad=L({cos(h.d),0,sin(h.d),0,1,0,-sin(h.d),0,cos(h.d)})Z=L({cos(h.c),-sin(h.c),0,sin(h.c),cos(h.c),0,0,0,1})aQ=z(z(Z,ad),af)aS=z(z(af,ad),Z)W=aQ
+av=P(W,ab)aw=P(W,au)at=P(W,aA)aC=f(g(1),g(3),g(2))aM=f(g(13),g(14),g(15))an=F(aM,aC)aO=F(aF(an,av,aw,at),aL)bd,ax,aJ=aE(aO)aa=g(16)==2
+ba=g(17)>0
+az=g(20)>0
+if aa then
+O=g(18)else
+O=0
+end
+if az then
+G=ac(G+O*.004,.3,1)l=(atan(aN(tan(.0125),tan(1.1),G))-.0125)/(1.1-.0125)else
+aG=a.min(g(19),99)aI=s(an)p=ac(p+O*.001,-.1,.3)l=(.99/(1+.4*2.7^(-.014*aI)))if(p+l)>1 then
+p=1-l
+elseif(p+l)<0 then
+p=-l
+end
+l=l+p-aG/4000
+end
+H(1,-ax/R)H(2,aJ/R*2.942+.7355)H(3,l)end
+function onDraw()i,u=x.getWidth(),x.getHeight()if aa then
+aq(1,1,1,200)x.drawRectF(2,u-6,12,5)aq(85,160,35)x.drawText(2,u-6,"SOI")end
 end

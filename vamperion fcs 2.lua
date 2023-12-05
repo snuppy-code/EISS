@@ -96,6 +96,12 @@ function onTick()
 	manaxes = {pitch=ign(2), roll=ign(1), yaw=ign(3)}--yaw=0}
 	angspdaxes = {pitch=-ign(5), roll=-ign(6), yaw=ign(7)}
 	spd = ign(8)
+	if spd <= 145 then
+		spdfactor = 20
+	else
+		spdfactor = 0.51/(1-3.64*(2.71828^(-0.01*spd)))
+	end
+	debug.log("spdfactor: "..spdfactor)
 	missilesfactor = ign(9)/8
 	--debug.log("missilesfactor: "..missilesfactor)
 	gains = {
@@ -111,6 +117,10 @@ function onTick()
 		roll=unloadedtrims.roll*gains.roll,
 		yaw=unloadedtrims.yaw*gains.yaw
 	}
+	gains = {
+		pitch=gains.pitch*spdfactor,
+		roll=gains.roll*spdfactor,
+		yaw=gains.yaw*spdfactor}
 
 	sumangspdaxes = addAxes(sumangspdaxes,angspdaxes)
 

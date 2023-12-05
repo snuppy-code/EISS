@@ -119,6 +119,7 @@ function onTick()
 	end
 
 	selectedtgt = vec(ign(23),ign(24),ign(25))
+	--debug.log("tsdx: "..selectedtgt.x.." y: "..selectedtgt.y.." z: "..selectedtgt.z)
 
 	--facing vectors
 	rx,ry,rz=ign(4),ign(5),ign(6)

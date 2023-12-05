@@ -18,6 +18,7 @@ end
 
 function onTick()
     selectedtgt = vec(ign(23),ign(24),ign(25))
+	--debug.log("evax: "..selectedtgt.x.." y: "..selectedtgt.y.." z: "..selectedtgt.z)
 	ACM = ign(28) == 1
 end
 	
