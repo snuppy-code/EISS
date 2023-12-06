@@ -25,6 +25,6 @@ sandboxEnv.simulator = simulator
 simulator:_beginSimulation(false, arg[1], arg[2])
 
 -- main require
-sandboxEnv.require("Track While Scan A")
+sandboxEnv.require("Electronic Vision Assistance A")
 
 simulator:_giveControlToMainLoop()

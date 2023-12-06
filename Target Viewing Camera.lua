@@ -124,7 +124,7 @@ x.x=w.x*v[1][1]+w.y*v[2][1]+w.z*v[3][1]x.y=w.x*v[1][2]+w.y*v[2][2]+w.z*v[3][2]x.
 function clamp(a, min, max) return m.max(min, m.min(a, max)) end
 function lerp(a,b,t) return a * (1-t) + b * t end
 
-camera_offset = vec(pgn("CAM X offset"),pgn("CAM Y offset"),pgn("CAM Z offset"))
+camera_offset = vec(0,1.5,-1)--vec(pgn("CAM X offset"),pgn("CAM Y offset"),pgn("CAM Z offset"))
 t=4
 hor_comp,ver_comp=0,0
 zoom,manualzoom,addonzoom,manualzoominteg=0.5,0.88,0,0

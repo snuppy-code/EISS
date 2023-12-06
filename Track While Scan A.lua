@@ -82,16 +82,13 @@ vicendf = pgn("VL End Frq")
 vicmyuser = property.getText("VL User")
 viccurrentfreq=vicstartfreq
 
---MSLLINK (missile datalink)
-mslstartfreq = pgn("ML Strt Frq")
-mslendf = pgn("ML End Frq")
-
 --radar & tgt handling info
 mergedist = pgn("Merge Dist")
 culltime = pgn("Cull Time")
 
-rawemissiontargets = {}
+--rawemissiontargets = {}
 rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
+	{},
 	{},
 	{},
 	{}
@@ -99,11 +96,10 @@ rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" sto
 
 targetfiles = {}
 friendlyfiles = {}
-missilefiles = {}
 friendlyindex = {}
 
-selectedtgt,tgtcycletouch = 0,0
-enemytransindex,friendlytransindex,missiletransindex=0,0,0
+selectedtgt = 0
+enemytransindex,friendlytransindex=0,0
 existedticks,possculltimer = 0,0
 function onTick()
 	possculltimer = possculltimer + 1
@@ -176,12 +172,6 @@ function onTick()
 	end
 	osn(3,viccurrentfreq)
 
-	---- MSLLINK ----
-	--since we don't have username, we rely on the cycle speed being constant. the data for each index will be outdated/mismatched but we don't care
-	--output read freq on comp 4
-	--use missilefiles table
-	--12,13,14
-
     ---- Raw Radar Targets to TWS ----
 	--data from new radar 1
 	if ign(18) > 0 then
@@ -189,40 +179,39 @@ function onTick()
 		rawradartargets[1].rel = torelative(rawradartargets[1].loc,right,fwd,up)	--new1 r tgt d,a,e 18,19,20
 		rawradartargets[1].pos = add(rawradartargets[1].rel, mpos)
 	else
-		rawradartargets[1].loc = vec()
-		rawradartargets[1].rel = vec()
-		rawradartargets[1].pos = vec()
+		rawradartargets[1] = {loc=vec(),rel=vec(),pos=vec()}
 	end
-	rawradartargets[1].tsd = ign(31)											--tsd: 31
+	rawradartargets[1].tsd = ign(30)											--tsd: 31
 
-	--data from new radar 3
-	if ign(24) > 0 then
-		rawradartargets[2].loc = stoc(ign(25)*pi2+pi,ign(26)*pi2,ign(24))
-		rawradartargets[2].rel = torelative(rawradartargets[2].loc,right,fwd,up)	--new3 r tgt d,a,e 24,25,26
+	--data from new radar 2
+	if ign(12) > 0 then
+		rawradartargets[2].loc = stoc(ign(13)*pi2,ign(14)*pi2,ign(12))
+		rawradartargets[2].rel = torelative(rawradartargets[2].loc,right,fwd,up)	--new2 r tgt d,a,e 12,13,14
 		rawradartargets[2].pos = add(rawradartargets[2].rel, mpos)
 	else
-		rawradartargets[2].loc = vec()
-		rawradartargets[2].rel = vec()
-		rawradartargets[2].pos = vec()
+		rawradartargets[2] = {loc=vec(),rel=vec(),pos=vec()}
 	end
 	rawradartargets[2].tsd = ign(31)											--tsd: 31
 
-	----THIS will be the long range STT radar
-	--rawradartargets[4] = {}
-	--rawradartargets[4] = stoctoglobal(ign(27),ign(28),ign(29))		--vernew r tgt d,a,e 27,28,29, 30..
-	--rawradartargets[4].tsd = ign(32)									--tsd: 32
+	--data from new radar 3
+	if ign(24) > 0 then
+		rawradartargets[3].loc = stoc(ign(25)*pi2+pi,ign(26)*pi2,ign(24))
+		rawradartargets[3].rel = torelative(rawradartargets[3].loc,right,fwd,up)	--new3 r tgt d,a,e 24,25,26
+		rawradartargets[3].pos = add(rawradartargets[3].rel, mpos)
+	else
+		rawradartargets[3] = {loc=vec(),rel=vec(),pos=vec()}
+	end
+	rawradartargets[3].tsd = ign(32)											--tsd: 32
 
 	--data from old radar / short range STT radar
-	rawradartargets[3].pos = vec(ign(15),ign(16),ign(17))
-	if length(rawradartargets[3].pos) > 0 then
-		rawradartargets[3].rel = subt(mpos,rawradartargets[3].pos)			--verold r tgt xyz 15,16,17
-		rawradartargets[3].loc = tolocal(rawradartargets[3].rel,right,fwd,up)
+	rawradartargets[4].pos = vec(ign(15),ign(16),ign(17))
+	if length(rawradartargets[4].pos) > 0 then
+		rawradartargets[4].rel = subt(mpos,rawradartargets[4].pos)			--verold r tgt xyz 15,16,17
+		rawradartargets[4].loc = tolocal(rawradartargets[4].rel,right,fwd,up)
 	else
-		rawradartargets[3].loc = vec()
-		rawradartargets[3].rel = vec()
-		rawradartargets[3].pos = vec()
+		rawradartargets[4] = {loc=vec(),rel=vec(),pos=vec()}
 	end
-	rawradartargets[3].tsd = 0												--tsd: X
+	rawradartargets[4].tsd = 0												--tsd: X
 
 	--raw tgts to target files
 	for k,rawtgt in ipairs(rawradartargets) do
@@ -340,39 +329,23 @@ function onTick()
 		--osn(19,targetfiles[enemytransindex+1].extrpos.z)
 	end
 	osn(26,enemytransindex)
-	osn(27,enemytransindex+1)
 	enemytransindex = enemytransindex + 2
 	if enemytransindex > #targetfiles then
 		enemytransindex = 1
 	end
 
 	--friendlies
-	--debug.log("h: "..#friendlyindex)
 	yup = friendlyfiles[friendlyindex[friendlytransindex]]
 	if yup then
 		osn(20,yup.x)
 		osn(21,yup.y)
 		osn(22,yup.z)
-		--debug.log("l: "..yup.x)
 	end
-	--debug.log("k: "..friendlytransindex)
 	osn(28,friendlytransindex)
 	friendlytransindex = friendlytransindex + 1
 	if friendlytransindex > #friendlyindex then
 		friendlytransindex = 1
 	end
-
-	--missiles
-	--if missilefiles[missiletransindex] then
-	--	--osn(23,missilefiles[missiletransindex].pos.x)
-	--	--osn(24,missilefiles[missiletransindex].pos.y)
-	--	--osn(25,missilefiles[missiletransindex].pos.z)
-	--end
-	----osn(29,missiletransindex)
-	--missiletransindex = missiletransindex + 1
-	--if missiletransindex > #missilefiles then
-	--	missiletransindex = 1
-	--end
 
 	--output selected tgt
 	if ACM then
@@ -396,9 +369,6 @@ function onTick()
 		end
 	end
 	
-	--new check radar slew
-	osn(5,0)
-	osn(6,0)
 	--old radar slew
 	osn(7,0)
 	osn(8,0)
@@ -406,17 +376,6 @@ function onTick()
 	osn(9,1)
 	osn(10,1)
 end
-
---[[frequencies
-start:
-	589340
-used:
-	friendly1	589341 AAA1
-	friendly2	589345 BBB2
-	me			589349 CCC3
-end:
-	589352
-]]
 
 --[[
 --debug.log("TWS\nraw radar target loop start")

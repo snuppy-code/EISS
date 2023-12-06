@@ -47,11 +47,13 @@ function clamp(a, min, max) return m.max(min, m.min(a, max)) end
 function round(x) return floor(x + 0.5) end
 
 --radar & tgt info
-radartype = pgb("Mode")--assuming sweep is true
-rangelim = pgn("R Max Rng")
-xfov = pgn("X FOV")*pi
-sweeplim = pgn("Swep Lim")*pi2+xfov
-culltime = 50
+--rangelim = 10256
+--xfov = 0.03*pi
+--sweeplim = 0.12*pi2+xfov
+rangelim = 13333
+xfov = 0.03*pi
+sweeplim = 0.09*pi2+xfov
+culltime = 10
 
 friendlies = {}
 tgtfiles = {}
@@ -62,12 +64,12 @@ rwrbuffer = {}
 for i = 1,100 do
 	rwrbuffer[i] = false
 end
-targetfiles = {}
 function onTick()
 	--some inputs
 	mpos = vec(ign(1),ign(3),ign(2))
-	forwangle = -ign(27)*pi2
-	rearangle = forwangle+pi
+	forwangle = -ign(27)*pi2--(radar 1)
+	forwangle2 = -ign(20)*pi2--(radar 2)
+	rearangle = -ign(32)*pi2+pi--(radar 3)
 
 	monitorpressed = ign(30) > 0
     tap=monitorpressed~=touch and monitorpressed
@@ -199,7 +201,7 @@ function onDraw()
 			s.setMapColorSnow(25,25,26)
 			--s.setMapColorRock(3,3,3)
 			--s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
-			
+
 			s.drawMap(viewedx,viewedy,zoom)
 		end
 		--find my position on the map and the size of the radar circle on the map
@@ -226,10 +228,13 @@ function onDraw()
 		line(mpixelx,mpixely,mpixelx + sin(forwangle+heading-xfov)*maxrangepixels, mpixely + cos(forwangle+heading-xfov)*maxrangepixels)
 		line(mpixelx,mpixely,mpixelx + sin(forwangle+heading+xfov)*maxrangepixels, mpixely + cos(forwangle+heading+xfov)*maxrangepixels)
 		
+		line(mpixelx,mpixely,mpixelx + sin(forwangle2+heading-xfov)*maxrangepixels, mpixely + cos(forwangle2+heading-xfov)*maxrangepixels)
+		line(mpixelx,mpixely,mpixelx + sin(forwangle2+heading+xfov)*maxrangepixels, mpixely + cos(forwangle2+heading+xfov)*maxrangepixels)
+		
 		line(mpixelx,mpixely,mpixelx + sin(rearangle+heading-xfov)*maxrangepixels, mpixely + cos(rearangle+heading-xfov)*maxrangepixels)
 		line(mpixelx,mpixely,mpixelx + sin(rearangle+heading+xfov)*maxrangepixels, mpixely + cos(rearangle+heading+xfov)*maxrangepixels)
 
-		if radartype then
+		--if radartype then
 			----radar borders for SWEEP
 			--setcolor(0,180,0,23)
 			--line(mpixelx,mpixely,mpixelx + sin(-sweeplim+heading)*maxrangepixels, mpixely + cos(-sweeplim+heading)*maxrangepixels)
@@ -246,15 +251,17 @@ function onDraw()
 			--		mpixely + sin(ang2) * maxrangepixels)
 			--	end
 			--end
-		else
-			--radar borders for CIRCLE
-			setcolor(0,255,0,8)
-			circl(mpixelx,mpixely,maxrangepixels)
-			--setcolor(0,255,0,4)
-			--circl(mpixelx,mpixely,maxrangepixels-0.6)
-			--setcolor(0,255,0,2)
-			--circl(mpixelx,mpixely,maxrangepixels-1.2)
-		end
+		--else
+		--originally there was radar type system, no longer in use so im just reusing code from it and keeping here inc i need it
+		setcolor(0,255,0,8)
+		circl(mpixelx,mpixely,maxrangepixels)
+		line(mpixelx,mpixely,mpixelx + sin(-sweeplim+heading)*maxrangepixels, mpixely + cos(-sweeplim+heading)*maxrangepixels)
+		line(mpixelx,mpixely,mpixelx + sin(sweeplim+heading)*maxrangepixels, mpixely + cos(sweeplim+heading)*maxrangepixels)
+		--setcolor(0,255,0,4)
+		--circl(mpixelx,mpixely,maxrangepixels-0.6)
+		--setcolor(0,255,0,2)
+		--circl(mpixelx,mpixely,maxrangepixels-1.2)
+		--end
 
 		--draw actual target files
 		for k,v in ipairs(tgtfiles) do
