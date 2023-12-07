@@ -8,17 +8,17 @@
 -- Minimized Size: 270 (602 with comment) chars
 
 e=output
-c=input
-g,i,k,f=c.getBool,e.setBool,c.getNumber,e.setNumber
-b=1
-_={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6,[8]=4,[9]=5}function onTick()d=g(1)if d and not j then
-b=b%(#_)+1
+d=input
+j,f,g,h=d.getBool,e.setBool,d.getNumber,e.setNumber
+a=1
+_={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6,[8]=4,[9]=5}function onTick()c=j(1)if c and not i then
+a=a%(#_)+1
 end
-j=d
-i(_[b],true)a=0
-for h=1,(#_-1)do
-if not(k(h)==0)then
-a=a+1
+i=c
+f(_[a],true)b=0
+for k=1,(#_-1)do
+if not(g(k)==0)then
+b=b+1
 end
 end
-f(1,a)end
+h(1,b)end

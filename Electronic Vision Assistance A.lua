@@ -5,7 +5,6 @@ abs,cos,sin,floor,atan = m.abs, m.cos, m.sin, m.floor,m.atan
 pi = m.pi
 pi2 = pi*2
 
-s = screen
 text,textbox,line,rect,rectF,circl,clear,setcolor = s.drawText,s.drawTextBox,s.drawLine,s.drawRect,s.drawRectF,s.drawCircle,s.drawClear,s.setColor
 
 function vec(x,y,z,w) --defines a vector
@@ -93,11 +92,11 @@ end
 
 ---- EVA SETUP VARS ----
 points={}
-max_points=1000--pgn("LIDAR Max Points")
+max_points=100
 t=3
 
-camera_offset=vec(0,2.625,-0.5)--vec(pgn("CAM X"),pgn("CAM Y"),pgn("CAM Z"))
-laser_offset=vec(0,3.125,-0.25)--vec(pgn("LSR X"),pgn("LSR Y"),pgn("LSR Z"))
+camera_offset=vec(0,2.625,-0.5)
+laser_offset=vec(0,3.125,-0.25)
 
 laser_angles = {}
 for i=1,t do
@@ -110,11 +109,14 @@ friendlies = {}
 tgtfiles = {}
 
 function onTick()
+
 	----  CONTROLS  ----
 	ACM = ign(28) == 1
+    zoom_in = 0.12
+    laser_dist = ign(20)
 
 	----  MY DATA  ----
-	mypos = vec(ign(1),ign(2),ign(3))
+	mypos = vec(ign(1),ign(3),ign(2))
 
 	rx,ry,rz=ign(4),ign(5),ign(6)
 	cx,cy,cz=cos(rx),cos(ry),cos(rz)
@@ -129,21 +131,25 @@ function onTick()
 	myspd = length(myvel)
 	myg = length(myacc)/9.81
 
+
 	---- GET TARGETS & FRIENDLIES ----
 	inindex = ign(19)
-	intgt = vec(ign(7),ign(8),ign(9))
-	if length(intgt) > 0 then
-		tgtfiles[inindex] = {pos=intgt,t=0}
+	intgt1 = vec(ign(7),ign(8),ign(9))
+	if length(intgt1) > 0 then
+		tgtfiles[inindex] = {pos=intgt1,t=0}
 	end
-	intgt = vec(ign(10),ign(11),ign(12))
-	if length(intgt) > 0 then
-		tgtfiles[inindex+1] = {pos=intgt,t=0}
+	intgt1 = vec(ign(10),ign(11),ign(12))
+	if length(intgt1) > 0 then
+		tgtfiles[inindex+1] = {pos=intgt1,t=0}
 	end
+
 	inindex = ign(21)
-	intgt = vec(ign(13),ign(14),ign(15))
-	if length(intgt) > 0 then
-		friendlies[inindex] = {pos=intgt,t=0}
+	intgt1 = vec(ign(13),ign(14),ign(15))
+	intgt2 = vec(ign(16),ign(17),ign(18))
+	if length(intgt1) > 0 then--friendly position
+		friendlies[inindex] = {pos=intgt1,sel=intgt2,t=0}
 	end
+
 	--cull/timeout targets
 	for k,_ in pairs(tgtfiles) do
 		tgtfiles[k].t = tgtfiles[k].t + 1
@@ -163,10 +169,67 @@ function onTick()
 	--debug.log("tsdx: "..selectedtgt.x.." y: "..selectedtgt.y.." z: "..selectedtgt.z)
 	
 
+	---- LIDAR ----
+	camera_right = right
+	camera_forward = to_global_frame(spherical_to_cart(0,-0.6*pi/4,1),right,fwd,up)
+	camera_up = cross(camera_right,camera_forward)
+
+	--laser spot calculations
+	for i=t,2,-1 do
+		laser_angles[i].hor = laser_angles[i-1].hor
+		laser_angles[i].ver = laser_angles[i-1].ver
+	end
+
+	laser_angles[1].hor = hor or 0
+	laser_angles[1].ver = ver or 0
+
+	if laser_dist >= 5 and laser_dist < 2000 then
+		--calculate point in global frame
+		laser_spot = add(to_global_frame(add(spherical_to_cart(laser_angles[t].hor,laser_angles[t].ver,laser_dist),laser_offset),right,fwd,up),mypos)
+		laser_spot = vec(laser_spot.x,laser_spot.y,laser_spot.z < 0 and 0 or laser_spot.z) --if laser spot is below water level, set z to 0
+		
+		if #points > 0 then --if the table has points
+
+			new,j = true,0
+			while j < #points and new and j < max_points do --check if calculated point is new
+				j = j + 1
+				new = length(subt(points[j],laser_spot)) > 5 --new if distance is >5m
+			end
+
+			table_full = #points >= max_points
+
+			if new then --if calculated point is new
+
+				if table_full then
+					for i=1,max_points-1 do --remove oldest point and shift all table contents down by 1
+						points[i] = points[i+1]
+					end
+					points[max_points] = laser_spot --add new point (overwrite last spot in table)
+				else
+					points[#points+1] = laser_spot --add new point (extend the table)
+				end
+
+			end
+
+		else --if the table is empty
+
+			points[1] = laser_spot --add new point (first index)
+
+		end
+
+	end
+
+	--outputs
+	hor = math.rad(math.random(-40,40))
+	ver = math.rad(math.random(-40,40))
+
+	osn(1,hor*4/pi)
+	osn(2,ver*4/pi)
+
 
 end
 function onDraw()
-	w,h = screen.getWidth(),screen.getHeight()
+	w,h = s.getWidth(),s.getHeight()
 	whalf,hhalf = w/2,h/2
 	if ACM then
 		setcolor(255,0,0)
@@ -181,6 +244,37 @@ function onDraw()
 	setcolor(255,120,120)
 	text(6,6,"Gs: "..myg)
 	text(6,12,"Spd: "..myspd)
+
+	amount = 0
+
+	for k,v in pairs(points) do --for all points
+		amount = amount + 1
+		relative_position = subt(v,mypos) --get relative positon
+		dist = length(relative_position) --dist
+
+		if dist<2000 then
+
+			local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+
+			if local_position.y > 0 then
+
+				pixel_x,pixel_y = to_monitor(local_position,camera_offset,zoom_in,w,h)
+				setcolor(5-dist, dist-5, 0)
+
+				if(v.z<0.5) then
+					setcolor(clamp(200-dist/10,0,200), 0, clamp(dist/10,0,200), clamp(200-dist/20,0,200))
+				else
+					setcolor(clamp(200-dist/10,0,200), clamp(dist/10,0,200), 0, clamp(200-dist/20,0,200))
+				end
+
+				rectF(pixel_x-1,pixel_y,1,1)
+
+			end
+
+    	end
+
+	end
+	debug.log(amount.." points")
 end
 
 

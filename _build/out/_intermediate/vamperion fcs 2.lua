@@ -109,6 +109,10 @@ function onTick()
 		pitch=lerp(unloadedgains.pitch,loadedgains.pitch,missilesfactor),
 		roll=lerp(unloadedgains.roll,loadedgains.roll,missilesfactor),
 		yaw=lerp(unloadedgains.yaw,loadedgains.yaw,missilesfactor)}
+	--gains = {
+	--	pitch=ign(8),
+	--	roll=ign(9),
+	--	yaw=ign(10)}
 	--debug.log("pitch gain: "..gains.pitch)
 	--debug.log("pitch gain: "..gains.roll)
 	--debug.log("pitch gain: "..gains.yaw)

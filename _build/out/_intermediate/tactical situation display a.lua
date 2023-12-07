@@ -153,12 +153,10 @@ function onTick()
 	inindex = ign(19)
 	intgt1 = vec(ign(7),ign(8),ign(9))
 	if length(intgt1) > 0 then
-		----debug.log("upd "..inindex)
 		tgtfiles[inindex] = {pos=intgt1,t=0}
 	end
 	intgt1 = vec(ign(10),ign(11),ign(12))
 	if length(intgt1) > 0 then
-		----debug.log("upd "..(inindex+1))
 		tgtfiles[inindex+1] = {pos=intgt1,t=0}
 	end
 
@@ -172,10 +170,8 @@ function onTick()
 	--cull/timeout targets
 	for k,_ in pairs(tgtfiles) do
 		tgtfiles[k].t = tgtfiles[k].t + 1
-		----debug.log(k.." is "..tgtfiles[k].t)
 		if tgtfiles[k].t >= culltime then 
 			tgtfiles[k] = nil
-			----debug.log("tgt "..k.." culled in TSD")
 		end
 	end
 	--cull/timeout friendlies
