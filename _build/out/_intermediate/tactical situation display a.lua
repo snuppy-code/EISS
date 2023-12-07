@@ -297,7 +297,7 @@ function onDraw()
 		if length(selectedtgt) > 0 then
 			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,selectedtgt.x,selectedtgt.y)
 			
-			setcolor(55,20,40,45)
+			setcolor(55,20,40,70)
 			dotline(mpixelx,mpixely,tgtpixelx,tgtpixely)
 			
 			setcolor(46,0,25)

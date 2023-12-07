@@ -91,6 +91,24 @@ function to_monitor(point,cam_offset,zoom,w,h) --calculates local point display 
 	return pixel_x,pixel_y
 end
 
+function dotline(x1,y1,x2,y2)
+	segments = 11
+	drawnyes = true
+	
+	xrel = x2-x1
+	yrel = y2-y1
+	
+	xseg = xrel/segments
+	yseg = yrel/segments
+	
+	for i = 1,segments do
+		if drawnyes then
+			line(x1+xseg*(i-1), y1+yseg*(i-1), x1+xseg*i, y1+yseg*i)
+		end
+		drawnyes = not drawnyes
+	end
+end
+
 ---- EVA SETUP VARS ----
 points={}
 max_points=100
@@ -231,34 +249,22 @@ function onTick()
 end
 function onDraw()
 	w,h = s.getWidth(),s.getHeight()
-	whalf,hhalf = w/2,h/2
+
 	if ACM then
 		setcolor(255,0,0)
 		rectF(0,0,1,h)
 		rectF(w-1,0,1,h)
 	end
-    if length(selectedtgt) > 0 then
-        setcolor(80,13,1)
-		rectF(0,0,w,3)
-        rectF(0,h-3,w,3)
-    end
-	setcolor(255,120,120)
-	text(6,6,"Gs: "..myg)
-	text(6,12,"Spd: "..myspd)
 
-	amount = 0
-
+	---- LIDAR ----
 	for k,v in pairs(points) do --for all points
-		amount = amount + 1
 		relative_position = subt(v,mypos) --get relative positon
 		dist = length(relative_position) --dist
 
 		if dist<2000 then
-
 			local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
 
 			if local_position.y > 0 then
-
 				pixel_x,pixel_y = to_monitor(local_position,camera_offset,zoom_in,w,h)
 				setcolor(5-dist, dist-5, 0)
 
@@ -267,15 +273,72 @@ function onDraw()
 				else
 					setcolor(clamp(200-dist/10,0,200), clamp(dist/10,0,200), 0, clamp(200-dist/20,0,200))
 				end
-
 				rectF(pixel_x-1,pixel_y,1,1)
-
 			end
-
     	end
-
 	end
-	debug.log(amount.." points")
+	
+	---- SYMBOLS ----
+	--targets
+	setcolor(80,13,1,230)
+	for k,v in ipairs(tgtfiles) do
+		relative_position = subt(v.pos,mypos)
+		local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+		tgtpixelx, tgtpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
+
+		
+		thistargetalt=v.pos.z
+		thistargetalt=m.max(m.min(thistargetalt/500,5),0)
+		line(tgtpixelx-thistargetalt,tgtpixely-2,tgtpixelx+thistargetalt+1,tgtpixely-2)
+		rect(tgtpixelx-1,tgtpixely-1,2,2)
+	end
+	
+	--selected target
+	setcolor(55,20,40,180)
+	if length(selectedtgt) > 0 then
+		relative_position = subt(selectedtgt,mypos)
+		local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+		tgtpixelx, tgtpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
+		
+		dotline(w/2,h,tgtpixelx,tgtpixely)
+		
+		setcolor(46,0,25,240)
+		rectF(tgtpixelx-2,tgtpixely-2,1,5)
+		rectF(tgtpixelx+2,tgtpixely-2,1,5)
+		rectF(tgtpixelx,tgtpixely,1,1)
+	end
+	
+	--friendlies & their selecteds
+	setcolor(0,40,255,230)
+	for k,v in pairs(friendlies) do
+		relative_position = subt(v.pos,mypos)
+		local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+		fpixelx, fpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
+		
+		thistargetalt=v.pos.z
+		thistargetalt=m.max(m.min(thistargetalt/500,5),0)
+		line(fpixelx-thistargetalt,fpixely-2,fpixelx+thistargetalt+1,fpixely-2)
+
+		rectF(fpixelx,fpixely-1,1,1)
+		rectF(fpixelx+1,fpixely,1,1)
+		rectF(fpixelx,fpixely+1,1,1)
+		rectF(fpixelx-1,fpixely,1,1)
+
+		if length(v.sel) > 0 then
+			relative_position = subt(v.sel,mypos)
+			local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+			ftrkpixelx, ftrkpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
+
+			setcolor(30,90,255,155)
+			dotline(fpixelx,fpixely,ftrkpixelx,ftrkpixely)
+
+			setcolor(40,40,110,165)
+			rectF(ftrkpixelx-2,ftrkpixely-2,1,5)
+			rectF(ftrkpixelx+2,ftrkpixely-2,1,5)
+			rectF(ftrkpixelx,ftrkpixely,1,1)
+		end
+	end
+	
 end
 
 

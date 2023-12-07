@@ -94,24 +94,28 @@ maxmissiles = 8
 
 function onTick()
 	manaxes = {pitch=ign(2), roll=ign(1), yaw=ign(3)}--yaw=0}
-	angspdaxes = {pitch=-ign(5), roll=-ign(6), yaw=ign(7)}
-	spd = ign(8)
-	if spd <= 145 then
-		spdfactor = 20
-	else
-		spdfactor = 0.51/(1-3.64*(2.71828^(-0.01*spd)))
-	end
+	angspdaxes = {pitch=-ign(4), roll=-ign(5), yaw=ign(6)}
+	--spd = ign(7)
+	--if spd <= 145 then
+	--	spdfactor = 20
+	--else
+	--	spdfactor = 0.51/(1-3.64*(2.71828^(-0.01*spd)))
+	--end
 	--debug.log("spdfactor: "..spdfactor)
-	missilesfactor = ign(9)/8
+	missilesfactor = ign(8)/8
 	--debug.log("missilesfactor: "..missilesfactor)
 	gains = {
 		pitch=lerp(unloadedgains.pitch,loadedgains.pitch,missilesfactor),
 		roll=lerp(unloadedgains.roll,loadedgains.roll,missilesfactor),
 		yaw=lerp(unloadedgains.yaw,loadedgains.yaw,missilesfactor)}
 	--gains = {
-	--	pitch=ign(8),
+	--	pitch=ign(10),
 	--	roll=ign(9),
-	--	yaw=ign(10)}
+	--	yaw=ign(11)}
+	--trims = {
+	--	pitch=0,
+	--	roll=0,
+	--	yaw=0}
 	--debug.log("pitch gain: "..gains.pitch)
 	--debug.log("pitch gain: "..gains.roll)
 	--debug.log("pitch gain: "..gains.yaw)
@@ -119,12 +123,12 @@ function onTick()
 	trims = {
 		pitch=unloadedtrims.pitch*gains.pitch,
 		roll=unloadedtrims.roll*gains.roll,
-		yaw=unloadedtrims.yaw*gains.yaw
-	}
-	gains = {
-		pitch=gains.pitch*spdfactor,
-		roll=gains.roll*spdfactor,
-		yaw=gains.yaw*spdfactor}
+		yaw=unloadedtrims.yaw*gains.yaw}
+	
+	--gains = {
+	--	pitch=gains.pitch*spdfactor,
+	--	roll=gains.roll*spdfactor,
+	--	yaw=gains.yaw*spdfactor}
 
 	sumangspdaxes = addAxes(sumangspdaxes,angspdaxes)
 
