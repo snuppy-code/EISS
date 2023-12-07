@@ -45,6 +45,24 @@ end
 function clamp(a, min, max) return m.max(min, m.min(a, max)) end
 function round(x) return floor(x + 0.5) end
 
+function dotline(x1,y1,x2,y2)
+	segments = -0.9*zoom+50.09
+	drawnyes = true
+	
+	xrel = x2-x1
+	yrel = y2-y1
+	
+	xseg = xrel/segments
+	yseg = yrel/segments
+	
+	for i = 1,segments do
+		if drawnyes then
+			line(x1+xseg*(i-1), y1+yseg*(i-1), x1+xseg*i, y1+yseg*i)
+		end
+		drawnyes = not drawnyes
+	end
+end
+
 --radar & tgt info
 --rangelim = 10256
 --xfov = 0.03*pi
@@ -132,24 +150,22 @@ function onTick()
 	up = cross(right,fwd)
 	
 	inindex = ign(19)
-	
-	intgt = vec(ign(7),ign(8),ign(9))
-	if length(intgt) > 0 then
+	intgt1 = vec(ign(7),ign(8),ign(9))
+	if length(intgt1) > 0 then
 		----debug.log("upd "..inindex)
-		tgtfiles[inindex] = {pos=intgt,t=0}
+		tgtfiles[inindex] = {pos=intgt1,t=0}
 	end
-	intgt = vec(ign(10),ign(11),ign(12))
-	if length(intgt) > 0 then
+	intgt1 = vec(ign(10),ign(11),ign(12))
+	if length(intgt1) > 0 then
 		----debug.log("upd "..(inindex+1))
-		tgtfiles[inindex+1] = {pos=intgt,t=0}
+		tgtfiles[inindex+1] = {pos=intgt1,t=0}
 	end
 
 	inindex = ign(21)
-
-	intgt = vec(ign(13),ign(14),ign(15))
-	if length(intgt) > 0 then
-		----debug.log("upd "..inindex)
-		friendlies[inindex] = {pos=intgt,t=0}
+	intgt1 = vec(ign(13),ign(14),ign(15))
+	intgt2 = vec(ign(16),ign(17),ign(18))
+	if length(intgt1) > 0 then--friendly position
+		friendlies[inindex] = {pos=intgt1,sel=intgt2,t=0}
 	end
 
 	--cull/timeout targets
@@ -265,7 +281,7 @@ function onDraw()
 		--draw actual target files
 		for k,v in ipairs(tgtfiles) do
 			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
-			tgtpixelx,tgtpixely = round(tgtpixelx),round(tgtpixely)
+
 			--if dist(v.pos,b) then
 			--	setcolor(90,2,5)
 			--	rectF(tgtpixelx-2,tgtpixely-3,5,1)
@@ -280,10 +296,13 @@ function onDraw()
 			rect(tgtpixelx-1,tgtpixely-1,2,2)
 		end
 		
-		----draw selected target marker
+		--draw selected target marker
 		if length(selectedtgt) > 0 then
 			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,selectedtgt.x,selectedtgt.y)
-			tgtpixelx,tgtpixely = round(tgtpixelx),round(tgtpixely)
+			
+			setcolor(55,20,40,45)
+			dotline(mpixelx,mpixely,tgtpixelx,tgtpixely)
+			
 			setcolor(46,0,25)
 			rectF(tgtpixelx-2,tgtpixely-2,1,5)
 			rectF(tgtpixelx+2,tgtpixely-2,1,5)
@@ -294,7 +313,7 @@ function onDraw()
 		setcolor(0,40,255)
 		for k,v in pairs(friendlies) do
 			--debug.log("v.x: "..v.x.." v.y: "..v.y.." v.z: "..v.z)
-			local fpixelx, fpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
+			fpixelx, fpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
 			--ang,spd,alt
 			--if ang then
 			--	linex1,liney1 = rotate2((m.ceil(m.min(alt/1000,4))),1.5,ang)
@@ -314,6 +333,19 @@ function onDraw()
 			rectF(fpixelx+1,fpixely,1,1)
 			rectF(fpixelx,fpixely+1,1,1)
 			rectF(fpixelx-1,fpixely,1,1)
+
+			if length(v.sel) > 0 then
+				ftrkpixelx, ftrkpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.sel.x,v.sel.y)
+				
+				setcolor(30,90,255,30)
+				dotline(fpixelx,fpixely,ftrkpixelx,ftrkpixely)
+
+				setcolor(40,40,110,30)
+				rectF(ftrkpixelx-2,ftrkpixely-2,1,5)
+				rectF(ftrkpixelx+2,ftrkpixely-2,1,5)
+				rectF(ftrkpixelx,ftrkpixely,1,1)
+				--line(fpixelx,fpixely,ftrkpixelx,ftrkpixely)
+			end
 		end
 
 		if SOI then

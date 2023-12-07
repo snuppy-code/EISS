@@ -9,16 +9,16 @@
 
 e=output
 c=input
-h,g,i,f=c.getBool,e.setBool,c.getNumber,e.setNumber
-_=1
-a={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6,[8]=4,[9]=5}function onTick()d=h(1)if d and not k then
-_=_%(#a)+1
+g,i,k,f=c.getBool,e.setBool,c.getNumber,e.setNumber
+b=1
+_={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6,[8]=4,[9]=5}function onTick()d=g(1)if d and not j then
+b=b%(#_)+1
 end
-k=d
-g(a[_],true)b=0
-for j=1,(#a-1)do
-if not(i(j)==0)then
-b=b+1
+j=d
+i(_[b],true)a=0
+for h=1,(#_-1)do
+if not(k(h)==0)then
+a=a+1
 end
 end
-f(1,b)end
+f(1,a)end

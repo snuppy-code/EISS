@@ -101,7 +101,7 @@ function onTick()
 	else
 		spdfactor = 0.51/(1-3.64*(2.71828^(-0.01*spd)))
 	end
-	debug.log("spdfactor: "..spdfactor)
+	--debug.log("spdfactor: "..spdfactor)
 	missilesfactor = ign(9)/8
 	--debug.log("missilesfactor: "..missilesfactor)
 	gains = {

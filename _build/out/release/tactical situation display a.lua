@@ -1,167 +1,173 @@
--- Author: judgementalbird on discord :3
--- GitHub: <GithubLink>
--- Workshop: <WorkshopLink>
---
--- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
--- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
---      By Nameous Changey
--- Minimized Size: 3630 (3964 with comment) chars
 
-G=230
+O=230
 k=255
-az=nil
-al=pairs
-ax=table
-N=false
-Q=true
-aG=screen
-ae=map.mapToScreen
-l,e,aC,av,g,bc,aY=math,input,output,property,aG,Q,N
-_,aW,be,bd=e.getNumber,aC.setNumber,e.getBool,aC.setBool
-aZ,ba=av.getNumber,av.getBool
-abs,cos,sin,floor,atan=l.abs,l.cos,l.sin,l.floor,l.atan
-pi=l.pi
-H=pi*2
-g=aG
-T,aX,s,aM,v,aw,bb,j=g.drawText,g.drawTextBox,g.drawLine,g.drawRect,g.drawRectF,g.drawCircle,g.drawClear,g.setColor
-function b_(aF,aD,aO,aT)S=aO-aF
-R=aT-aD
-if abs(S)>=abs(R)then
-af=abs(S)else
-af=abs(R)end
-S=S/af
-R=R/af
-a=aF
-d=aD
-e=0
-while(e<=af)do
-v(a,d,1,1)a=a+S
-d=d+R
-e=e+1
+aS=nil
+aw=pairs
+aO=table
+T=false
+M=true
+aH=screen
+W=map.mapToScreen
+m,a,aD,aG,h,bd,be=math,input,output,property,aH,M,T
+_,bf,bj,bo=a.getNumber,aD.setNumber,a.getBool,aD.setBool
+bn,bk=aG.getNumber,aG.getBool
+abs,cos,sin,floor,atan=m.abs,m.cos,m.sin,m.floor,m.atan
+pi=m.pi
+L=pi*2
+h=aH
+ac,bh,p,b_,n,aR,bp,g=h.drawText,h.drawTextBox,h.drawLine,h.drawRect,h.drawRectF,h.drawCircle,h.drawClear,h.setColor
+function bi(K,N,as,aq)Q=as-K
+V=aq-N
+if abs(Q)>=abs(V)then
+aj=abs(Q)else
+aj=abs(V)end
+Q=Q/aj
+V=V/aj
+b=K
+e=N
+a=0
+while(a<=aj)do
+n(b,e,1,1)b=b+Q
+e=e+V
+a=a+1
 end
 end
-function A(a,d,n)return{a=a or 0,d=d or 0,n=n or 0}end
-function aR(f,u)return A(f.d*u.n-f.n*u.d,f.n*u.a-f.a*u.n,f.a*u.d-f.d*u.a)end
-function ac(f)return l.sqrt(f.a*f.a+f.d*f.d+f.n*f.n)end
-function aV(f,u)return l.sqrt((f.a-u.a)^2+(f.d-u.d)^2+(f.n-u.n)^2)end
-function aH(f,min,max)return l.max(min,l.min(f,max))end
-function U(a)return floor(a+.5)end
-aS=13333
-m=.03*pi
-V=.09*H+m
-aK=10
-E={}B={}ak=Q
-o,D=7,0
-K={}for e=1,100 do
-K[e]=N
-end
-function onTick()Y=A(_(1),_(3),_(2))Z=-_(27)*H
-X=-_(20)*H
-W=-_(32)*H+pi
-ah=_(30)>0
-aP=ah~=aQ and ah
-aQ=ah
-if aP then
-ak=not ak
-end
-aI=_(31)==1
-ax.remove(K,1)ax.insert(K,aI)r=0
-for e=1,6 do
-if K[e]then
-r=r+1
+function w(b,e,q)return{b=b or 0,e=e or 0,q=q or 0}end
+function aY(f,t)return w(f.e*t.q-f.q*t.e,f.q*t.b-f.b*t.q,f.b*t.e-f.e*t.b)end
+function X(f)return m.sqrt(f.b*f.b+f.e*f.e+f.q*f.q)end
+function bl(f,t)return m.sqrt((f.b-t.b)^2+(f.e-t.e)^2+(f.q-t.q)^2)end
+function aK(f,min,max)return m.max(min,m.min(f,max))end
+function bm(b)return floor(b+.5)end
+function aP(K,N,as,aq)av=-.9*l+50.09
+aA=M
+bb=as-K
+bc=aq-N
+aJ=bb/av
+aM=bc/av
+for a=1,av do
+if aA then
+p(K+aJ*(a-1),N+aM*(a-1),K+aJ*a,N+aM*a)end
+aA=not aA
 end
 end
-if r>=2 then
-ar=Q
+ba=13333
+o=.03*pi
+ab=.09*L+o
+aQ=10
+F={}A={}am=M
+l,H=7,0
+P={}for a=1,100 do
+P[a]=T
+end
+function onTick()Z=w(_(1),_(3),_(2))Y=-_(27)*L
+ae=-_(20)*L
+ai=-_(32)*L+pi
+az=_(30)>0
+aU=az~=aV and az
+aV=az
+if aU then
+am=not am
+end
+aF=_(31)==1
+aO.remove(P,1)aO.insert(P,aF)s=0
+for a=1,6 do
+if P[a]then
+s=s+1
+end
+end
+if s>=2 then
+aB=M
 else
-ar=N
+aB=T
 end
-r=0
-for e=1,26 do
-if K[e]then
-r=r+1
+s=0
+for a=1,26 do
+if P[a]then
+s=s+1
 end
 end
-if r>=2 then
-an=Q
+if s>=2 then
+ap=M
 else
-an=N
+ap=T
 end
-r=0
-for e=1,100 do
-if K[e]then
-r=r+1
+s=0
+for a=1,100 do
+if P[a]then
+s=s+1
 end
 end
-if r>=2 then
-aj=Q
+if s>=2 then
+ar=M
 else
-aj=N
+ar=T
 end
-ao=A(_(23),_(24),_(25))aB,ay,aA=_(4),_(5),_(6)at,as,au=cos(aB),cos(ay),cos(aA)aE,am,ap=sin(aB),sin(ay),sin(aA)aN=A(as*au,-am,as*ap)aq=A(aE*ap+at*am*au,at*as,-aE*au+at*am*ap)aU=aR(aN,aq)aa=_(19)z=A(_(7),_(8),_(9))if ac(z)>0 then
-B[aa]={y=z,x=0}end
-z=A(_(10),_(11),_(12))if ac(z)>0 then
-B[aa+1]={y=z,x=0}end
-aa=_(21)z=A(_(13),_(14),_(15))if ac(z)>0 then
-E[aa]={y=z,x=0}end
-for t,aL in al(B)do
-B[t].x=B[t].x+1
-if B[t].x>=aK then
-B[t]=az
-end
-end
-for t,aL in al(E)do
-E[t].x=E[t].x+1
-if E[t].x>=aK then
-E[t]=az
+ak=w(_(23),_(24),_(25))aN,aT,aI=_(4),_(5),_(6)al,an,ax=cos(aN),cos(aT),cos(aI)aE,ao,at=sin(aN),sin(aT),sin(aI)aW=w(an*ax,-ao,an*at)au=w(aE*at+al*ao*ax,al*an,-aE*ax+al*ao*at)bg=aY(aW,au)af=_(19)B=w(_(7),_(8),_(9))if X(B)>0 then
+A[af]={z=B,x=0}end
+B=w(_(10),_(11),_(12))if X(B)>0 then
+A[af+1]={z=B,x=0}end
+af=_(21)B=w(_(13),_(14),_(15))aX=w(_(16),_(17),_(18))if X(B)>0 then
+F[af]={z=B,aC=aX,x=0}end
+for r,aZ in aw(A)do
+A[r].x=A[r].x+1
+if A[r].x>=aQ then
+A[r]=aS
 end
 end
-aJ=_(29)==1
-if aJ then
-P=_(26)else
-P=0
+for r,aZ in aw(F)do
+F[r].x=F[r].x+1
+if F[r].x>=aQ then
+F[r]=aS
 end
-if P<.01 and P>-.01 then
-D=D-D/5
+end
+aL=_(29)==1
+if aL then
+S=_(26)else
+S=0
+end
+if S<.01 and S>-.01 then
+H=H-H/5
 else
-D=aH((D+P/160),-.1,.1)end
-if o>=50 then D=0 end
-o=aH(o+(P/55*o/2.4)+D*o/2.4,.1,50)i=-atan(aq.a,aq.d)+pi
-M,L=Y.a,Y.d
+H=aK((H+S/160),-.1,.1)end
+if l>=50 then H=0 end
+l=aK(l+(S/55*l/2.4)+H*l/2.4,.1,50)j=-atan(au.b,au.e)+pi
+I,J=Z.b,Z.e
 end
-function onDraw()F,ag=g.getWidth(),g.getHeight()if F>32 then
-if ak then
-g.setMapColorOcean(0,0,0)g.setMapColorShallows(2,2,2)g.setMapColorLand(7,7,7)g.setMapColorGrass(8,10,8)g.setMapColorSand(6,6,4)g.setMapColorSnow(25,25,26)g.drawMap(M,L,o)end
-b,c=ae(M,L,o,F,ag,Y.a,Y.d)O=o/F
-ai=o/50
-h=(aS/1000)/O
-for e=0,2 do
-ab=5+10*e
-j(k,k,k,7-ai*3)aw(b,c,ab/O)j(k,k,k,11-ai*2)T(b+ab/O-(5*(#tostring(ab))),c,ab)end
-j(k,k,k,4-ai*2)for e=1,8 do
-s(b,c,b+sin(e*H/8)*120/O,c+cos(e*H/8)*120/O)end
-j(80,k,0,38)s(b,c,b+sin(Z+i-m)*h,c+cos(Z+i-m)*h)s(b,c,b+sin(Z+i+m)*h,c+cos(Z+i+m)*h)s(b,c,b+sin(X+i-m)*h,c+cos(X+i-m)*h)s(b,c,b+sin(X+i+m)*h,c+cos(X+i+m)*h)s(b,c,b+sin(W+i-m)*h,c+cos(W+i-m)*h)s(b,c,b+sin(W+i+m)*h,c+cos(W+i+m)*h)j(0,k,0,8)aw(b,c,h)s(b,c,b+sin(-V+i)*h,c+cos(-V+i)*h)s(b,c,b+sin(V+i)*h,c+cos(V+i)*h)for t,C in ipairs(B)do
-p,q=ae(M,L,o,F,ag,C.y.a,C.y.d)p,q=U(p),U(q)j(80,13,1)w=C.y.n
-w=l.max(l.min(w/500,5),0)s(p-w,q-2,p+w+1,q-2)aM(p-1,q-1,2,2)end
-if ac(ao)>0 then
-p,q=ae(M,L,o,F,ag,ao.a,ao.d)p,q=U(p),U(q)j(46,0,25)v(p-2,q-2,1,5)v(p+2,q-2,1,5)v(p,q,1,1)end
-j(0,40,k)for t,C in al(E)do
-local J,I=ae(M,L,o,F,ag,C.y.a,C.y.d)w=C.y.n
-w=l.max(l.min(w/500,5),0)s(J-w,I-2,J+w+1,I-2)v(J,I-1,1,1)v(J+1,I,1,1)v(J,I+1,1,1)v(J-1,I,1,1)end
-if aJ then
-j(1,1,1,200)v(13,2,12,5)j(85,160,35)T(13,2,"SOI")end
+function onDraw()E,U=h.getWidth(),h.getHeight()if E>32 then
+if am then
+h.setMapColorOcean(0,0,0)h.setMapColorShallows(2,2,2)h.setMapColorLand(7,7,7)h.setMapColorGrass(8,10,8)h.setMapColorSand(6,6,4)h.setMapColorSnow(25,25,26)h.drawMap(I,J,l)end
+d,c=W(I,J,l,E,U,Z.b,Z.e)R=l/E
+ay=l/50
+i=(ba/1000)/R
+for a=0,2 do
+ah=5+10*a
+g(k,k,k,7-ay*3)aR(d,c,ah/R)g(k,k,k,11-ay*2)ac(d+ah/R-(5*(#tostring(ah))),c,ah)end
+g(k,k,k,4-ay*2)for a=1,8 do
+p(d,c,d+sin(a*L/8)*120/R,c+cos(a*L/8)*120/R)end
+g(80,k,0,38)p(d,c,d+sin(Y+j-o)*i,c+cos(Y+j-o)*i)p(d,c,d+sin(Y+j+o)*i,c+cos(Y+j+o)*i)p(d,c,d+sin(ae+j-o)*i,c+cos(ae+j-o)*i)p(d,c,d+sin(ae+j+o)*i,c+cos(ae+j+o)*i)p(d,c,d+sin(ai+j-o)*i,c+cos(ai+j-o)*i)p(d,c,d+sin(ai+j+o)*i,c+cos(ai+j+o)*i)g(0,k,0,8)aR(d,c,i)p(d,c,d+sin(-ab+j)*i,c+cos(-ab+j)*i)p(d,c,d+sin(ab+j)*i,c+cos(ab+j)*i)for r,u in ipairs(A)do
+y,C=W(I,J,l,E,U,u.z.b,u.z.e)g(80,13,1)v=u.z.q
+v=m.max(m.min(v/500,5),0)p(y-v,C-2,y+v+1,C-2)b_(y-1,C-1,2,2)end
+if X(ak)>0 then
+y,C=W(I,J,l,E,U,ak.b,ak.e)g(55,20,40,45)aP(d,c,y,C)g(46,0,25)n(y-2,C-2,1,5)n(y+2,C-2,1,5)n(y,C,1,1)end
+g(0,40,k)for r,u in aw(F)do
+D,G=W(I,J,l,E,U,u.z.b,u.z.e)v=u.z.q
+v=m.max(m.min(v/500,5),0)p(D-v,G-2,D+v+1,G-2)n(D,G-1,1,1)n(D+1,G,1,1)n(D,G+1,1,1)n(D-1,G,1,1)if X(u.aC)>0 then
+ag,aa=W(I,J,l,E,U,u.aC.b,u.aC.e)g(30,90,k,30)aP(D,G,ag,aa)g(40,40,110,30)n(ag-2,aa-2,1,5)n(ag+2,aa-2,1,5)n(ag,aa,1,1)end
+end
+if aL then
+g(1,1,1,200)n(13,2,12,5)g(85,160,35)ac(13,2,"SOI")end
 else
 ad=""
-if ar then
-j(k,0,0)ad="MSSLE"
-elseif an then
-j(239,38,0)ad="TRACK"
-elseif aj then
-j(k,135,0)ad="WARN"
+if aB then
+g(k,0,0)ad="MSSLE"
+elseif ap then
+g(239,38,0)ad="TRACK"
+elseif ar then
+g(k,135,0)ad="WARN"
 end
-if ar or an or aj then
-v(0,0,32,32)j(G,G,G)T(4,12,ad)end
-if aI then
-j(G,G,G)T(6,2,"PING")end
+if aB or ap or ar then
+n(0,0,32,32)g(O,O,O)ac(4,12,ad)end
+if aF then
+g(O,O,O)ac(6,2,"PING")end
 end
 end

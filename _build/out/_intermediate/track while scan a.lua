@@ -91,7 +91,6 @@ culltime = pgn("Cull Time")
 rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
 	{},
 	{},
-	{},
 	{}
 }
 
@@ -107,7 +106,6 @@ function onTick()
 	existedticks = existedticks + 1
 	--my position vector
 	mpos = vec(ign(1),ign(2),ign(3))
-
 	touchin = ign(27) == 1
 	if touchin and not touch and (#targetfiles > 0) then
 		selectedtgt = selectedtgt%(#targetfiles)+1
@@ -128,6 +126,7 @@ function onTick()
 	---- VICLINK ----
 	--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlyfiles table at index of their ASCII
 	fpos = vec(ign(7),ign(9),ign(8))
+	ftrk = vec(ign(21),ign(22),ign(23))
 	--debug.log(fpos.x.." "..fpos.y.." "..fpos.z)
 	if length(fpos)>0 then
 		--debug.log("valid user:"..fpos.x.." "..fpos.y.." "..fpos.z)
@@ -142,7 +141,7 @@ function onTick()
 		else
 			user = "XXXX"
 		end
-		friendlyfiles[user]=fpos
+		friendlyfiles[user]={pos=fpos,sel=ftrk}
 		friendlymatch = nil
 		for k,v in ipairs(friendlyindex) do
 			if v == user then
@@ -156,7 +155,10 @@ function onTick()
 		end
 	end
 	--put me in the friendlies table for the TWS :3
-	friendlyfiles[vicmyuser] = mpos
+	friendlyfiles[vicmyuser] = {pos=mpos,sel=vec()}
+	if targetfiles[selectedtgt] then
+		friendlyfiles[vicmyuser].sel = lastpos(selectedtgt)
+	end
 
 	--output my ASCII on radio
 	myuserascii = ""
@@ -205,14 +207,14 @@ function onTick()
 	rawradartargets[3].tsd = ign(32)											--tsd: 32
 
 	--data from old radar / short range STT radar
-	rawradartargets[4].pos = vec(ign(15),ign(16),ign(17))
-	if length(rawradartargets[4].pos) > 0 then
-		rawradartargets[4].rel = subt(mpos,rawradartargets[4].pos)			--verold r tgt xyz 15,16,17
-		rawradartargets[4].loc = tolocal(rawradartargets[4].rel,right,fwd,up)
-	else
-		rawradartargets[4] = {loc=vec(),rel=vec(),pos=vec()}
-	end
-	rawradartargets[4].tsd = 0												--tsd: X
+	--rawradartargets[4].pos = vec(ign(15),ign(16),ign(17))
+	--if length(rawradartargets[4].pos) > 0 then
+	--	rawradartargets[4].rel = subt(mpos,rawradartargets[4].pos)			--verold r tgt xyz 15,16,17
+	--	rawradartargets[4].loc = tolocal(rawradartargets[4].rel,right,fwd,up)
+	--else
+	--	rawradartargets[4] = {loc=vec(),rel=vec(),pos=vec()}
+	--end
+	--rawradartargets[4].tsd = 0												--tsd: X
 
 	--raw tgts to target files
 	for k,rawtgt in ipairs(rawradartargets) do
@@ -297,7 +299,7 @@ function onTick()
 			end
 			for i,r in pairs(friendlyfiles) do
 				if thisnotculled then
-					if length(subt(r,lastpos(k)))<=mergedist then
+					if length(subt(r.pos,lastpos(k)))<=mergedist then
 						--debug.log("friendly killed "..k)
 						if thisnotculled then
 							table.remove(targetfiles,k)
@@ -312,19 +314,29 @@ function onTick()
 
 	---- OUTPUTS ----
 	--targets
+	--debug.log("qu:"..#targetfiles)
 	if targetfiles[enemytransindex] then
+		--debug.log("ind:"..enemytransindex)
 		--debug.log(enemytransindex.." age "..targetfiles[enemytransindex].t)
-		osn(14,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].x)
-		osn(15,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].y)
-		osn(16,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].z)
+		osn(14,lastpos(enemytransindex).x)
+		--debug.log("lsx:"..lastpos(enemytransindex).x)
+		osn(15,lastpos(enemytransindex).y)
+		osn(16,lastpos(enemytransindex).z)
+		
+		--osn(14,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].x)
+		--osn(15,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].y)
+		--osn(16,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].z)
 		--osn(14,targetfiles[enemytransindex].extrpos.x)
 		--osn(15,targetfiles[enemytransindex].extrpos.y)
 		--osn(16,targetfiles[enemytransindex].extrpos.z)
 	end
 	if targetfiles[enemytransindex+1] then
-		osn(17,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].x)
-		osn(18,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].y)
-		osn(19,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].z)
+		osn(17,lastpos(enemytransindex+1).x)
+		osn(18,lastpos(enemytransindex+1).y)
+		osn(19,lastpos(enemytransindex+1).z)
+		--osn(17,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].x)
+		--osn(18,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].y)
+		--osn(19,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].z)
 		--osn(17,targetfiles[enemytransindex+1].extrpos.x)
 		--osn(18,targetfiles[enemytransindex+1].extrpos.y)
 		--osn(19,targetfiles[enemytransindex+1].extrpos.z)
@@ -338,9 +350,14 @@ function onTick()
 	--friendlies
 	yup = friendlyfiles[friendlyindex[friendlytransindex]]
 	if yup then
-		osn(20,yup.x)
-		osn(21,yup.y)
-		osn(22,yup.z)
+		yup2 = yup.pos
+		yup3 = yup.sel
+		osn(20,yup2.x)
+		osn(21,yup2.y)
+		osn(22,yup2.z)
+		osn(23,yup3.x)
+		osn(24,yup3.y)
+		osn(25,yup3.z)
 	end
 	osn(28,friendlytransindex)
 	friendlytransindex = friendlytransindex + 1
@@ -349,15 +366,19 @@ function onTick()
 	end
 
 	--output selected tgt
+	--debug.log("E")
 	if ACM then
 		osn(30,rawradartargets[3].pos.x)
 		osn(31,rawradartargets[3].pos.y)
 		osn(32,rawradartargets[3].pos.z)
 	else
 		if targetfiles[selectedtgt] then
-			osn(30,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].x)
-			osn(31,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].y)
-			osn(32,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].z)
+			osn(30,lastpos(selectedtgt).x)
+			osn(31,lastpos(selectedtgt).y)
+			osn(32,lastpos(selectedtgt).z)
+			--osn(30,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].x)
+			--osn(31,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].y)
+			--osn(32,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].z)
 			--osn(30,targetfiles[selectedtgt].extrpos.x)
 			--osn(31,targetfiles[selectedtgt].extrpos.y)
 			--osn(32,targetfiles[selectedtgt].extrpos.z)
@@ -369,7 +390,7 @@ function onTick()
 			osn(11,0)
 		end
 	end
-	
+	--debug.log("F")
 	--old radar slew
 	osn(7,0)
 	osn(8,0)
