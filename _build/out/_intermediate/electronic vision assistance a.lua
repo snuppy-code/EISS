@@ -250,12 +250,6 @@ end
 function onDraw()
 	w,h = s.getWidth(),s.getHeight()
 
-	if ACM then
-		setcolor(255,0,0)
-		rectF(0,0,1,h)
-		rectF(w-1,0,1,h)
-	end
-
 	---- LIDAR ----
 	for k,v in pairs(points) do --for all points
 		relative_position = subt(v,mypos) --get relative positon
@@ -339,6 +333,16 @@ function onDraw()
 		end
 	end
 	
+	---- HUD INFO ----
+	
+
+
+	if ACM then
+		setcolor(255,0,0)
+		rectF(0,0,1,h)
+		rectF(w-1,0,1,h)
+	end
+
 end
 
 

@@ -91,6 +91,7 @@ culltime = pgn("Cull Time")
 rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
 	{},
 	{},
+	{},
 	{}
 }
 
@@ -207,14 +208,14 @@ function onTick()
 	rawradartargets[3].tsd = ign(32)											--tsd: 32
 
 	--data from old radar / short range STT radar
-	--rawradartargets[4].pos = vec(ign(15),ign(16),ign(17))
-	--if length(rawradartargets[4].pos) > 0 then
-	--	rawradartargets[4].rel = subt(mpos,rawradartargets[4].pos)			--verold r tgt xyz 15,16,17
-	--	rawradartargets[4].loc = tolocal(rawradartargets[4].rel,right,fwd,up)
-	--else
-	--	rawradartargets[4] = {loc=vec(),rel=vec(),pos=vec()}
-	--end
-	--rawradartargets[4].tsd = 0												--tsd: X
+	rawradartargets[4].pos = vec(ign(15),ign(16),ign(17))
+	if length(rawradartargets[4].pos) > 0 then
+		rawradartargets[4].rel = subt(mpos,rawradartargets[4].pos)			--verold r tgt xyz 15,16,17
+		rawradartargets[4].loc = tolocal(rawradartargets[4].rel,right,fwd,up)
+	else
+		rawradartargets[4] = {loc=vec(),rel=vec(),pos=vec()}
+	end
+	rawradartargets[4].tsd = 0												--tsd: X
 
 	--raw tgts to target files
 	for k,rawtgt in ipairs(rawradartargets) do
