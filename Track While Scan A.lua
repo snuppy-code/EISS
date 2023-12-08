@@ -57,24 +57,6 @@ function torelative(a,r,f,u)
 return add(add(multf(r,a.x), multf(f,a.y)), multf(u,a.z))
 end
 
---functional functions
-function edgeindex(input,findtop)
-    local edge = nil
-    for k, _ in pairs(input) do
-        if edge == nil or (k > edge and findtop) or (k < edge and not findtop) then
-            edge = k
-        end
-    end
-    return edge
-end
-function lastpos(tgt)
-	--debug.log("->"..tgt)
-	--debug.log("->"..type(targetfiles[tgt]))
-	--debug.log("->"..type(targetfiles[tgt].poss))
-	--debug.log("->"..type(targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]))
-	return targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]
-end
-
 --VICLINK (vehicle datalink)
 vicstartfreq = pgn("VL Strt Frq")
 vicuserf = pgn("VL You Frq")
@@ -322,24 +304,11 @@ function onTick()
 		--debug.log("lsx:"..lastpos(enemytransindex).x)
 		osn(15,lastpos(enemytransindex).y)
 		osn(16,lastpos(enemytransindex).z)
-		
-		--osn(14,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].x)
-		--osn(15,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].y)
-		--osn(16,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].z)
-		--osn(14,targetfiles[enemytransindex].extrpos.x)
-		--osn(15,targetfiles[enemytransindex].extrpos.y)
-		--osn(16,targetfiles[enemytransindex].extrpos.z)
 	end
 	if targetfiles[enemytransindex+1] then
 		osn(17,lastpos(enemytransindex+1).x)
 		osn(18,lastpos(enemytransindex+1).y)
 		osn(19,lastpos(enemytransindex+1).z)
-		--osn(17,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].x)
-		--osn(18,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].y)
-		--osn(19,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].z)
-		--osn(17,targetfiles[enemytransindex+1].extrpos.x)
-		--osn(18,targetfiles[enemytransindex+1].extrpos.y)
-		--osn(19,targetfiles[enemytransindex+1].extrpos.z)
 	end
 	osn(26,enemytransindex)
 	enemytransindex = enemytransindex + 2
@@ -376,12 +345,7 @@ function onTick()
 			osn(30,lastpos(selectedtgt).x)
 			osn(31,lastpos(selectedtgt).y)
 			osn(32,lastpos(selectedtgt).z)
-			--osn(30,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].x)
-			--osn(31,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].y)
-			--osn(32,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].z)
-			--osn(30,targetfiles[selectedtgt].extrpos.x)
-			--osn(31,targetfiles[selectedtgt].extrpos.y)
-			--osn(32,targetfiles[selectedtgt].extrpos.z)
+			
 			osn(11,targetfiles[selectedtgt].t)
 		else
 			osn(30,0)
