@@ -58,24 +58,6 @@ function torelative(a,r,f,u)
 return add(add(multf(r,a.x), multf(f,a.y)), multf(u,a.z))
 end
 
---functional functions
-function edgeindex(input,findtop)
-    local edge = nil
-    for k, _ in pairs(input) do
-        if edge == nil or (k > edge and findtop) or (k < edge and not findtop) then
-            edge = k
-        end
-    end
-    return edge
-end
-function lastpos(tgt)
-	--debug.log("->"..tgt)
-	--debug.log("->"..type(targetfiles[tgt]))
-	--debug.log("->"..type(targetfiles[tgt].poss))
-	--debug.log("->"..type(targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]))
-	return targetfiles[tgt].poss[edgeindex(targetfiles[tgt].poss,true)]
-end
-
 --VICLINK (vehicle datalink)
 vicstartfreq = pgn("VL Strt Frq")
 vicuserf = pgn("VL You Frq")
@@ -101,10 +83,7 @@ friendlyindex = {}
 
 selectedtgt = 0
 enemytransindex,friendlytransindex=0,0
-existedticks,possculltimer = 0,0
 function onTick()
-	possculltimer = possculltimer + 1
-	existedticks = existedticks + 1
 	--my position vector
 	mpos = vec(ign(1),ign(2),ign(3))
 	touchin = ign(27) == 1
@@ -158,7 +137,7 @@ function onTick()
 	--put me in the friendlies table for the TWS :3
 	friendlyfiles[vicmyuser] = {pos=mpos,sel=vec()}
 	if targetfiles[selectedtgt] then
-		friendlyfiles[vicmyuser].sel = lastpos(selectedtgt)
+		friendlyfiles[vicmyuser].sel = targetfiles[selectedtgt].pos
 	end
 
 	--output my ASCII on radio
@@ -223,37 +202,16 @@ function onTick()
 			local rawradarmatch = 0 --no match with a target file found yet
 			for fileindex,file in ipairs(targetfiles) do
 				if rawradarmatch == 0 then--we havent matched something
-					if length(subt(lastpos(fileindex),rawtgt.pos)) <= mergedist then
+					if length(subt(targetfiles[fileindex].pos,rawtgt.pos)) <= mergedist then
 						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found
 						rawradarmatch = fileindex
 						--update found existing tgt file with raw tgt
-						targetfiles[fileindex].poss[existedticks] = rawtgt.pos
+						targetfiles[fileindex].pos = rawtgt.pos
 						targetfiles[fileindex].t = 0
 
-						--update velocity vector 1
-						thresholdvec = nil
-						thresholdindex = -1
-						for pastposindex, pastpos in pairs(targetfiles[fileindex].poss) do
-							thresholddistance = length(subt(pastpos, lastpos(fileindex)))
-							
-							if thresholddistance >= 50 and pastposindex > thresholdindex then --50 is minextrapdist
-								thresholdvec = pastpos
-								
-								thresholdindex = pastposindex
-							end
-						end
-						--update velocity vector 2
-						if thresholdvec ~= nil then
-							timediff = edgeindex(targetfiles[fileindex].poss,true) - thresholdindex
-							if timediff > 0 then  -- Prevent division by zero
-								targetfiles[fileindex].veltick = divf(subt(lastpos(fileindex), thresholdvec), timediff)
-							end
-						else
-							targetfiles[fileindex].veltick = vec()
-						end
 					end
 				else--we already have a match
-					if length(subt(lastpos(fileindex),rawtgt.pos)) <= mergedist then
+					if length(subt(targetfiles[fileindex].pos,rawtgt.pos)) <= mergedist then
 						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found, also not a selected target
 						table.remove(targetfiles,fileindex)--we already matched raw tgt to a file so we will delete this one
 					end
@@ -261,32 +219,14 @@ function onTick()
 			end
 			if rawradarmatch == 0 then
 				--create target file
-				targetfiles[#targetfiles+1] = {poss = {[existedticks] = rawtgt.pos},veltick = vec(),extrpos = vec(),t = 0}
+				targetfiles[#targetfiles+1] = {pos = rawtgt.pos, t = 0}
 			end
 		end
 	end
 	-- target file culling
 	culled = 0
 	for k, v in ipairs(targetfiles) do
-		thisnotculled = true
-		if possculltimer > 120 then
-			local length = 0
-			for _ in pairs(targetfiles[k].poss) do
-				length = length + 1
-			end
-			while length > 40 do
-				targetfiles[k].poss[edgeindex(targetfiles[k].poss,false)] = nil
-				length = length - 1
-				culled = culled + 1
-			end
-			--debug.log("culled "..culled.." positions of target "..k)
-		end
-		
 		targetfiles[k].t = targetfiles[k].t + 1
-
-
-		--also extrapolation teehee
-		targetfiles[k].extrpos = add(lastpos(k), multf(targetfiles[k].veltick, targetfiles[k].t))
 
 		if (v.t >= culltime) then--and not (k == selectedtgt) then
 			--debug.log("tmdout "..k)
@@ -295,13 +235,12 @@ function onTick()
 				thisnotculled = false
 			end
 		else
-			if lastpos(k).z <= -1 then
-				targetfiles[k].poss[edgeindex(targetfiles[k].poss,true)].z = 5
+			if targetfiles[k].pos.z <= -1 then
+				targetfiles[k].pos.z = 5
 			end
 			for i,r in pairs(friendlyfiles) do
 				if thisnotculled then
-					if length(subt(r.pos,lastpos(k)))<=mergedist then
-						--debug.log("friendly killed "..k)
+					if length(subt(r.pos,targetfiles[k].pos))<=mergedist then
 						if thisnotculled then
 							table.remove(targetfiles,k)
 							thisnotculled = false
@@ -315,32 +254,15 @@ function onTick()
 
 	---- OUTPUTS ----
 	--targets
-	--debug.log("qu:"..#targetfiles)
 	if targetfiles[enemytransindex] then
-		--debug.log("ind:"..enemytransindex)
-		--debug.log(enemytransindex.." age "..targetfiles[enemytransindex].t)
-		osn(14,lastpos(enemytransindex).x)
-		--debug.log("lsx:"..lastpos(enemytransindex).x)
-		osn(15,lastpos(enemytransindex).y)
-		osn(16,lastpos(enemytransindex).z)
-		
-		--osn(14,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].x)
-		--osn(15,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].y)
-		--osn(16,targetfiles[enemytransindex].poss[edgeindex(targetfiles[enemytransindex].poss,true)].z)
-		--osn(14,targetfiles[enemytransindex].extrpos.x)
-		--osn(15,targetfiles[enemytransindex].extrpos.y)
-		--osn(16,targetfiles[enemytransindex].extrpos.z)
+		osn(14,targetfiles[enemytransindex].pos.x)
+		osn(15,targetfiles[enemytransindex].pos.y)
+		osn(16,targetfiles[enemytransindex].pos.z)
 	end
 	if targetfiles[enemytransindex+1] then
-		osn(17,lastpos(enemytransindex+1).x)
-		osn(18,lastpos(enemytransindex+1).y)
-		osn(19,lastpos(enemytransindex+1).z)
-		--osn(17,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].x)
-		--osn(18,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].y)
-		--osn(19,targetfiles[enemytransindex+1].poss[edgeindex(targetfiles[enemytransindex+1].poss,true)].z)
-		--osn(17,targetfiles[enemytransindex+1].extrpos.x)
-		--osn(18,targetfiles[enemytransindex+1].extrpos.y)
-		--osn(19,targetfiles[enemytransindex+1].extrpos.z)
+		osn(17,targetfiles[enemytransindex+1].pos.x)
+		osn(18,targetfiles[enemytransindex+1].pos.y)
+		osn(19,targetfiles[enemytransindex+1].pos.z)
 	end
 	osn(26,enemytransindex)
 	enemytransindex = enemytransindex + 2
@@ -369,20 +291,18 @@ function onTick()
 	--output selected tgt
 	--debug.log("E")
 	if ACM then
-		osn(30,rawradartargets[3].pos.x)
-		osn(31,rawradartargets[3].pos.y)
-		osn(32,rawradartargets[3].pos.z)
+		osn(30,0)
+		osn(31,0)
+		osn(32,0)
+		--osn(30,rawradartargets[3].pos.x)
+		--osn(31,rawradartargets[3].pos.y)
+		--osn(32,rawradartargets[3].pos.z)
 	else
 		if targetfiles[selectedtgt] then
-			osn(30,lastpos(selectedtgt).x)
-			osn(31,lastpos(selectedtgt).y)
-			osn(32,lastpos(selectedtgt).z)
-			--osn(30,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].x)
-			--osn(31,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].y)
-			--osn(32,targetfiles[selectedtgt].poss[edgeindex(targetfiles[selectedtgt].poss,true)].z)
-			--osn(30,targetfiles[selectedtgt].extrpos.x)
-			--osn(31,targetfiles[selectedtgt].extrpos.y)
-			--osn(32,targetfiles[selectedtgt].extrpos.z)
+			osn(30,targetfiles[selectedtgt].x)
+			osn(31,targetfiles[selectedtgt].y)
+			osn(32,targetfiles[selectedtgt].z)
+			
 			osn(11,targetfiles[selectedtgt].t)
 		else
 			osn(30,0)

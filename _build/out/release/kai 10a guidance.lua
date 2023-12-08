@@ -8,78 +8,78 @@
 -- Minimized Size: 2440 (2774 with comment) chars
 
 J=true
-az=false
-ad=property
-ag=output
-ah=input
-af=math
-I=af.sin
-V=af.cos
-x=debug.log
-D=ah.getNumber
-f=D; z=ag.setNumber; b_=ah.getBool; bc=ag.setBool;
-n=ad.getNumber; bf=ad.getBool; ba=ad.getText; h=af; pi=h.pi; at=pi*2
-function e(b,d,c)return{b=b or 0,d=d or 0,c=c or 0}end
-function l(_,a)return e(_.b+a.b,_.d+a.d,_.c+a.c)end
-function bb(_,a)return e(_.b*a.b,_.d*a.d,_.c*a.c)end
-function g(_,t)return e(_.b*t,_.d*t,_.c*t)end
-function au(_)return g(_,-1)end
-function p(_,a)return l(_,au(a))end
-function m(_)return h.sqrt(_.b*_.b+_.d*_.d+_.c*_.c)end
-function aw(_,t)return g(_,1/t)end
-function A(_)return aw(_,m(_))end
-function o(_,a)return _.b*a.b+_.d*a.d+_.c*a.c
+am=false
+V=property
+at=output
+ax=input
+R=math
+ae=R.sin
+N=R.cos
+q=debug.log
+A=ax.getNumber
+f=A; H=at.setNumber; ba=ax.getBool; be=at.setBool;
+o=V.getNumber; bd=V.getBool; bb=V.getText; h=R; pi=h.pi; aE=pi*2
+function d(b,e,c)return{b=b or 0,e=e or 0,c=c or 0}end
+function j(_,a)return d(_.b+a.b,_.e+a.e,_.c+a.c)end
+function bc(_,a)return d(_.b*a.b,_.e*a.e,_.c*a.c)end
+function g(_,p)return d(_.b*p,_.e*p,_.c*p)end
+function aG(_)return g(_,-1)end
+function r(_,a)return j(_,aG(a))end
+function k(_)return h.sqrt(_.b*_.b+_.e*_.e+_.c*_.c)end
+function aB(_,p)return g(_,1/p)end
+function E(_)return aB(_,k(_))end
+function n(_,a)return _.b*a.b+_.e*a.e+_.c*a.c
 end
-function u(_,a)return e(_.d*a.c-_.c*a.d,_.c*a.b-_.b*a.c,_.b*a.d-_.d*a.b)end
-function am(_,a)return p(_,g(A(a),o(_,A(a))))end
-function be(ak,aa,s)local s=s or 1
-return e(h.sin(ak)*h.cos(aa)*s,h.cos(ak)*h.cos(aa)*s,h.sin(aa)*s)end
-function y(_,j)if not i then
-i={}i[j]={Z=e(),ae=e()}elseif not i[j]then
-i[j]={Z=e(),ae=e()}end
-i[j].ae=p(_,i[j].Z)i[j].Z=_
-return i[j].ae
+function w(_,a)return d(_.e*a.c-_.c*a.e,_.c*a.b-_.b*a.c,_.b*a.e-_.e*a.b)end
+function au(_,a)return r(_,g(E(a),n(_,E(a))))end
+function bf(aj,Q,t)local t=t or 1
+return d(h.sin(aj)*h.cos(Q)*t,h.cos(aj)*h.cos(Q)*t,h.sin(Q)*t)end
+function D(_,m)if not i then
+i={}i[m]={S=d(),aa=d()}elseif not i[m]then
+i[m]={S=d(),aa=d()}end
+i[m].aa=r(_,i[m].S)i[m].S=_
+return i[m].aa
 end
-function aH(_,ab,Y,O)return e(o(ab,_),o(Y,_),o(O,_))end
-function aE(_,ab,Y,O)return l(l(g(ab,_.b),g(Y,_.d)),g(O,_.c))end
-function ar(b,aj,B)return b<aj and aj or b>B and B or b
+function aP(_,I,O,Y)return d(n(I,_),n(O,_),n(Y,_))end
+function ai(_,I,O,Y)return j(j(g(I,_.b),g(O,_.e)),g(Y,_.c))end
+function an(b,al,y)return b<al and al or b>y and y or b
 end
-function bd(Q,aY)x("VECTOR "..aY.." COMPONENTS:")x(Q.b)x(Q.d)x(Q.c)x("------------------")end
-function aN()return((W<=2495 or W>=2505)and W>=aI and aK)end
-w=n("Navigation Constant")G=n("Max Control")aI=n("Minimum Mass")aC=n("Horizontal Offset")av=n("Vertical Offset")aR=n("Max Distance from radio")C=az
-function onTick()aF,al,aD=D(4),D(5),D(6)N,R,S=V(aF),V(al),V(aD)an,U,K=I(aF),I(al),I(aD)H=e(R*S,-U,R*K)E=e(an*K+N*U*S,N*R,-an*S+N*U*K)M=u(H,E)L=e(f(1),f(3),f(2))ac=y(L,"m_vel")aV=l(L,au(aE(e(0,1.25,0),H,E,M)))T=e(f(7),f(8),f(9))ap=f(12)aq=f(13)aZ=f(14)or 0
-W=aZ*ap
-aS=f(10)*at
-aB=f(11)*at
-aG=h.sin(aS)*ap
-aJ=h.sin(aB)*aq
-aQ=h.cos(aB)*aq
-B=(aQ^2-aG^2)^.5
-ax=e(aG,B,aJ)aK=m(ax)>0
-aT=k or e()if aN()then
-ao=l(aV,aE(ax,H,E,M))if m(T)>0 then
-if m(p(k,T))<=aR then
-C=J
-k=ao
+function b_(K,aJ)q("VECTOR "..aJ.." COMPONENTS:")q(K.b)q(K.e)q(K.c)q("------------------")end
+function aS()return((M<=2495 or M>=2505)and M>=aK and aU)end
+v=o("Navigation Constant")G=o("Max Control")aK=o("Minimum Mass")ay=o("Horizontal Offset")az=o("Vertical Offset")aI=o("Max Distance from radio")B=am
+function onTick()aw,aq,as=A(4),A(5),A(6)L,X,ab=N(aw),N(aq),N(as)ap,ac,Z=ae(aw),ae(aq),ae(as)C=d(X*ab,-ac,X*Z)z=d(ap*Z+L*ac*ab,L*X,-ap*ab+L*ac*Z)ad=w(C,z)af=d(f(1),f(3),f(2))W=D(af,"m_vel")aN=j(af,aG(ai(d(0,1.25,0),C,z,ad)))P=d(f(7),f(8),f(9))ah=f(12)aA=f(13)aR=f(14)or 0
+M=aR*ah
+aL=f(10)*aE
+ak=f(11)*aE
+ar=h.sin(aL)*ah
+aQ=h.sin(ak)*aA
+aV=h.cos(ak)*aA
+y=(aV^2-ar^2)^.5
+ag=d(ar,y,aQ)aU=k(ag)>0
+aW=l or d()if aS()then
+aD=j(aN,ai(ag,C,z,ad))if k(P)>0 then
+if k(r(l,P))<=aI then
+B=J
+l=aD
 else
-C=J
-k=T
-end
-else
-C=J
-k=ao
+B=J
+l=P
 end
 else
-k=aT
+B=J
+l=aD
 end
-as=y(k,"tgt_vel")ai=y(as,"tgt_acc")aW=y(ai,"tgt_jer")q=p(k,L)r=A(q)F=p(as,ac)aO=am(ai,r)aX=am(aW,r)X=aw(u(q,F),o(q,q))P=g(u(F,X),w)P=g(u(r,X),-w*m(F))aU=A(ac)P=g(u(aU,X),-w*m(F))aL=g(aO,w/2)aP=g(aX,w/6)aA=l(P,l(aL,aP))if m(q)<1000 and o(r,ac)>1 then
-v=1
 else
-aA=r
-v=4
+l=aW
 end
-ay=aH(aA,H,E,M)aM=f(15)>0 or az
-if aM and C then
-z(1,ar(-ay.b,-G/v,G/v)+aC)z(2,ar(-ay.c,-G/v,G/v)+av)else
-z(1,aC)z(2,av)end
+ao=D(l,"tgt_vel")aC=D(ao,"tgt_acc")aX=D(aC,"tgt_jer")u=r(l,af)x=E(u)F=r(ao,W)aY=au(aC,x)aM=au(aX,x)U=aB(w(u,F),n(u,u))T=g(w(F,U),v)T=g(w(x,U),-v*k(F))aT=E(W)T=g(w(aT,U),-v*k(F))aH=g(aY,v/2)aZ=g(aM,v/6)av=j(T,j(aH,aZ))if k(u)<1000 and n(x,W)>1 then
+s=1
+else
+av=x
+s=4
+end
+aF=aP(av,C,z,ad)aO=f(15)>0 or am
+if aO and B then
+H(1,an(-aF.b,-G/s,G/s)+ay)H(2,an(-aF.c,-G/s,G/s)+az)else
+H(1,ay)H(2,az)end
 end

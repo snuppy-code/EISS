@@ -1,134 +1,134 @@
 
-q=200
-aE=nil
-af=pairs
-al=true
-aA=math
-aL=aA.random
-aH=aA.rad
-g,h,aM,aO,i,by,bw=aA,input,output,property,screen,al,false
-a,aP,bF,bK=h.getNumber,aM.setNumber,h.getBool,aM.setBool
-bC,bE=aO.getNumber,aO.getBool
-abs,cos,sin,floor,atan=g.abs,g.cos,g.sin,g.floor,g.atan
-pi=g.pi
-bJ=pi*2
-bx,bI,as,bk,j,bA,bB,t=i.drawText,i.drawTextBox,i.drawLine,i.drawRect,i.drawRectF,i.drawCircle,i.drawClear,i.setColor
-function e(c,b,d,l)return{c=c or 0,b=b or 0,d=d or 0,l=l or 0}end
-function X(_,f)return e(_.c+f.c,_.b+f.b,_.d+f.d)end
-function bD(_,f)return e(_.c*f.c,_.b*f.b,_.d*f.d)end
-function H(_,W)return e(_.c*W,_.b*W,_.d*W)end
-function bv(_)return H(_,-1)end
-function B(_,f)return X(_,bv(f))end
-function u(_)return g.sqrt(_.c*_.c+_.b*_.b+_.d*_.d)end
-function bq(_,W)return H(_,1/W)end
-function bH(_)return bq(_,u(_))end
-function aB(_,f)return _.c*f.c+_.b*f.b+_.d*f.d
+v=200
+aZ=nil
+ab=pairs
+av=true
+az=math
+aS=az.random
+aV=az.rad
+h,g,aO,aR,k,by,bI=az,input,output,property,screen,av,false
+a,aY,bJ,bK=g.getNumber,aO.setNumber,g.getBool,aO.setBool
+bE,bC=aR.getNumber,aR.getBool
+abs,cos,sin,floor,atan=h.abs,h.cos,h.sin,h.floor,h.atan
+pi=h.pi
+bB=pi*2
+bA,bF,ar,bj,j,bH,bx,s=k.drawText,k.drawTextBox,k.drawLine,k.drawRect,k.drawRectF,k.drawCircle,k.drawClear,k.setColor
+function e(b,c,d,m)return{b=b or 0,c=c or 0,d=d or 0,m=m or 0}end
+function aa(_,f)return e(_.b+f.b,_.c+f.c,_.d+f.d)end
+function bz(_,f)return e(_.b*f.b,_.c*f.c,_.d*f.d)end
+function J(_,V)return e(_.b*V,_.c*V,_.d*V)end
+function br(_)return J(_,-1)end
+function E(_,f)return aa(_,br(f))end
+function q(_)return h.sqrt(_.b*_.b+_.c*_.c+_.d*_.d)end
+function bo(_,V)return J(_,1/V)end
+function bw(_)return bo(_,q(_))end
+function am(_,f)return _.b*f.b+_.c*f.c+_.d*f.d
 end
-function aN(_,f)return e(_.b*f.d-_.d*f.b,_.d*f.c-_.c*f.d,_.c*f.b-_.b*f.c)end
-function aI(s,n,Z)local Z=Z or 1
-return e(g.sin(s)*g.cos(n)*Z,g.cos(s)*g.cos(n)*Z,g.sin(n)*Z)end
-function aV(_,L)if not F then
-F={}F[L]={au=e(),aC=e()}elseif not F[L]then
-F[L]={au=e(),aC=e()}end
-F[L].aC=B(_,F[L].au)F[L].au=_
-return F[L].aC
+function aX(_,f)return e(_.c*f.d-_.d*f.c,_.d*f.b-_.b*f.d,_.b*f.c-_.c*f.b)end
+function aH(r,n,W)local W=W or 1
+return e(h.sin(r)*h.cos(n)*W,h.cos(r)*h.cos(n)*W,h.sin(n)*W)end
+function bc(_,K)if not D then
+D={}D[K]={an=e(),ao=e()}elseif not D[K]then
+D[K]={an=e(),ao=e()}end
+D[K].ao=E(_,D[K].an)D[K].an=_
+return D[K].ao
 end
-function S(_,ay,aD,av)return e(aB(ay,_),aB(aD,_),aB(av,_))end
-function aR(_,ay,aD,av)return X(X(H(ay,_.c),H(aD,_.b)),H(av,_.d))end
-function N(c,i,aS)return c<i and i or c>aS and aS or c
+function S(_,aj,aC,aB)return e(am(aj,_),am(aC,_),am(aB,_))end
+function aG(_,aj,aC,aB)return aa(aa(J(aj,_.b),J(aC,_.c)),J(aB,_.d))end
+function O(b,k,aE)return b<k and k or b>aE and aE or b
 end
-function aa(bh,bf,bp,l,p)local bi=bp*(.025-2.2)+2.2
-local aU=l/2; local aW=p/2
-local bn=(aU-128*.025)/(aW-128*.025)local ba=g.tan(bi/2); local bj=ba*bn
-local O=B(bh,bf)local ap,ar=O.b>0 and aU*(1+O.c/O.b/bj)or 0,O.b>0 and p-aW*(1+O.d/O.b/ba)or 0
-return ap,ar
+function Z(bh,bu,bn,m,o)local bi=bn*(.025-2.2)+2.2
+local aK=m/2; local bb=o/2
+local bm=(aK-128*.025)/(bb-128*.025)local aI=h.tan(bi/2); local bp=aI*bm
+local R=E(bh,bu)local as,at=R.c>0 and aK*(1+R.b/R.c/bp)or 0,R.c>0 and o-bb*(1+R.d/R.c/aI)or 0
+return as,at
 end
-function aQ(ao,ah,bg,bu)ak=11
-aj=al
-bs=bg-ao
-bd=bu-ah
-bb=bs/ak
-aF=bd/ak
-for h=1,ak do
-if aj then
-as(ao+bb*(h-1),ah+aF*(h-1),ao+bb*h,ah+aF*h)end
-aj=not aj
-end
-end
-o={}ae=100
-k=3
-V=e(0,2.625,-.5)bm=e(0,3.125,-.25)A={}for h=1,k do
-A[h]={s=0,n=0}end
-bc=10
-K={}C={}function onTick()bt=a(28)==1
-U=.12
-aq=a(20)I=e(a(1),a(3),a(2))aJ,b_,aX=a(4),a(5),a(6)am,aw,ax=cos(aJ),cos(b_),cos(aX)aZ,at,az=sin(aJ),sin(b_),sin(aX)ac=e(aw*ax,-at,aw*az)ai=e(aZ*az+am*at*ax,am*aw,-aZ*ax+am*at*az)aT=aN(ac,ai)aK=H(aV(I,"myvel"),60)bl=H(aV(aK,"myacc"),60)bG=u(aK)bz=u(bl)/9.81
-ag=a(19)E=e(a(7),a(8),a(9))if u(E)>0 then
-C[ag]={R=E,k=0}end
-E=e(a(10),a(11),a(12))if u(E)>0 then
-C[ag+1]={R=E,k=0}end
-ag=a(21)E=e(a(13),a(14),a(15))br=e(a(16),a(17),a(18))if u(E)>0 then
-K[ag]={R=E,aY=br,k=0}end
-for m,be in af(C)do
-C[m].k=C[m].k+1
-if C[m].k>=bc then
-C[m]=aE
+function aW(aw,ay,bt,bv)au=11
+ah=av
+bg=bt-aw
+bl=bv-ay
+b_=bg/au
+aT=bl/au
+for g=1,au do
+if ah then
+ar(aw+b_*(g-1),ay+aT*(g-1),aw+b_*g,ay+aT*g)end
+ah=not ah
 end
 end
-for m,be in af(K)do
-K[m].k=K[m].k+1
-if K[m].k>=bc then
-K[m]=aE
+p={}ae=100
+i=3
+X=e(0,2.625,-.5)bf=e(0,3.125,-.25)A={}for g=1,i do
+A[g]={r=0,n=0}end
+aQ=10
+M={}B={}function onTick()bs=a(28)==1
+Y=.12
+ax=a(20)I=e(a(1),a(3),a(2))aJ,aM,aU=a(4),a(5),a(6)ap,al,aD=cos(aJ),cos(aM),cos(aU)ba,aq,aA=sin(aJ),sin(aM),sin(aU)af=e(al*aD,-aq,al*aA)ak=e(ba*aA+ap*aq*aD,ap*al,-ba*aD+ap*aq*aA)aF=aX(af,ak)aN=J(bc(I,"myvel"),60)bq=J(bc(aN,"myacc"),60)bG=q(aN)bD=q(bq)/9.81
+ad=a(19)G=e(a(7),a(8),a(9))if q(G)>0 then
+B[ad]={N=G,i=0}end
+G=e(a(10),a(11),a(12))if q(G)>0 then
+B[ad+1]={N=G,i=0}end
+ad=a(21)G=e(a(13),a(14),a(15))be=e(a(16),a(17),a(18))if q(G)>0 then
+M[ad]={N=G,aP=be,i=0}end
+for l,bd in ab(B)do
+B[l].i=B[l].i+1
+if B[l].i>=aQ then
+B[l]=aZ
 end
 end
-aG=e(a(23),a(24),a(25))P=ac
-Q=aR(aI(0,-.6*pi/4,1),ac,ai,aT)Y=aN(P,Q)for h=k,2,-1 do
-A[h].s=A[h-1].s
-A[h].n=A[h-1].n
+for l,bd in ab(M)do
+M[l].i=M[l].i+1
+if M[l].i>=aQ then
+M[l]=aZ
 end
-A[1].s=s or 0
+end
+aL=e(a(23),a(24),a(25))P=af
+Q=aG(aH(0,-.6*pi/4,1),af,ak,aF)U=aX(P,Q)for g=i,2,-1 do
+A[g].r=A[g-1].r
+A[g].n=A[g-1].n
+end
+A[1].r=r or 0
 A[1].n=n or 0
-if aq>=5 and aq<2000 then
-z=X(aR(X(aI(A[k].s,A[k].n,aq),bm),ac,ai,aT),I)z=e(z.c,z.b,z.d<0 and 0 or z.d)if#o>0 then
-an,T=al,0
-while T<#o and an and T<ae do
+if ax>=5 and ax<2000 then
+x=aa(aG(aa(aH(A[i].r,A[i].n,ax),bf),af,ak,aF),I)x=e(x.b,x.c,x.d<0 and 0 or x.d)if#p>0 then
+ai,T=av,0
+while T<#p and ai and T<ae do
 T=T+1
-an=u(B(o[T],z))>5
+ai=q(E(p[T],x))>5
 end
-bo=#o>=ae
-if an then
-if bo then
-for h=1,ae-1 do
-o[h]=o[h+1]end
-o[ae]=z
+bk=#p>=ae
+if ai then
+if bk then
+for g=1,ae-1 do
+p[g]=p[g+1]end
+p[ae]=x
 else
-o[#o+1]=z
+p[#p+1]=x
 end
 end
 else
-o[1]=z
+p[1]=x
 end
 end
-s=aH(aL(-40,40))n=aH(aL(-40,40))aP(1,s*4/pi)aP(2,n*4/pi)end
-function onDraw()l,p=i.getWidth(),i.getHeight()for m,r in af(o)do
-w=B(r,I)x=u(w)if x<2000 then
-v=S(w,P,Q,Y)if v.b>0 then
-ap,ar=aa(v,V,U,l,p)t(5-x,x-5,0)if(r.d<.5)then
-t(N(q-x/10,0,q),0,N(x/10,0,q),N(q-x/20,0,q))else
-t(N(q-x/10,0,q),N(x/10,0,q),0,N(q-x/20,0,q))end
-j(ap-1,ar,1,1)end
+r=aV(aS(-40,40))n=aV(aS(-40,40))aY(1,r*4/pi)aY(2,n*4/pi)end
+function onDraw()m,o=k.getWidth(),k.getHeight()for l,u in ab(p)do
+t=E(u,I)y=q(t)if y<2000 then
+w=S(t,P,Q,U)if w.c>0 then
+as,at=Z(w,X,Y,m,o)s(5-y,y-5,0)if(u.d<.5)then
+s(O(v-y/10,0,v),0,O(y/10,0,v),O(v-y/20,0,v))else
+s(O(v-y/10,0,v),O(y/10,0,v),0,O(v-y/20,0,v))end
+j(as-1,at,1,1)end
 end
 end
-t(80,13,1,230)for m,r in ipairs(C)do
-w=B(r.R,I)v=S(w,P,Q,Y)G,D=aa(v,V,U,l,p)y=r.R.d
-y=g.max(g.min(y/500,5),0)as(G-y,D-2,G+y+1,D-2)bk(G-1,D-1,2,2)end
-t(55,20,40,180)if u(aG)>0 then
-w=B(aG,I)v=S(w,P,Q,Y)G,D=aa(v,V,U,l,p)aQ(l/2,p,G,D)t(46,0,25,240)j(G-2,D-2,1,5)j(G+2,D-2,1,5)j(G,D,1,1)end
-t(0,40,255,230)for m,r in af(K)do
-w=B(r.R,I)v=S(w,P,Q,Y)M,J=aa(v,V,U,l,p)y=r.R.d
-y=g.max(g.min(y/500,5),0)as(M-y,J-2,M+y+1,J-2)j(M,J-1,1,1)j(M+1,J,1,1)j(M,J+1,1,1)j(M-1,J,1,1)if u(r.aY)>0 then
-w=B(r.aY,I)v=S(w,P,Q,Y)ad,ab=aa(v,V,U,l,p)t(30,90,255,155)aQ(M,J,ad,ab)t(40,40,110,165)j(ad-2,ab-2,1,5)j(ad+2,ab-2,1,5)j(ad,ab,1,1)end
+s(80,13,1,230)for l,u in ipairs(B)do
+t=E(u.N,I)w=S(t,P,Q,U)F,C=Z(w,X,Y,m,o)z=u.N.d
+z=h.max(h.min(z/500,5),0)ar(F-z,C-2,F+z+1,C-2)bj(F-1,C-1,2,2)end
+s(55,20,40,180)if q(aL)>0 then
+t=E(aL,I)w=S(t,P,Q,U)F,C=Z(w,X,Y,m,o)aW(m/2,o,F,C)s(46,0,25,240)j(F-2,C-2,1,5)j(F+2,C-2,1,5)j(F,C,1,1)end
+s(0,40,255,230)for l,u in ab(M)do
+t=E(u.N,I)w=S(t,P,Q,U)H,L=Z(w,X,Y,m,o)z=u.N.d
+z=h.max(h.min(z/500,5),0)ar(H-z,L-2,H+z+1,L-2)j(H,L-1,1,1)j(H+1,L,1,1)j(H,L+1,1,1)j(H-1,L,1,1)if q(u.aP)>0 then
+t=E(u.aP,I)w=S(t,P,Q,U)ag,ac=Z(w,X,Y,m,o)s(30,90,255,155)aW(H,L,ag,ac)s(40,40,110,165)j(ag-2,ac-2,1,5)j(ag+2,ac-2,1,5)j(ag,ac,1,1)end
 end
-if bt then
-t(255,0,0)j(0,0,1,p)j(l-1,0,1,p)end
+if bs then
+s(255,0,0)j(0,0,1,o)j(m-1,0,1,o)end
 end

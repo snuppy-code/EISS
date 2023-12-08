@@ -136,7 +136,7 @@ function onTick()
 	--put me in the friendlies table for the TWS :3
 	friendlyfiles[vicmyuser] = {pos=mpos,sel=vec()}
 	if targetfiles[selectedtgt] then
-		friendlyfiles[vicmyuser].sel = targetfiles[k].pos
+		friendlyfiles[vicmyuser].sel = targetfiles[selectedtgt].pos
 	end
 
 	--output my ASCII on radio
@@ -234,7 +234,7 @@ function onTick()
 				thisnotculled = false
 			end
 		else
-			if targetfiles[k].pos <= -1 then
+			if targetfiles[k].pos.z <= -1 then
 				targetfiles[k].pos.z = 5
 			end
 			for i,r in pairs(friendlyfiles) do
@@ -298,9 +298,9 @@ function onTick()
 		--osn(32,rawradartargets[3].pos.z)
 	else
 		if targetfiles[selectedtgt] then
-			osn(30,lastpos(selectedtgt).x)
-			osn(31,lastpos(selectedtgt).y)
-			osn(32,lastpos(selectedtgt).z)
+			osn(30,targetfiles[selectedtgt].x)
+			osn(31,targetfiles[selectedtgt].y)
+			osn(32,targetfiles[selectedtgt].z)
 			
 			osn(11,targetfiles[selectedtgt].t)
 		else
