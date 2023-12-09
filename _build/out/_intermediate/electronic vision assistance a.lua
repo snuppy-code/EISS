@@ -123,7 +123,7 @@ for i=1,t do
 end
 
 ---- NON-EVA SETUP VARS ----
-culltime = 10
+culltime = 40
 friendlies = {}
 tgtfiles = {}
 

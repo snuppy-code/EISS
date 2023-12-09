@@ -88,7 +88,7 @@ function onTick()
 	touchin = ign(27) == 1
 	if touchin and not touch and (#targetfiles > 0) then
 		selectedtgt = selectedtgt%(#targetfiles)+1
-		--debug.log("judcycled: "..selectedtgt)
+		debug.log("cycled: "..selectedtgt)
 	end
 	touch = touchin
 
@@ -212,6 +212,7 @@ function onTick()
 				else--we already have a match
 					if length(subt(targetfiles[fileindex].pos,rawtgt.pos)) <= mergedist then
 						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found, also not a selected target
+						debug.log("merged: "..fileindex.."\n"..file.pos.x.." "..file.pos.y.." "..file.pos.z)
 						table.remove(targetfiles,fileindex)--we already matched raw tgt to a file so we will delete this one
 					end
 				end
@@ -223,14 +224,18 @@ function onTick()
 		end
 	end
 	-- target file culling
-	culled = 0
 	for k, v in ipairs(targetfiles) do
+		thisnotculled = true
 		targetfiles[k].t = targetfiles[k].t + 1
 
-		if (v.t >= culltime) then--and not (k == selectedtgt) then
-			--debug.log("tmdout "..k)
+		if (v.t >= culltime) and not (k == selectedtgt) then
+			debug.log("tmdout: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
 			if thisnotculled then
 				table.remove(targetfiles,k)
+				if k < selectedtgt then
+					selectedtgt = selectedtgt - 1
+					debug.log("shifted selected down 1 to "..selectedtgt)
+				end
 				thisnotculled = false
 			end
 		else
@@ -241,7 +246,12 @@ function onTick()
 				if thisnotculled then
 					if length(subt(r.pos,targetfiles[k].pos))<=mergedist then
 						if thisnotculled then
+							debug.log("fdist-removed: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
 							table.remove(targetfiles,k)
+							if k < selectedtgt then
+								selectedtgt = selectedtgt - 1
+								debug.log("shifted selected down 1 to "..selectedtgt)
+							end
 							thisnotculled = false
 						end
 					end
@@ -249,7 +259,6 @@ function onTick()
 			end
 		end
 	end
-	if culled > 0 then possculltimer = 0 end
 
 	---- OUTPUTS ----
 	--targets
@@ -298,9 +307,9 @@ function onTick()
 		--osn(32,rawradartargets[3].pos.z)
 	else
 		if targetfiles[selectedtgt] then
-			osn(30,targetfiles[selectedtgt].x)
-			osn(31,targetfiles[selectedtgt].y)
-			osn(32,targetfiles[selectedtgt].z)
+			osn(30,targetfiles[selectedtgt].pos.x)
+			osn(31,targetfiles[selectedtgt].pos.y)
+			osn(32,targetfiles[selectedtgt].pos.z)
 			
 			osn(11,targetfiles[selectedtgt].t)
 		else

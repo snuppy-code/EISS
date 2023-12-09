@@ -71,7 +71,7 @@ end
 rangelim = 13333
 xfov = 0.03*pi
 sweeplim = 0.09*pi2+xfov
-culltime = 10
+culltime = 40
 
 friendlies = {}
 tgtfiles = {}
@@ -211,8 +211,8 @@ function onDraw()
 			s.setMapColorGrass(8,10,8)
 			s.setMapColorSand(6,6,4)
 			s.setMapColorSnow(25,25,26)
-			s.setMapColorRock(3,3,3)
-			s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
+			--s.setMapColorRock(3,3,3)
+			--s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
 
 			s.drawMap(viewedx,viewedy,zoom)
 		end

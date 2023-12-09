@@ -32,6 +32,18 @@ deadzone = pgn("Deadzone")
 
 runpids = pgb("Use PIDs?")
 
+custommissiletrim = {--setup for 0 to 8 KAIs
+	[0] = -0.045,
+	[1] = -0.18 ,
+	[2] = -0.04 ,
+	[3] = -0.2 ,
+	[4] = -0.045,
+	[5] = -0.215,
+	[6] = -0.04 ,
+	[7] = -0.225,
+	[8] = -0.045,
+}
+
 function threshold(a,min,max)
 	return a > min and a < max
 end
@@ -103,7 +115,8 @@ function onTick()
 	--	spdfactor = 0.51/(1-3.64*(2.71828^(-0.01*spd)))
 	--end
 	--debug.log("spdfactor: "..spdfactor)
-	missilesfactor = ign(8)/8
+	missiles = ign(8)
+	missilesfactor = missiles/8
 	--debug.log("missilesfactor: "..missilesfactor)
 	gains = {
 		pitch=lerp(unloadedgains.pitch,loadedgains.pitch,missilesfactor),
@@ -125,7 +138,10 @@ function onTick()
 		pitch=unloadedtrims.pitch*gains.pitch,
 		roll=unloadedtrims.roll*gains.roll,
 		yaw=unloadedtrims.yaw*gains.yaw}
-	
+	if custommissiletrim[missiles] then
+		trims.yaw = trims.yaw + custommissiletrim[missiles]*gains.yaw
+	end
+
 	--gains = {
 	--	pitch=gains.pitch*spdfactor,
 	--	roll=gains.roll*spdfactor,
