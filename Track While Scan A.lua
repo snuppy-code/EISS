@@ -48,18 +48,53 @@ function torelative(a,r,f,u)
 return add(add(multf(r,a.x), multf(f,a.y)), multf(u,a.z))
 end
 
---VICLINK (vehicle datalink)
-vicstartfreq = pgn("VL Strt Frq")
-vicuserf = pgn("VL You Frq")
-vicendf = pgn("VL End Frq")
-vicmyuser = property.getText("VL User")
-viccurrentfreq=vicstartfreq
+
+---- IFF / DATALINK SETUP ----
+maxfriendlies = property.getNumber("Max friendlies")
+usernumber = property.getNumber("User number")
+freqseed = property.getNumber("Frequency seed")
+encseed = property.getNumber("Encryption seed")
+basefreqmin,basefreqmax = 1871759, 6393518
+
+-- find base frequency all friendlies will go from, based on freq seed
+m.randomseed(freqseed)
+basefreq = m.random(basefreqmin,basefreqmax)
+
+--define table that will hold friendly offsets, and later, their final frequency
+friendlyfreq = {}
+
+-- find offsets for each friendly, ensuring no duplicates, based on freq seed
+m.randomseed(freqseed)
+for i = 1,maxfriendlies do
+  thisoffset = m.random(-605791, 605791)
+  for _,v in ipairs(friendlyfreq) do
+    while v == thisoffset do
+      thisoffset = m.random(-605791, 605791)
+    end
+  end
+  friendlyfreq[i] = thisoffset
+end
+-- add the base frequency to each friendly's offset to get them to their true freq
+for k in ipairs(friendlyfreq) do
+  friendlyfreq[k] = friendlyfreq[k] + basefreq
+end
+
+-- setup vars 
+currentfriend = 1
+currentenemy = 1
+enemybase = 719700
+ticksdelay = 7
+radiobuffer = {}
+radiobufferlength = 7
+
+friendlyfiles = {}--number indexed table with all friendlies, specific order or anything doesn't really matter as long as they are all there
+emissiontargets = {}--number indexed table with all enemies found through datalink sniffing, again specific order doesn't matter
+targetfiles = {}
 
 --radar & tgt handling info
 mergedist = pgn("Merge Dist")
 culltime = pgn("Cull Time")
 
---rawemissiontargets = {}
 rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
 	{},
 	{},
@@ -67,14 +102,11 @@ rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" sto
 	{}
 }
 
-targetfiles = {}
-friendlyfiles = {}
-friendlyindex = {}
-
-notenemysniffing = true
+ticks = 0
 selectedtgt = 0
 enemytransindex,friendlytransindex=0,0
 function onTick()
+	ticks = ticks + 1
 	--my position vector
 	mpos = vec(ign(1),ign(2),ign(3))
 	touchin = ign(27) == 1
@@ -95,67 +127,74 @@ function onTick()
 	up = cross(right,fwd)
 
 	---- VICLINK & ENEMY SNIFF ----
-	if notenemysniffing then
-		-- VICLINK
-		--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlyfiles table at index of their ASCII
-		fpos = vec(ign(7),ign(9),ign(8))
-		ftrk = vec(ign(21),ign(22),ign(23))
-		--debug.log(fpos.x.." "..fpos.y.." "..fpos.z)
-		if length(fpos)>0 then
-			--debug.log("valid user:"..fpos.x.." "..fpos.y.." "..fpos.z)
-			local userascii2 = {ign(10),ign(11)}
-			user=""
-			if userascii2[1]>=1000000 and userascii2[1]>=1000000 then
-				userascii = tostring(userascii2[1]):sub(2,7)..tostring(userascii2[2]):sub(2,7)
-				for i=1, #userascii, 3 do
-					user = user..string.char(userascii:sub(i,i+3-1))
-				end
-				--debug.log("valid user:"..user)
-			else
-				user = "XXXX"
-			end
-			friendlyfiles[user]={pos=fpos,sel=ftrk}
-			friendlymatch = nil
-			for k,v in ipairs(friendlyindex) do
-				if v == user then
-					friendlymatch = k
-				end
-			end
-			if friendlymatch then
-				friendlyindex[friendlymatch] = user
-			else
-				friendlyindex[#friendlyindex+1] = user
-			end
-		end
-
-		--output my ASCII on radio
-		myuserascii = ""
-		for i=1, #vicmyuser do
-			myuserascii = myuserascii..string.format("%03d", vicmyuser:byte(i))
-		end
-		osn(1,tonumber("1"..myuserascii:sub(1,6)))
-		osn(2,tonumber("1"..myuserascii:sub(7,12)))
-
-		--increment freq scan
-		if viccurrentfreq == vicendf then 
-			viccurrentfreq = vicstartfreq 
+	--set freq
+	if ticks % 3 > 0 then
+		--2/3 ticks, check next friendly
+		currentiff = true
+		if currentfriend == maxfriendlies then 
+			currentfriend = 1 
 		else
-			viccurrentfreq = viccurrentfreq+1
+			currentfriend = currentfriend+1
 		end
-		
-		if viccurrentfreq==vicuserf then 
-			if viccurrentfreq==vicendf then
-				viccurrentfreq = vicstartfreq
+		if currentfriend == usernumber then 
+			if currentfriend == maxfriendlies then
+				currentfriend = 1
 			else
-				viccurrentfreq = viccurrentfreq+1
+				currentfriend = currentfriend+1
 			end
 		end
-		osn(3,viccurrentfreq)
+		usedfreq = friendlyfreq[currentfriend]
 	else
-		-- ENEMY SNIFF
-		--
-		
+		--1/3 ticks, check next enemy
+		currentiff = false
+		if currentenemy == 9 then 
+			currentenemy = 0 
+		else
+			currentenemy = currentenemy+1
+		end
+		usedfreq = enemybase+currentenemy
 	end
+
+	if #radiobuffer == radiobufferlength then
+		--copy and overwrite everything up one
+		for i=radiobufferlength,2,-1 do
+			radiobuffer[i] = radiobuffer[i-1]
+		end
+
+		if currentiff then 
+			radiobuffer[1] = {iff = currentiff,id=currentfriend}
+			--debug.log("checking friend: "..currentfriend.." freq: "..usedfreq)
+		else
+			radiobuffer[1] = {iff = currentiff,id=currentenemy}
+			--debug.log("checking enemy: "..currentenemy.." freq: "..usedfreq)
+		end
+
+		if radiobuffer[ticksdelay].iff then
+			friendlyfiles[radiobuffer[ticksdelay].id]={pos=vec(ign(7),ign(9),ign(8)),sel=vec(ign(21),ign(22),ign(23))}
+		else
+			emissiontargets[radiobuffer[ticksdelay].id] = vec(ign(11),ign(23),-900)
+		end
+	end
+
+	--[[debug.log("friendlies:")
+	for k,v in pairs(friendlyfiles) do
+		debug.log("k: "..k.." v: "..v)
+	end
+	debug.log("emissiontargets:")
+	for k,v in pairs(emissiontargets) do
+		debug.log("k: "..k.." v: "..v)
+	end]]
+
+	osn(3,usedfreq)--set the next frequency to check, be it friendly or enemy
+	osn(29,friendlyfreq[usernumber])--set our frequency, even though it isn't changing we need to output it still
+	osn(1,usernumber)--output our debug number
+
+
+
+
+
+
+
 
     ---- Raw Radar Targets to TWS ----
 	--data from new radar 1
