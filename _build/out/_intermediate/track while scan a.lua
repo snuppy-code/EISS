@@ -1,9 +1,9 @@
 
 --math input and other shorthands
-m,i,o,p,s,T,F = math,input,output,property,screen,true,false
+m,i,o,p = math,input,output,property
 ign,osn,igb,osb = i.getNumber, o.setNumber, i.getBool, o.setBool
 pgn,pgb = p.getNumber, p.getBool
-abs,cos,sin,floor,atan = m.abs, m.cos, m.sin, m.floor,m.atan
+cos,sin = m.cos, m.sin
 pi = m.pi
 pi2 = pi*2
 
@@ -38,15 +38,6 @@ end
 function cross(a,b)
 return vec(a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x)
 end
---function project(a,b)
---return multf(norm(b), dot(a, norm(b)))
---end
---function reject(a,b)
---return subt(a, multf(norm(b), dot(a, norm(b))))
---end
---function reflect(a,b,factor)
---return subt(a, multf(reject(a, b), factor or 2))
---end
 function stoc(hor,ver,d)
 stocd=stocd or 1
 return vec(m.sin(hor)*m.cos(ver)*d, m.cos(hor)*m.cos(ver)*d, m.sin(ver)*d)
@@ -81,6 +72,7 @@ targetfiles = {}
 friendlyfiles = {}
 friendlyindex = {}
 
+notenemysniffing = true
 selectedtgt = 0
 enemytransindex,friendlytransindex=0,0
 function onTick()
@@ -103,57 +95,68 @@ function onTick()
 	fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
 	up = cross(right,fwd)
 
-	---- VICLINK ----
-	--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlyfiles table at index of their ASCII
-	fpos = vec(ign(7),ign(9),ign(8))
-	ftrk = vec(ign(21),ign(22),ign(23))
-	--debug.log(fpos.x.." "..fpos.y.." "..fpos.z)
-	if length(fpos)>0 then
-		--debug.log("valid user:"..fpos.x.." "..fpos.y.." "..fpos.z)
-		local userascii2 = {ign(10),ign(11)}
-		user=""
-		if userascii2[1]>=1000000 and userascii2[1]>=1000000 then
-			userascii = tostring(userascii2[1]):sub(2,7)..tostring(userascii2[2]):sub(2,7)
-			for i=1, #userascii, 3 do
-				user = user..string.char(userascii:sub(i,i+3-1))
+	---- VICLINK & ENEMY SNIFF ----
+	if notenemysniffing then
+		-- VICLINK
+		--get current friendly's pos, if it is anything except 0,0,0 then get their ASCII and put their pos in friendlyfiles table at index of their ASCII
+		fpos = vec(ign(7),ign(9),ign(8))
+		ftrk = vec(ign(21),ign(22),ign(23))
+		--debug.log(fpos.x.." "..fpos.y.." "..fpos.z)
+		if length(fpos)>0 then
+			--debug.log("valid user:"..fpos.x.." "..fpos.y.." "..fpos.z)
+			local userascii2 = {ign(10),ign(11)}
+			user=""
+			if userascii2[1]>=1000000 and userascii2[1]>=1000000 then
+				userascii = tostring(userascii2[1]):sub(2,7)..tostring(userascii2[2]):sub(2,7)
+				for i=1, #userascii, 3 do
+					user = user..string.char(userascii:sub(i,i+3-1))
+				end
+				--debug.log("valid user:"..user)
+			else
+				user = "XXXX"
 			end
-			--debug.log("valid user:"..user)
-		else
-			user = "XXXX"
-		end
-		friendlyfiles[user]={pos=fpos,sel=ftrk}
-		friendlymatch = nil
-		for k,v in ipairs(friendlyindex) do
-			if v == user then
-				friendlymatch = k
+			friendlyfiles[user]={pos=fpos,sel=ftrk}
+			friendlymatch = nil
+			for k,v in ipairs(friendlyindex) do
+				if v == user then
+					friendlymatch = k
+				end
+			end
+			if friendlymatch then
+				friendlyindex[friendlymatch] = user
+			else
+				friendlyindex[#friendlyindex+1] = user
 			end
 		end
-		if friendlymatch then
-			friendlyindex[friendlymatch] = user
-		else
-			friendlyindex[#friendlyindex+1] = user
+
+		--output my ASCII on radio
+		myuserascii = ""
+		for i=1, #vicmyuser do
+			myuserascii = myuserascii..string.format("%03d", vicmyuser:byte(i))
 		end
-	end
-	--put me in the friendlies table for the TWS :3
-	friendlyfiles[vicmyuser] = {pos=mpos,sel=vec()}
-	if targetfiles[selectedtgt] then
-		friendlyfiles[vicmyuser].sel = targetfiles[selectedtgt].pos
-	end
+		osn(1,tonumber("1"..myuserascii:sub(1,6)))
+		osn(2,tonumber("1"..myuserascii:sub(7,12)))
 
-	--output my ASCII on radio
-	myuserascii = ""
-	for i=1, #vicmyuser do
-		myuserascii = myuserascii..string.format("%03d", vicmyuser:byte(i))
+		--increment freq scan
+		if viccurrentfreq == vicendf then 
+			viccurrentfreq = vicstartfreq 
+		else
+			viccurrentfreq = viccurrentfreq+1
+		end
+		
+		if viccurrentfreq==vicuserf then 
+			if viccurrentfreq==vicendf then
+				viccurrentfreq = vicstartfreq
+			else
+				viccurrentfreq = viccurrentfreq+1
+			end
+		end
+		osn(3,viccurrentfreq)
+	else
+		-- ENEMY SNIFF
+		--
+		
 	end
-	osn(1,tonumber("1"..myuserascii:sub(1,6)))
-	osn(2,tonumber("1"..myuserascii:sub(7,12)))
-
-	--increment freq scan
-	viccurrentfreq=viccurrentfreq==vicendf and vicstartfreq or viccurrentfreq+1
-	if viccurrentfreq==vicuserf then 
-		viccurrentfreq=viccurrentfreq==vicendf and vicstartfreq or viccurrentfreq+1 
-	end
-	osn(3,viccurrentfreq)
 
     ---- Raw Radar Targets to TWS ----
 	--data from new radar 1
@@ -229,31 +232,46 @@ function onTick()
 		thisnotculled = true
 		targetfiles[k].t = targetfiles[k].t + 1
 
+		--cull if really old and not selected
 		if (v.t >= culltime) and not (k == selectedtgt) then
-			debug.log("tmdout: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
+			--debug.log("tmdout: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
 			if thisnotculled then
 				table.remove(targetfiles,k)
+				thisnotculled = false
 				if k < selectedtgt then
 					selectedtgt = selectedtgt - 1
-					debug.log("shifted selected down 1 to "..selectedtgt)
+					--debug.log("shifted selected down 1 to "..selectedtgt)
 				end
-				thisnotculled = false
 			end
 		else
+			--if under the sea, move to altitude of 5
 			if targetfiles[k].pos.z <= -1 then
 				targetfiles[k].pos.z = 5
 			end
+
+			--if within 50m of ME, cull
+			if thisnotculled then
+				if length(subt(mpos,targetfiles[k].pos))<= 50 then
+					debug.log("me dist-removed: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
+					table.remove(targetfiles,k)
+					thisnotculled = false
+					if k < selectedtgt then
+						selectedtgt = selectedtgt - 1
+						debug.log("shifted selected down 1 to "..selectedtgt)
+					end
+				end
+			end
+			
+			--if within 300m of a friendly, cull
 			for i,r in pairs(friendlyfiles) do
 				if thisnotculled then
-					if length(subt(r.pos,targetfiles[k].pos))<=mergedist then
-						if thisnotculled then
-							debug.log("fdist-removed: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
-							table.remove(targetfiles,k)
-							if k < selectedtgt then
-								selectedtgt = selectedtgt - 1
-								debug.log("shifted selected down 1 to "..selectedtgt)
-							end
-							thisnotculled = false
+					if length(subt(r.pos,targetfiles[k].pos))<=300 then
+						debug.log("fr dist-removed: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
+						table.remove(targetfiles,k)
+						thisnotculled = false
+						if k < selectedtgt then
+							selectedtgt = selectedtgt - 1
+							--debug.log("shifted selected down 1 to "..selectedtgt)
 						end
 					end
 				end

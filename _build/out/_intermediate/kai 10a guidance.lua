@@ -126,20 +126,33 @@ function onTick()
         if length(radio_pos)>0 then --If there's a position from radio
             if length(subt(tgt_pos,radio_pos))<=maxdist then --If the distance from our target to radio target is less than maxdist
                 --guide to onboard position (close enough to radio pos, probably same target)
+				--PITBULL
+				debug.log("PITBULL")
                 targettogoto = true
                 tgt_pos = tgt_pos_global
             else
-                --guide to radio position (far from radio pos, go to radio pos instead)
+                --guide to radio position (target is far from radio pos, so use radio pos instead)
+				--FOX1
+				debug.log("FOX1")
                 targettogoto = true
                 tgt_pos = radio_pos
             end
         else --No position from radio
             --guide to onboard position (no radio pos, eg go maddog)
+			--MADDOG
+			debug.log("MADDOG")
             targettogoto = true
             tgt_pos = tgt_pos_global
         end
+	elseif length(radio_pos)>0 then --If there's a position from radio
+		--guide to radio position (no target, but there is a position from radio, so use radio pos instead)
+		--FOX1
+		debug.log("FOX1")
+		targettogoto = true
+		tgt_pos = radio_pos
     else --No onboard position and no radio position
         --guide to last known position
+		debug.log("LAST KNOWN")
         tgt_pos = p_tgt_pos
     end
 

@@ -9,26 +9,26 @@ pi2 = pi*2
 s = screen
 text,textbox,line,rect,rectF,circl,clear,setcolor = s.drawText,s.drawTextBox,s.drawLine,s.drawRect,s.drawRectF,s.drawCircle,s.drawClear,s.setColor
 
-function line2(x1,y1,x2,y2)
-	dx=x2-x1
-	dy=y2-y1
-	if abs(dx) >= abs(dy) then
-		step = abs(dx)
-	else
-		step = abs(dy)
-	end
-	dx = dx / step
-	dy = dy / step
-	x = x1
-	y = y1
-	i = 0
-	while (i <= step) do
-		rectF(x,y,1,1)
-		x = x + dx
-		y = y + dy
-		i = i + 1
-	end
-end
+--function line2(x1,y1,x2,y2)
+--	dx=x2-x1
+--	dy=y2-y1
+--	if abs(dx) >= abs(dy) then
+--		step = abs(dx)
+--	else
+--		step = abs(dy)
+--	end
+--	dx = dx / step
+--	dy = dy / step
+--	x = x1
+--	y = y1
+--	i = 0
+--	while (i <= step) do
+--		rectF(x,y,1,1)
+--		x = x + dx
+--		y = y + dy
+--		i = i + 1
+--	end
+--end
 function vec(x,y,z)
 return {x=x or 0,y=y or 0,z=z or 0}
 end
@@ -211,8 +211,8 @@ function onDraw()
 			s.setMapColorGrass(8,10,8)
 			s.setMapColorSand(6,6,4)
 			s.setMapColorSnow(25,25,26)
-			--s.setMapColorRock(3,3,3)
-			--s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
+			s.setMapColorRock(3,3,3)
+			s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
 
 			s.drawMap(viewedx,viewedy,zoom)
 		end
@@ -265,10 +265,20 @@ function onDraw()
 			--end
 		--else
 		--originally there was radar type system, no longer in use so im just reusing code from it and keeping here inc i need it
+		
 		setcolor(0,255,0,8)
+		--radar circle
 		circl(mpixelx,mpixely,maxrangepixels)
+		--frontal radar fov lines
 		line(mpixelx,mpixely,mpixelx + sin(-sweeplim+heading)*maxrangepixels, mpixely + cos(-sweeplim+heading)*maxrangepixels)
 		line(mpixelx,mpixely,mpixelx + sin(sweeplim+heading)*maxrangepixels, mpixely + cos(sweeplim+heading)*maxrangepixels)
+		
+		--camera FOV lines
+		setcolor(22,22,22)
+		line(mpixelx,mpixely,mpixelx + sin(-0.97+heading)*22, mpixely + cos(-0.97+heading)*22)
+		line(mpixelx,mpixely,mpixelx + sin(0.97+heading)*22, mpixely + cos(0.97+heading)*22)
+		line(mpixelx,mpixely,mpixelx + sin(heading)*9, mpixely + cos(heading)*9)
+		
 		--setcolor(0,255,0,4)
 		--circl(mpixelx,mpixely,maxrangepixels-0.6)
 		--setcolor(0,255,0,2)
