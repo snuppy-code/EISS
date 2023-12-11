@@ -72,6 +72,7 @@ end
 
 
 nc=pgn("Navigation Constant")
+ppnc=pgn("Pure Pursuit Navigation Constant")
 maxc=pgn("Max Control")
 minmass=pgn("Minimum Mass")
 hoff=pgn("Horizontal Offset")
@@ -99,7 +100,8 @@ function onTick()
 	
 	--Get radio position
 	radio_pos = vec(ign(7),ign(8),ign(9))
-    
+    debug.log("radio pos: "..radio_pos.x..","..radio_pos.y..","..radio_pos.z)
+
 	--Calculate TGT local position from radars
 	rdrXdist = ign(12)
 	rdrYdist = ign(13)
@@ -122,20 +124,23 @@ function onTick()
 	p_tgt_pos = tgt_pos or vec()
 	if validowntarget() then --If we are tracking something
         tgt_pos_global = add(offset,torelative(tgt_pos_local,right,fwd,up))
+		debug.log("tgt_pos_global: "..tgt_pos_global.x..","..tgt_pos_global.y..","..tgt_pos_global.z)
 
         if length(radio_pos)>0 then --If there's a position from radio
-            if length(subt(tgt_pos,radio_pos))<=maxdist then --If the distance from our target to radio target is less than maxdist
+            if length(subt(tgt_pos_global,radio_pos))<=maxdist then --If the distance from our target to radio target is less than maxdist
                 --guide to onboard position (close enough to radio pos, probably same target)
 				--PITBULL
 				debug.log("PITBULL")
-                targettogoto = true
-                tgt_pos = tgt_pos_global
+				targettogoto = true
+				tgt_pos = tgt_pos_global
+				state = "PITBULL"
             else
                 --guide to radio position (target is far from radio pos, so use radio pos instead)
 				--FOX1
 				debug.log("FOX1")
                 targettogoto = true
                 tgt_pos = radio_pos
+				state = "FOX1"
             end
         else --No position from radio
             --guide to onboard position (no radio pos, eg go maddog)
@@ -143,6 +148,7 @@ function onTick()
 			debug.log("MADDOG")
             targettogoto = true
             tgt_pos = tgt_pos_global
+			state = "MADDOG"
         end
 	elseif length(radio_pos)>0 then --If there's a position from radio
 		--guide to radio position (no target, but there is a position from radio, so use radio pos instead)
@@ -150,11 +156,15 @@ function onTick()
 		debug.log("FOX1")
 		targettogoto = true
 		tgt_pos = radio_pos
+		state = "FOX1"
     else --No onboard position and no radio position
         --guide to last known position
 		debug.log("LAST KNOWN")
         tgt_pos = p_tgt_pos
+		state = "LASTKNOWN"
     end
+
+	debug.log("tgt_pos: "..tgt_pos.x..","..tgt_pos.y..","..tgt_pos.z)
 
     --p_tgt_pos = tgt_pos or vec()
 	--if validowntarget() then --If mass is above threshold, does not match tree mass, and a radar xyz is available
@@ -206,14 +216,15 @@ function onTick()
 	--EPN
 	Acmd = add(TPN_term,add(Acc_term,Jer_term))
 	
-	if length(tgt_pos_rel)<1000 and dot(tgt_pos_rel_n,m_vel)>1 then
+	if length(tgt_pos_rel)<1000 and dot(tgt_pos_rel_n,m_vel)>1 and not (state=="FOX1") and not (state=="LASTKNOWN") then--not PITBULL,MADDOG
 		limiter = 1
 	else
 		--PP
-		Acmd = tgt_pos_rel_n
-		limiter = 4
+		Acmd = multf(tgt_pos_rel_n,ppnc)
+		limiter = 3
 	end
-    
+	
+
 	--Firing and Control
 	ctrl = tolocal(Acmd,right,fwd,up)
     

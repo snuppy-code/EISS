@@ -274,16 +274,26 @@ function onDraw()
 	
 	---- SYMBOLS ----
 	--targets
-	setcolor(80,13,1,230)
 	for k,v in ipairs(tgtfiles) do
-		relative_position = subt(v.pos,mypos)
+		targetvector = v.pos
+		if targetvector.z < 0 then
+			targetvector = add(targetvector,vec(0,0,9999))
+			setcolor(240,0,0)
+			drawaltline = false
+		else
+			drawaltline = true
+			setcolor(80,13,1,230)
+		end
+
+		relative_position = subt(targetvector,mypos)
 		local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
 		tgtpixelx, tgtpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
-
 		
-		thistargetalt=v.pos.z
-		thistargetalt=m.max(m.min(thistargetalt/500,5),0)
-		line(tgtpixelx-thistargetalt,tgtpixely-2,tgtpixelx+thistargetalt+1,tgtpixely-2)
+		thistargetalt=targetvector.z
+		if drawaltline then
+			thistargetalt=m.max(m.min(thistargetalt/500,5),0)
+			line(tgtpixelx-thistargetalt,tgtpixely-2,tgtpixelx+thistargetalt+1,tgtpixely-2)
+		end
 		rect(tgtpixelx-1,tgtpixely-1,2,2)
 	end
 	

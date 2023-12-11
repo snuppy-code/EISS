@@ -86,7 +86,7 @@ currentenemy = 1
 enemybase = 719700
 ticksdelay = 7
 radiobuffer = {}
-radiobufferlength = 7
+radiobufferlength = 8
 
 friendlyfiles = {}--number indexed table with all friendlies, specific order or anything doesn't really matter as long as they are all there
 emissiontargets = {}--number indexed table with all enemies found through datalink sniffing, again specific order doesn't matter
@@ -96,12 +96,10 @@ targetfiles = {}
 mergedist = pgn("Merge Dist")
 culltime = pgn("Cull Time")
 
-rawradartargets = {--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
-	{},
-	{},
-	{},
-	{}
-}
+rawtargets = {}--"pos" stores position, "rel" stores relative vec, "tsd" stores time since detected
+for i = 1,14 do
+	rawtargets[i] = {}
+end
 
 ticks = 0
 selectedtgt = 0
@@ -112,8 +110,10 @@ function onTick()
 	mpos = vec(ign(1),ign(2),ign(3))
 	touchin = ign(27) == 1
 	if touchin and not touch and (#targetfiles > 0) then
-		selectedtgt = selectedtgt%(#targetfiles)+1
-		debug.log("cycled: "..selectedtgt)
+		if targetfiles[selectedtgt%(#targetfiles)+1].pos.z > 0 then
+			selectedtgt = selectedtgt%(#targetfiles)+1
+			--debug.log("cycled: "..selectedtgt)
+		end
 	end
 	touch = touchin
 
@@ -148,121 +148,127 @@ function onTick()
 	else
 		--1/3 ticks, check next enemy
 		currentiff = false
-		if currentenemy == 9 then 
-			currentenemy = 0 
+		if currentenemy == 10 then 
+			currentenemy = 1 
 		else
 			currentenemy = currentenemy+1
 		end
-		usedfreq = enemybase+currentenemy
+		usedfreq = enemybase+currentenemy-1
 	end
 
+	--copy and overwrite everything up one
+	for i=radiobufferlength,2,-1 do
+		radiobuffer[i] = radiobuffer[i-1]
+	end
+	if currentiff then 
+		radiobuffer[1] = {iff = currentiff,id=currentfriend}
+		--debug.log("checking friend: "..currentfriend.." freq: "..usedfreq)
+	else
+		radiobuffer[1] = {iff = currentiff,id=currentenemy}
+		--debug.log("checking enemy: "..currentenemy.." freq: "..usedfreq)
+	end
 	if #radiobuffer == radiobufferlength then
-		--copy and overwrite everything up one
-		for i=radiobufferlength,2,-1 do
-			radiobuffer[i] = radiobuffer[i-1]
-		end
-
-		if currentiff then 
-			radiobuffer[1] = {iff = currentiff,id=currentfriend}
-			--debug.log("checking friend: "..currentfriend.." freq: "..usedfreq)
-		else
-			radiobuffer[1] = {iff = currentiff,id=currentenemy}
-			--debug.log("checking enemy: "..currentenemy.." freq: "..usedfreq)
-		end
-
+		--debug.log("#radiobuffer == radiobufferlength")
 		if radiobuffer[ticksdelay].iff then
-			friendlyfiles[radiobuffer[ticksdelay].id]={pos=vec(ign(7),ign(9),ign(8)),sel=vec(ign(21),ign(22),ign(23))}
+			--debug.log("radiobuffer[ticksdelay].iff")
+			friendlyfiles[radiobuffer[ticksdelay].id]={pos=vec(ign(7),ign(8),ign(9)),sel=vec(ign(21),ign(22),ign(23))}
 		else
-			emissiontargets[radiobuffer[ticksdelay].id] = vec(ign(11),ign(23),-900)
+			--debug.log("NOT radiobuffer[ticksdelay].iff")
+			--debug.log("inserted at "..radiobuffer[ticksdelay].id)
+			rawtargets[4 + radiobuffer[ticksdelay].id].pos = vec(ign(10),ign(11),0)
+			rawtargets[4 + radiobuffer[ticksdelay].id].tsd = 0
+			rawtargets[4 + radiobuffer[ticksdelay].id].e = true
 		end
+		--[[debug.log("friendlies:")
+		for k,v in pairs(friendlyfiles) do
+			debug.log("k: "..k.." v: "..v)
+		end
+		debug.log("emissiontargets:")
+		for k,v in ipairs(emissiontargets) do
+			debug.log("k: "..tostring(k).." v: "..tostring(v.x))
+		end]]
 	end
-
-	--[[debug.log("friendlies:")
-	for k,v in pairs(friendlyfiles) do
-		debug.log("k: "..k.." v: "..v)
-	end
-	debug.log("emissiontargets:")
-	for k,v in pairs(emissiontargets) do
-		debug.log("k: "..k.." v: "..v)
-	end]]
 
 	osn(3,usedfreq)--set the next frequency to check, be it friendly or enemy
 	osn(29,friendlyfreq[usernumber])--set our frequency, even though it isn't changing we need to output it still
-	osn(1,usernumber)--output our debug number
-
-
-
-
-
+	--osn(1,usernumber)--output our debug number
 
 
 
     ---- Raw Radar Targets to TWS ----
 	--data from new radar 1
 	if ign(18) > 0 then
-		rawradartargets[1].loc = stoc(ign(19)*pi2,ign(20)*pi2,ign(18))
-		rawradartargets[1].rel = torelative(rawradartargets[1].loc,right,fwd,up)	--new1 r tgt d,a,e 18,19,20
-		rawradartargets[1].pos = add(rawradartargets[1].rel, mpos)
+		rawtargets[1].loc = stoc(ign(19)*pi2,ign(20)*pi2,ign(18))
+		rawtargets[1].rel = torelative(rawtargets[1].loc,right,fwd,up)	--new1 r tgt d,a,e 18,19,20
+		rawtargets[1].pos = add(rawtargets[1].rel, mpos)
 	else
-		rawradartargets[1] = {loc=vec(),rel=vec(),pos=vec()}
+		rawtargets[1] = {loc=vec(),rel=vec(),pos=vec()}
 	end
-	rawradartargets[1].tsd = ign(30)											--tsd: 31
+	rawtargets[1].tsd = ign(30)											--tsd: 31
 
 	--data from new radar 2
 	if ign(12) > 0 then
-		rawradartargets[2].loc = stoc(ign(13)*pi2,ign(14)*pi2,ign(12))
-		rawradartargets[2].rel = torelative(rawradartargets[2].loc,right,fwd,up)	--new2 r tgt d,a,e 12,13,14
-		rawradartargets[2].pos = add(rawradartargets[2].rel, mpos)
+		rawtargets[2].loc = stoc(ign(13)*pi2,ign(14)*pi2,ign(12))
+		rawtargets[2].rel = torelative(rawtargets[2].loc,right,fwd,up)	--new2 r tgt d,a,e 12,13,14
+		rawtargets[2].pos = add(rawtargets[2].rel, mpos)
 	else
-		rawradartargets[2] = {loc=vec(),rel=vec(),pos=vec()}
+		rawtargets[2] = {loc=vec(),rel=vec(),pos=vec()}
 	end
-	rawradartargets[2].tsd = ign(31)											--tsd: 31
+	rawtargets[2].tsd = ign(31)											--tsd: 31
 
 	--data from new radar 3
 	if ign(24) > 0 then
-		rawradartargets[3].loc = stoc(ign(25)*pi2+pi,ign(26)*pi2,ign(24))
-		rawradartargets[3].rel = torelative(rawradartargets[3].loc,right,fwd,up)	--new3 r tgt d,a,e 24,25,26
-		rawradartargets[3].pos = add(rawradartargets[3].rel, mpos)
+		rawtargets[3].loc = stoc(ign(25)*pi2+pi,ign(26)*pi2,ign(24))
+		rawtargets[3].rel = torelative(rawtargets[3].loc,right,fwd,up)	--new3 r tgt d,a,e 24,25,26
+		rawtargets[3].pos = add(rawtargets[3].rel, mpos)
 	else
-		rawradartargets[3] = {loc=vec(),rel=vec(),pos=vec()}
+		rawtargets[3] = {loc=vec(),rel=vec(),pos=vec()}
 	end
-	rawradartargets[3].tsd = ign(32)											--tsd: 32
+	rawtargets[3].tsd = ign(32)											--tsd: 32
 
 	--data from old radar / short range STT radar
-	rawradartargets[4].pos = vec(ign(15),ign(16),ign(17))
-	if length(rawradartargets[4].pos) > 0 then
-		rawradartargets[4].rel = subt(mpos,rawradartargets[4].pos)			--verold r tgt xyz 15,16,17
-		rawradartargets[4].loc = tolocal(rawradartargets[4].rel,right,fwd,up)
+	rawtargets[4].pos = vec(ign(15),ign(16),ign(17))
+	if length(rawtargets[4].pos) > 0 then
+		rawtargets[4].rel = subt(mpos,rawtargets[4].pos)			--verold r tgt xyz 15,16,17
+		rawtargets[4].loc = tolocal(rawtargets[4].rel,right,fwd,up)
 	else
-		rawradartargets[4] = {loc=vec(),rel=vec(),pos=vec()}
+		rawtargets[4] = {loc=vec(),rel=vec(),pos=vec()}
 	end
-	rawradartargets[4].tsd = 0												--tsd: X
+	rawtargets[4].tsd = 0												--tsd: X
 
 	--raw tgts to target files
-	for k,rawtgt in ipairs(rawradartargets) do
-		if (length(rawtgt.rel) > 0) and not (rawtgt.tsd > 0) then--there is actually a target and its on tick 1 of info
-			local rawradarmatch = 0 --no match with a target file found yet
-			for fileindex,file in ipairs(targetfiles) do
-				if rawradarmatch == 0 then--we havent matched something
-					if length(subt(targetfiles[fileindex].pos,rawtgt.pos)) <= mergedist then
-						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found
-						rawradarmatch = fileindex
-						--update found existing tgt file with raw tgt
-						targetfiles[fileindex].pos = rawtgt.pos
-						targetfiles[fileindex].t = 0
+	for k,rawtgt in ipairs(rawtargets) do
+		--debug.log("k: "..k.."  pos: "..rawtgt.pos.x.." "..rawtgt.pos.y.." "..rawtgt.pos.z)
+		if rawtgt.pos and rawtgt.tsd and (length(rawtgt.pos) > 0) then
+			if rawtgt.e then
+				rawtgt.pos = add(rawtgt.pos, vec(0,0,-9999))
+				rawtgt.rel = subt(mpos,rawtgt.pos)
+			end
+			
+			if (length(rawtgt.rel) > 0) and not (rawtgt.tsd > 0) then--there is actually a target and its on tick 1 of info
+				local rawradarmatch = 0 --no match with a target file found yet
+				for fileindex,file in ipairs(targetfiles) do
+					if rawradarmatch == 0 then--we havent matched something
+						if length(subt(targetfiles[fileindex].pos,rawtgt.pos)) <= mergedist then
+							--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found
+							rawradarmatch = fileindex
+							--update found existing tgt file with raw tgt
+							targetfiles[fileindex].pos = rawtgt.pos
+							targetfiles[fileindex].t = 0
 
-					end
-				else--we already have a match
-					if length(subt(targetfiles[fileindex].pos,rawtgt.pos)) <= mergedist then
-						--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found, also not a selected target
-						debug.log("merged: "..fileindex.."\n"..file.pos.x.." "..file.pos.y.." "..file.pos.z)
-						table.remove(targetfiles,fileindex)--we already matched raw tgt to a file so we will delete this one
+						end
+					else--we already have a match
+						if length(subt(targetfiles[fileindex].pos,rawtgt.pos)) <= mergedist then
+							--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found, also not a selected target
+							debug.log("merged: "..fileindex.."\n"..file.pos.x.." "..file.pos.y.." "..file.pos.z)
+							table.remove(targetfiles,fileindex)--we already matched raw tgt to a file so we will delete this one
+						end
 					end
 				end
-			end
-			if rawradarmatch == 0 then
-				--create target file
-				targetfiles[#targetfiles+1] = {pos = rawtgt.pos, t = 0}
+				if rawradarmatch == 0 then
+					--create target file
+					targetfiles[#targetfiles+1] = {pos = rawtgt.pos, t = 0}
+				end
 			end
 		end
 	end
@@ -284,7 +290,7 @@ function onTick()
 			end
 		else
 			--if under the sea, move to altitude of 5
-			if targetfiles[k].pos.z <= -1 then
+			if targetfiles[k].pos.z <= -1 and targetfiles[k].pos.z >= -7999  then
 				targetfiles[k].pos.z = 5
 			end
 
@@ -337,7 +343,7 @@ function onTick()
 	end
 
 	--friendlies
-	yup = friendlyfiles[friendlyindex[friendlytransindex]]
+	yup = friendlyfiles[friendlytransindex]
 	if yup then
 		yup2 = yup.pos
 		yup3 = yup.sel
@@ -350,7 +356,7 @@ function onTick()
 	end
 	osn(28,friendlytransindex)
 	friendlytransindex = friendlytransindex + 1
-	if friendlytransindex > #friendlyindex then
+	if friendlytransindex > #friendlyfiles then
 		friendlytransindex = 1
 	end
 
@@ -360,9 +366,9 @@ function onTick()
 		osn(30,0)
 		osn(31,0)
 		osn(32,0)
-		--osn(30,rawradartargets[3].pos.x)
-		--osn(31,rawradartargets[3].pos.y)
-		--osn(32,rawradartargets[3].pos.z)
+		--osn(30,rawtargets[3].pos.x)
+		--osn(31,rawtargets[3].pos.y)
+		--osn(32,rawtargets[3].pos.z)
 	else
 		if targetfiles[selectedtgt] then
 			osn(30,targetfiles[selectedtgt].pos.x)

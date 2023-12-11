@@ -7,18 +7,18 @@
 --      By Nameous Changey
 -- Minimized Size: 270 (573 with comment) chars
 
-d=output
+e=output
 c=input
-g,f,h,j=c.getBool,d.setBool,c.getNumber,d.setNumber
-_=1
-a={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6,[8]=4,[9]=5}function onTick()e=g(1)if e and not i then
-_=_%(#a)+1
+i,g,k,f=c.getBool,e.setBool,c.getNumber,e.setNumber
+a=1
+b={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6,[8]=4,[9]=5}function onTick()d=i(1)if d and not h then
+a=a%(#b)+1
 end
-i=e
-f(a[_],true)b=0
-for k=1,(#a-1)do
-if not(h(k)==0)then
-b=b+1
+h=d
+g(b[a],true)_=0
+for j=1,(#b-1)do
+if not(k(j)==0)then
+_=_+1
 end
 end
-j(1,b)end
+f(1,_)end

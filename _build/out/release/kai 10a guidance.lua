@@ -5,85 +5,93 @@
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 2525 (2830 with comment) chars
-bg="FOX1"
+-- Minimized Size: 2782 (3087 with comment) chars
+bm="FOX1"
+bl="PITBULL"
+bk=","
+bj="LASTKNOWN"
+bi="MADDOG"
 
-G=true
-aq=false
-af=property
-al=output
-as=input
-aa=math
-M=aa.sin
-T=aa.cos
-h=debug.log
-I=as.getNumber
-f=I; H=al.setNumber; bd=as.getBool; bf=al.setBool;
-o=af.getNumber; ba=af.getBool; b_=af.getText; i=aa; pi=i.pi; au=pi*2
-function d(b,e,c)return{b=b or 0,e=e or 0,c=c or 0}end
-function m(_,a)return d(_.b+a.b,_.e+a.e,_.c+a.c)end
-function be(_,a)return d(_.b*a.b,_.e*a.e,_.c*a.c)end
-function g(_,r)return d(_.b*r,_.e*r,_.c*r)end
-function ah(_)return g(_,-1)end
-function t(_,a)return m(_,ah(a))end
-function j(_)return i.sqrt(_.b*_.b+_.e*_.e+_.c*_.c)end
-function aG(_,r)return g(_,1/r)end
-function J(_)return aG(_,j(_))end
-function p(_,a)return _.b*a.b+_.e*a.e+_.c*a.c
+J=true
+ao=false
+O=property
+aG=output
+ay=input
+M=math
+N=M.sin
+Q=M.cos
+f=debug.log
+L=ay.getNumber
+g=L; G=aG.setNumber; bc=ay.getBool; bd=aG.setBool;
+o=O.getNumber; bg=O.getBool; bh=O.getText; j=M; pi=j.pi; au=pi*2
+function e(a,d,c)return{a=a or 0,d=d or 0,c=c or 0}end
+function p(_,b)return e(_.a+b.a,_.d+b.d,_.c+b.c)end
+function bf(_,b)return e(_.a*b.a,_.d*b.d,_.c*b.c)end
+function h(_,A)return e(_.a*A,_.d*A,_.c*A)end
+function ai(_)return h(_,-1)end
+function x(_,b)return p(_,ai(b))end
+function m(_)return j.sqrt(_.a*_.a+_.d*_.d+_.c*_.c)end
+function az(_,A)return h(_,1/A)end
+function K(_)return az(_,m(_))end
+function r(_,b)return _.a*b.a+_.d*b.d+_.c*b.c
 end
-function y(_,a)return d(_.e*a.c-_.c*a.e,_.c*a.b-_.b*a.c,_.b*a.e-_.e*a.b)end
-function az(_,a)return t(_,g(J(a),p(_,J(a))))end
-function bb(ax,U,v)local v=v or 1
-return d(i.sin(ax)*i.cos(U)*v,i.cos(ax)*i.cos(U)*v,i.sin(U)*v)end
-function C(_,n)if not l then
-l={}l[n]={P=d(),ad=d()}elseif not l[n]then
-l[n]={P=d(),ad=d()}end
-l[n].ad=t(_,l[n].P)l[n].P=_
-return l[n].ad
+function u(_,b)return e(_.d*b.c-_.c*b.d,_.c*b.a-_.a*b.c,_.a*b.d-_.d*b.a)end
+function aF(_,b)return x(_,h(K(b),r(_,K(b))))end
+function be(am,R,y)local y=y or 1
+return e(j.sin(am)*j.cos(R)*y,j.cos(am)*j.cos(R)*y,j.sin(R)*y)end
+function H(_,n)if not k then
+k={}k[n]={ac=e(),ab=e()}elseif not k[n]then
+k[n]={ac=e(),ab=e()}end
+k[n].ab=x(_,k[n].ac)k[n].ac=_
+return k[n].ab
 end
-function aM(_,Q,ab,ac)return d(p(Q,_),p(ab,_),p(ac,_))end
-function aC(_,Q,ab,ac)return m(m(g(Q,_.b),g(ab,_.e)),g(ac,_.c))end
-function at(b,aD,B)return b<aD and aD or b>B and B or b
+function aJ(_,P,aa,Z)return e(r(P,_),r(aa,_),r(Z,_))end
+function aD(_,P,aa,Z)return p(p(h(P,_.a),h(aa,_.d)),h(Z,_.c))end
+function an(a,ap,I)return a<ap and ap or a>I and I or a
 end
-function bc(Z,aJ)h("VECTOR "..aJ.." COMPONENTS:")h(Z.b)h(Z.e)h(Z.c)h("------------------")end
-function aI()return((X<=2495 or X>=2505)and X>=aK and aU)end
-s=o("Navigation Constant")A=o("Max Control")aK=o("Minimum Mass")ak=o("Horizontal Offset")av=o("Vertical Offset")aT=o("Max Distance from radio")w=aq
-function onTick()ay,aj,am=I(4),I(5),I(6)L,R,O=T(ay),T(aj),T(am)an,N,S=M(ay),M(aj),M(am)E=d(R*O,-N,R*S)F=d(an*S+L*N*O,L*R,-an*O+L*N*S)V=y(E,F)K=d(f(1),f(3),f(2))Y=C(K,"m_vel")aP=m(K,ah(aC(d(0,1.25,0),E,F,V)))x=d(f(7),f(8),f(9))ai=f(12)aw=f(13)aR=f(14)or 0
-X=aR*ai
-aO=f(10)*au
-aF=f(11)*au
-aE=i.sin(aO)*ai
-aQ=i.sin(aF)*aw
-aV=i.cos(aF)*aw
-B=(aV^2-aE^2)^.5
-aA=d(aE,B,aQ)aU=j(aA)>0
-aN=k or d()if aI()then
-ag=m(aP,aC(aA,E,F,V))if j(x)>0 then
-if j(t(k,x))<=aT then
-h("PITBULL")w=G
-k=ag
+function bb(ae,aM)f("VECTOR "..aM.." COMPONENTS:")f(ae.a)f(ae.d)f(ae.c)f("------------------")end
+function aY()return((U<=2495 or U>=2505)and U>=aX and aS)end
+B=o("Navigation Constant")aZ=o("Pure Pursuit Navigation Constant")F=o("Max Control")aX=o("Minimum Mass")ar=o("Horizontal Offset")aA=o("Vertical Offset")b_=o("Max Distance from radio")z=ao
+function onTick()as,aj,aH=L(4),L(5),L(6)ah,ad,V=Q(as),Q(aj),Q(aH)al,S,T=N(as),N(aj),N(aH)C=e(ad*V,-S,ad*T)E=e(al*T+ah*S*V,ah*ad,-al*V+ah*S*T)X=u(C,E)af=e(g(1),g(3),g(2))Y=H(af,"m_vel")aT=p(af,ai(aD(e(0,1.25,0),C,E,X)))l=e(g(7),g(8),g(9))f("radio pos: "..l.a..bk..l.d..bk..l.c)ax=g(12)aq=g(13)aV=g(14)or 0
+U=aV*ax
+aW=g(10)*au
+at=g(11)*au
+av=j.sin(aW)*ax
+aP=j.sin(at)*aq
+aK=j.cos(at)*aq
+I=(aK^2-av^2)^.5
+aC=e(av,I,aP)aS=m(aC)>0
+ba=i or e()if aY()then
+s=p(aT,aD(aC,C,E,X))f("tgt_pos_global: "..s.a..bk..s.d..bk..s.c)if m(l)>0 then
+if m(x(s,l))<=b_ then
+f(bl)z=J
+i=s
+q=bl
 else
-h(bg)w=G
-k=x
+f(bm)z=J
+i=l
+q=bm
 end
 else
-h("MADDOG")w=G
-k=ag
+f(bi)z=J
+i=s
+q=bi
 end
-elseif j(x)>0 then
-h(bg)w=G
-k=x
+elseif m(l)>0 then
+f(bm)z=J
+i=l
+q=bm
 else
-h("LAST KNOWN")k=aN
+f("LAST KNOWN")i=ba
+q=bj
 end
-ao=C(k,"tgt_vel")ap=C(ao,"tgt_acc")aZ=C(ap,"tgt_jer")u=t(k,K)q=J(u)D=t(ao,Y)aL=az(ap,q)aS=az(aZ,q)W=aG(y(u,D),p(u,u))ae=g(y(D,W),s)ae=g(y(q,W),-s*j(D))aH=J(Y)ae=g(y(aH,W),-s*j(D))aW=g(aL,s/2)aX=g(aS,s/6)ar=m(ae,m(aW,aX))if j(u)<1000 and p(q,Y)>1 then
-z=1
+f("tgt_pos: "..i.a..bk..i.d..bk..i.c)ak=H(i,"tgt_vel")aw=H(ak,"tgt_acc")aO=H(aw,"tgt_jer")w=x(i,af)t=K(w)D=x(ak,Y)aU=aF(aw,t)aL=aF(aO,t)ag=az(u(w,D),r(w,w))W=h(u(D,ag),B)W=h(u(t,ag),-B*m(D))aQ=K(Y)W=h(u(aQ,ag),-B*m(D))aN=h(aU,B/2)aR=h(aL,B/6)aE=p(W,p(aN,aR))if m(w)<1000 and r(t,Y)>1 and not(q==bm)and not(q==bj)then
+v=1
 else
-ar=q
-z=4
+aE=h(t,aZ)v=3
 end
-aB=aM(ar,E,F,V)aY=f(15)>0 or aq
-if aY and w then
-H(1,at(-aB.b,-A/z,A/z)+ak)H(2,at(-aB.c,-A/z,A/z)+av)else
-H(1,ak)H(2,av)end
+aB=aJ(aE,C,E,X)aI=g(15)>0 or ao
+if aI and z then
+G(1,an(-aB.a,-F/v,F/v)+ar)G(2,an(-aB.c,-F/v,F/v)+aA)else
+G(1,ar)G(2,aA)end
 end

@@ -211,8 +211,8 @@ function onDraw()
 			s.setMapColorGrass(8,10,8)
 			s.setMapColorSand(6,6,4)
 			s.setMapColorSnow(25,25,26)
-			s.setMapColorRock(3,3,3)
-			s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
+			--s.setMapColorRock(3,3,3)
+			--s.setMapColorGravel(4,4,4)--commented cuz miniifer keeps yoinking them
 
 			s.drawMap(viewedx,viewedy,zoom)
 		end
@@ -288,7 +288,7 @@ function onDraw()
 		--draw actual target files
 		for k,v in ipairs(tgtfiles) do
 			tgtpixelx, tgtpixely = map.mapToScreen(viewedx,viewedy,zoom,w,h,v.pos.x,v.pos.y)
-
+			thistargetalt=v.pos.z
 			--if dist(v.pos,b) then
 			--	setcolor(90,2,5)
 			--	rectF(tgtpixelx-2,tgtpixely-3,5,1)
@@ -296,10 +296,14 @@ function onDraw()
 			--else
 			--	setcolor(80,13,1)
 			--end
-			setcolor(80,13,1)
-			thistargetalt=v.pos.z
-			thistargetalt=m.max(m.min(thistargetalt/500,5),0)
-			line(tgtpixelx-thistargetalt,tgtpixely-2,tgtpixelx+thistargetalt+1,tgtpixely-2)
+			if thistargetalt < 0 then
+				setcolor(240,0,0)
+			else
+				setcolor(80,13,1)
+				
+				thistargetalt=m.max(m.min(thistargetalt/500,5),0)
+				line(tgtpixelx-thistargetalt,tgtpixely-2,tgtpixelx+thistargetalt+1,tgtpixely-2)
+			end
 			rect(tgtpixelx-1,tgtpixely-1,2,2)
 		end
 		
