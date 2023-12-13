@@ -174,7 +174,7 @@ function onTick()
 	end
 	if currentiff then 
 		radiobuffer[1] = {iff = currentiff,id=currentfriend}
-		--debug.log("checking friend: "..currentfriend.." freq: "..usedfreq)
+		debug.log("checking friend: "..currentfriend.." freq: "..usedfreq)
 	else
 		radiobuffer[1] = {iff = currentiff,id=currentenemy}
 		--debug.log("checking enemy: "..currentenemy.." freq: "..usedfreq)
