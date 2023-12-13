@@ -25,12 +25,6 @@ end
 function length(a)
 return m.sqrt(a.x*a.x+a.y*a.y+a.z*a.z)
 end
-function divf(a,n)
-return multf(a,1/n)
-end
-function norm(a)
-return divf(a,length(a))
-end
 function dot(a,b)
 return a.x*b.x+a.y*b.y+a.z*b.z
 end
@@ -50,10 +44,10 @@ end
 
 
 ---- IFF / DATALINK SETUP ----
-maxfriendlies = property.getNumber("Max friendlies")
-usernumber = property.getNumber("User number")
-freqseed = property.getNumber("Frequency seed")
-encseed = property.getNumber("Encryption seed")
+maxfriendlies = pgn("Max friendlies")
+usernumber = pgn("User number")
+freqseed = pgn("Frequency seed")
+encseed = pgn("Encryption seed")
 basefreqmin,basefreqmax = 1871759, 6393518
 
 -- find base frequency all friendlies will go from, based on freq seed
@@ -100,6 +94,21 @@ for i = 1,14 do
 	rawtargets[i] = {}
 end
 
+--these work
+function encrypt(h)
+    --print("encseed: "..round(encseed,2))
+    --print(string.format("Normal:\nx: %.2f\ny: %.2f\nz: %.2f", h.x, h.y, h.z))
+    --h = vec(h.y/(3.57*encseed), h.x/(3.81*encseed), h.z/(4.19*encseed))
+    --print(string.format("Encrypted:\nx: %.2f\ny: %.2f\nz: %.2f", h.x, h.y, h.z))
+    return vec(h.y/(3.57*encseed), h.x/(3.81*encseed), h.z/(4.19*encseed))
+end
+
+function decrypt(g)
+    --g = vec(g.y*(3.81*encseed), g.x*(3.57*encseed), g.z*(4.19*encseed))
+    --print(string.format("Decrypted:\nx: %.2f\ny: %.2f\nz: %.2f", g.x, g.y, g.z))
+    return vec(g.y*(3.81*encseed), g.x*(3.57*encseed), g.z*(4.19*encseed))
+end
+
 ticks = 0
 selectedtgt = 0
 enemytransindex,friendlytransindex=0,0
@@ -128,31 +137,35 @@ function onTick()
 
 	---- VICLINK & ENEMY SNIFF ----
 	--set freq
-	if ticks % 3 > 0 then
+	currentiff = ticks % 3 > 0
+	if currentiff then
 		--2/3 ticks, check next friendly
-		currentiff = true
-		if currentfriend == maxfriendlies then 
-			currentfriend = 1 
-		else
-			currentfriend = currentfriend+1
-		end
-		if currentfriend == usernumber then 
-			if currentfriend == maxfriendlies then
-				currentfriend = 1
-			else
-				currentfriend = currentfriend+1
-			end
-		end
+		--if currentfriend == maxfriendlies then 
+		--	currentfriend = 1 
+		--else
+		--	currentfriend = currentfriend+1
+		--end
+		--if currentfriend == usernumber then 
+		--	if currentfriend == maxfriendlies then
+		--		currentfriend = 1
+		--	else
+		--		currentfriend = currentfriend+1
+		--	end
+		--end
+		--usedfreq = friendlyfreq[currentfriend]
+		currentfriend = (currentfriend == maxfriendlies) and 1 or currentfriend + 1
+		currentfriend = (currentfriend == usernumber) and ((currentfriend == maxfriendlies) and 1 or currentfriend + 1) or currentfriend
 		usedfreq = friendlyfreq[currentfriend]
 	else
 		--1/3 ticks, check next enemy
-		currentiff = false
-		if currentenemy == 10 then 
-			currentenemy = 1 
-		else
-			currentenemy = currentenemy+1
-		end
-		usedfreq = enemybase+currentenemy-1
+		--if currentenemy == 9 then 
+		--	currentenemy = 1 
+		--else
+		--	currentenemy = currentenemy+1
+		--end
+		--usedfreq = enemybase+currentenemy
+		currentenemy = (currentenemy == 9) and 1 or currentenemy + 1
+		usedfreq = enemybase + currentenemy
 	end
 
 	--copy and overwrite everything up one
@@ -170,7 +183,7 @@ function onTick()
 		--debug.log("#radiobuffer == radiobufferlength")
 		if radiobuffer[ticksdelay].iff then
 			--debug.log("radiobuffer[ticksdelay].iff")
-			friendlyfiles[radiobuffer[ticksdelay].id]={pos=vec(ign(7),ign(8),ign(9)),sel=vec(ign(21),ign(22),ign(23))}
+			friendlyfiles[radiobuffer[ticksdelay].id]={pos=decrypt(vec(ign(7),ign(8),ign(9))),sel=decrypt(vec(ign(21),ign(22),ign(23)))}
 		else
 			--debug.log("NOT radiobuffer[ticksdelay].iff")
 			--debug.log("inserted at "..radiobuffer[ticksdelay].id)
@@ -190,9 +203,11 @@ function onTick()
 
 	osn(3,usedfreq)--set the next frequency to check, be it friendly or enemy
 	osn(29,friendlyfreq[usernumber])--set our frequency, even though it isn't changing we need to output it still
-	--osn(1,usernumber)--output our debug number
 
-
+	encryptedposition = encrypt(mpos)
+	osn(4,encryptedposition.x)--encrypted my pos x
+	osn(5,encryptedposition.y)--encrypted my pos y
+	osn(6,encryptedposition.z)--encrypted my pos z
 
     ---- Raw Radar Targets to TWS ----
 	--data from new radar 1
@@ -259,7 +274,7 @@ function onTick()
 					else--we already have a match
 						if length(subt(targetfiles[fileindex].pos,rawtgt.pos)) <= mergedist then
 							--length of rel vector from raw tgt to this tgt file is less than or equal to merge dist, eg match found, also not a selected target
-							debug.log("merged: "..fileindex.."\n"..file.pos.x.." "..file.pos.y.." "..file.pos.z)
+							--debug.log("merged: "..fileindex.."\n"..file.pos.x.." "..file.pos.y.." "..file.pos.z)
 							table.remove(targetfiles,fileindex)--we already matched raw tgt to a file so we will delete this one
 						end
 					end
@@ -296,12 +311,12 @@ function onTick()
 			--if within 50m of ME, cull
 			if thisnotculled then
 				if length(subt(mpos,targetfiles[k].pos))<= 50 then
-					debug.log("me dist-removed: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
+					--debug.log("me dist-removed: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
 					table.remove(targetfiles,k)
 					thisnotculled = false
 					if k < selectedtgt then
 						selectedtgt = selectedtgt - 1
-						debug.log("shifted selected down 1 to "..selectedtgt)
+						--debug.log("shifted selected down 1 to "..selectedtgt)
 					end
 				end
 			end
@@ -310,7 +325,7 @@ function onTick()
 			for i,r in pairs(friendlyfiles) do
 				if thisnotculled then
 					if length(subt(r.pos,targetfiles[k].pos))<=300 then
-						debug.log("fr dist-removed: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
+						--debug.log("fr dist-removed: "..k.."\n"..v.pos.x.." "..v.pos.y.." "..v.pos.z)
 						table.remove(targetfiles,k)
 						thisnotculled = false
 						if k < selectedtgt then
@@ -344,14 +359,13 @@ function onTick()
 	--friendlies
 	yup = friendlyfiles[friendlytransindex]
 	if yup then
-		yup2 = yup.pos
-		yup3 = yup.sel
-		osn(20,yup2.x)
-		osn(21,yup2.y)
-		osn(22,yup2.z)
-		osn(23,yup3.x)
-		osn(24,yup3.y)
-		osn(25,yup3.z)
+		osn(20,yup.pos.x)
+		osn(21,yup.pos.y)
+		osn(22,yup.pos.z)
+		--debug.log(yup.sel.x.."\n"..yup.sel.y.."\n"..yup.sel.z)
+		osn(23,yup.sel.x)
+		osn(24,yup.sel.y)
+		osn(25,yup.sel.z)
 	end
 	osn(28,friendlytransindex)
 	friendlytransindex = friendlytransindex + 1
@@ -373,6 +387,11 @@ function onTick()
 			osn(30,targetfiles[selectedtgt].pos.x)
 			osn(31,targetfiles[selectedtgt].pos.y)
 			osn(32,targetfiles[selectedtgt].pos.z)
+
+			encryptedselected = encrypt(targetfiles[selectedtgt].pos)
+			osn(2,encryptedselected.x)--encrypted my sel pos x
+			osn(12,encryptedselected.y)--encrypted my sel pos y
+			osn(13,encryptedselected.z)--encrypted my sel pos z
 			
 			osn(11,targetfiles[selectedtgt].t)
 		else

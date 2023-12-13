@@ -41,20 +41,20 @@ if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.
 local combinedText, outText, outFile = _builder:buildMicrocontroller([[Emission Tracking System A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Emission Tracking System A.lua]]), params)
 if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Emission Tracking System A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Emission Tracking System A.lua]]), outFile, combinedText, outText) end
 
-if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Track While Scan A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua]])) end
+if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Tactical Situation Display A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua]])) end
 
-local combinedText, outText, outFile = _builder:buildMicrocontroller([[Track While Scan A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua]]), params)
-if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Track While Scan A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua]]), outFile, combinedText, outText) end
+local combinedText, outText, outFile = _builder:buildMicrocontroller([[Tactical Situation Display A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua]]), params)
+if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Tactical Situation Display A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua]]), outFile, combinedText, outText) end
 
 if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Target Viewing Camera.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Target Viewing Camera.lua]])) end
 
 local combinedText, outText, outFile = _builder:buildMicrocontroller([[Target Viewing Camera.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Target Viewing Camera.lua]]), params)
 if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Target Viewing Camera.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Target Viewing Camera.lua]]), outFile, combinedText, outText) end
 
-if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Tactical Situation Display A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua]])) end
+if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]])) end
 
-local combinedText, outText, outFile = _builder:buildMicrocontroller([[Tactical Situation Display A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua]]), params)
-if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Tactical Situation Display A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua]]), outFile, combinedText, outText) end
+local combinedText, outText, outFile = _builder:buildMicrocontroller([[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]]), params)
+if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]]), outFile, combinedText, outText) end
 
 if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[KAI 10A Guidance.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\KAI 10A Guidance.lua]])) end
 
@@ -75,6 +75,11 @@ if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.
 
 local combinedText, outText, outFile = _builder:buildMicrocontroller([[vamperion fcs 2.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\vamperion fcs 2.lua]]), params)
 if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[vamperion fcs 2.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\vamperion fcs 2.lua]]), outFile, combinedText, outText) end
+
+if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Track While Scan A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua]])) end
+
+local combinedText, outText, outFile = _builder:buildMicrocontroller([[Track While Scan A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua]]), params)
+if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Track While Scan A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua]]), outFile, combinedText, outText) end
 
 if onLBBuildComplete then onLBBuildComplete(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]])) end
 --- @diagnostic enable: undefined-global

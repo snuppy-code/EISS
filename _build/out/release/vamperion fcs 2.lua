@@ -7,89 +7,89 @@
 --      By Nameous Changey
 -- Minimized Size: 2316 (2621 with comment) chars
 
-A=false
-T=true
-R,i,ae,r=math,input,output,property
-n,k,ao=i.getNumber,ae.setNumber,i.getBool
-e,aa=r.getNumber,r.getBool
-ah={r=e("P pitch"),i=e("I pitch"),o=e("D pitch")}Z={r=e("P roll"),i=e("I roll"),o=e("D roll")}Y={r=e("P yaw"),i=e("I yaw"),o=e("D yaw")}K={_=e("Control gain pitch"),b=e("Control gain roll"),a=e("Control gain yaw")}E={_=e("Control gain pitch loaded"),b=e("Control gain roll loaded"),a=e("Control gain yaw loaded")}B={_=e("Pitch trim"),b=e("Roll trim"),a=e("Yaw trim")}M={_=e("Pitch PID activation delay ticks"),b=e("Roll PID activation delay ticks"),a=e("Yaw PID activation delay ticks")}l={}s=e("Deadzone")y=aa("Use PIDs?")Q={[0]=-.045,[1]=-.18,[2]=-.04,[3]=-.2,[4]=-.045,[5]=-.215,[6]=-.04,[7]=-.225,[8]=-.045}function C(j,min,max)return j>min and j<max
+B=false
+P=true
+R,h,ad,p=math,input,output,property
+n,k,ap=h.getNumber,ad.setNumber,h.getBool
+e,ac=p.getNumber,p.getBool
+ae={p=e("P pitch"),h=e("I pitch"),o=e("D pitch")}aj={p=e("P roll"),h=e("I roll"),o=e("D roll")}Y={p=e("P yaw"),h=e("I yaw"),o=e("D yaw")}z={_=e("Control gain pitch"),b=e("Control gain roll"),a=e("Control gain yaw")}J={_=e("Control gain pitch loaded"),b=e("Control gain roll loaded"),a=e("Control gain yaw loaded")}G={_=e("Pitch trim"),b=e("Roll trim"),a=e("Yaw trim")}C={_=e("Pitch PID activation delay ticks"),b=e("Roll PID activation delay ticks"),a=e("Yaw PID activation delay ticks")}l={}r=e("Deadzone")y=ac("Use PIDs?")T={[0]=-.045,[1]=-.18,[2]=-.04,[3]=-.2,[4]=-.045,[5]=-.215,[6]=-.04,[7]=-.225,[8]=-.045}function M(j,min,max)return j>min and j<max
 end
-function ap(j,min,max)return R.min(R.max(j,min),max)end
-function af(j,v)return{_=j._+v._,b=j.b+v.b,a=j.a+v.a}end
-function O(j,v,P)return j*(1-P)+v*P end
-function N(ad,ag,al,c)if not h then
-h={}h[c]={w=0,u=0}elseif not h[c]then
-h[c]={w=0,u=0}end
-if ad then
-if h[c].w>=ag then
-h[c].u=al
-return T
+function ao(j,min,max)return R.min(R.max(j,min),max)end
+function Z(j,u)return{_=j._+u._,b=j.b+u.b,a=j.a+u.a}end
+function N(j,u,S)return j*(1-S)+u*S end
+function A(V,U,ak,c)if not i then
+i={}i[c]={x=0,v=0}elseif not i[c]then
+i[c]={x=0,v=0}end
+if V then
+if i[c].x>=U then
+i[c].v=ak
+return P
 else
-h[c].w=h[c].w+1
-return A
+i[c].x=i[c].x+1
+return B
 end
 else
-if h[c].u==0 then
-return A
+if i[c].v==0 then
+return B
 else
-h[c].u=h[c].u-1
-return T
+i[c].v=i[c].v-1
+return P
 end
 end
 end
-function F(U,ac,G,c)if not f then
-f={}f[c]={t=0,i=0,o=0,D=0,I=0}elseif not f[c]then
-f[c]={t=0,i=0,o=0,D=0,I=0}end
-f[c].t=U-ac
-f[c].i=f[c].I+f[c].t
-f[c].o=f[c].t-f[c].D
-f[c].ai=G.r*f[c].t+G.i*f[c].i+G.o*f[c].o
-f[c].D=f[c].t
-f[c].I=f[c].i
-return f[c].ai
+function K(aa,ab,I,c)if not f then
+f={}f[c]={s=0,h=0,o=0,O=0,H=0}elseif not f[c]then
+f[c]={s=0,h=0,o=0,O=0,H=0}end
+f[c].s=aa-ab
+f[c].h=f[c].H+f[c].s
+f[c].o=f[c].s-f[c].O
+f[c].ag=I.p*f[c].s+I.h*f[c].h+I.o*f[c].o
+f[c].O=f[c].s
+f[c].H=f[c].h
+return f[c].ag
 end
-m={_=5,b=0,a=0}q={_=-5,b=0,a=0}d={_=0,b=0,a=0}am=A
-an=8
-function onTick()p={_=n(2),b=n(1),a=n(3)}x={_=-n(4),b=-n(5),a=n(6)}L=n(8)H=L/8
-l={_=O(K._,E._,H),b=O(K.b,E.b,H),a=O(K.a,E.a,H)}g={_=B._*l._,b=B.b*l.b,a=B.a*l.a}if Q[L]then
-g.a=g.a+Q[L]*l.a
+m={_=5,b=0,a=0}t={_=-5,b=0,a=0}d={_=0,b=0,a=0}an=B
+am=8
+function onTick()q={_=n(2),b=n(1),a=n(3)}w={_=-n(4),b=-n(5),a=n(6)}F=n(8)E=F/8
+l={_=N(z._,J._,E),b=N(z.b,J.b,E),a=N(z.a,J.a,E)}g={_=G._*l._,b=G.b*l.b,a=G.a*l.a}if T[F]then
+g.a=g.a+T[F]*l.a
 end
-m=af(m,x)X=p._*l._
-ab=F(q._,m._,ah,"ppid")z=C(p._,-s,s)if N(not z,0,M._,"pcap")then
-if z then
-d._=g._-x._*10
+m=Z(m,w)al=q._*l._
+ai=K(t._,m._,ae,"ppid")L=M(q._,-r,r)if A(not L,0,C._,"pcap")then
+if L then
+d._=g._-w._*10
 else
-d._=g._+X
+d._=g._+al
 end
-q._=m._
+t._=m._
 elseif y then
-d._=g._+ab
+d._=g._+ai
 else
 d._=g._
 end
-W=p.b*l.b
-ak=F(q.b,m.b,Z,"rpid")J=C(p.b,-s,s)if N(not J,0,M.b,"rcap")then
-if J then
-d.b=g.b-x.b*2
+ah=q.b*l.b
+W=K(t.b,m.b,aj,"rpid")D=M(q.b,-r,r)if A(not D,0,C.b,"rcap")then
+if D then
+d.b=g.b-w.b*2
 else
-d.b=g.b+W
+d.b=g.b+ah
 end
-q.b=m.b
+t.b=m.b
 elseif y then
-d.b=g.b+ak
+d.b=g.b+W
 else
 d.b=g.b
 end
-V=p.a*l.a
-aj=F(q.a,m.a,Y,"ypid")S=C(p.a,-s,s)if N(not S or not z or not J,0,M.a,"ycap")then
-if S then
-d.a=g.a-x.a*5
+af=q.a*l.a
+X=K(t.a,m.a,Y,"ypid")Q=M(q.a,-r,r)if A(not Q or not L or not D,0,C.a,"ycap")then
+if Q then
+d.a=g.a-w.a*5
 else
-d.a=g.a+V
+d.a=g.a+af
 end
-q.a=m.a
+t.a=m.a
 elseif y then
-d.a=g.a+aj
+d.a=g.a+X
 else
 d.a=g.a
 end
