@@ -349,8 +349,8 @@ function onDraw()
 
 	if ACM then
 		setcolor(255,0,0)
-		rectF(0,0,1,h)
-		rectF(w-1,0,1,h)
+		rectF(7,4,1,88)
+		rectF(88,4,1,88)
 	end
 
 end
