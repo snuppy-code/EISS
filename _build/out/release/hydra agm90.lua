@@ -5,47 +5,76 @@
 -- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
--- Minimized Size: 2118 (2423 with comment) chars
+-- Minimized Size: 2777 (3082 with comment) chars
 
-ak=property
-T=output
-y=math
-N=y.sin
-A=y.cos
-S=T.setNumber
-d,X,al,W=y,input,T,ak
-h,ad,aJ,aK=X.getNumber,al.setNumber,X.getBool,al.setBool
-q,aN=W.getNumber,W.getBool
-abs,cos,sin,acos,asin,tan,atan=d.abs,d.cos,d.sin,d.acos,d.asin,d.tan,d.atan
-pi=d.pi
-aO=pi*2
-function f(c,e,b)return{c=c or 0,e=e or 0,b=b or 0}end
-function g(_,l)return f(_.c*l,_.e*l,_.b*l)end
-function at(_)return g(_,-1)end
-function t(_,l)return g(_,1/l)end
-function k(_,a)return f(_.c+a.c,_.e+a.e,_.b+a.b)end
-function o(_,a)return k(_,at(a))end
-function F(_)return d.sqrt(_.c*_.c+_.e*_.e+_.b*_.b)end
-function m(_)return g(_,1/F(_))end
-function ap(_,a)return f(_.e*a.b-_.b*a.e,_.b*a.c-_.c*a.b,_.c*a.e-_.e*a.c)end
-function n(_,a)return _.c*a.c+_.e*a.e+_.b*a.b
+o=nil
+an=property
+aF=output
+S=math
+A=S.sin
+Y=S.cos
+u=aF.setNumber
+b,r,aD,au=S,input,aF,an
+e,D,bi,bf=r.getNumber,aD.setNumber,r.getBool,aD.setBool
+i,bh=au.getNumber,au.getBool
+abs,cos,sin,acos,asin,tan,atan=b.abs,b.cos,b.sin,b.acos,b.asin,b.tan,b.atan
+pi=b.pi
+ad=pi*2
+function g(c,f,d)return{c=c or 0,f=f or 0,d=d or 0}end
+function h(_,n)return g(_.c*n,_.f*n,_.d*n)end
+function aJ(_)return h(_,-1)end
+function L(_,n)return h(_,1/n)end
+function k(_,a)return g(_.c+a.c,_.f+a.f,_.d+a.d)end
+function l(_,a)return k(_,aJ(a))end
+function s(_)return b.sqrt(_.c*_.c+_.f*_.f+_.d*_.d)end
+function m(_)return h(_,1/s(_))end
+function aZ(_,a)return g(_.f*a.d-_.d*a.f,_.d*a.c-_.c*a.d,_.c*a.f-_.f*a.c)end
+function p(_,a)return _.c*a.c+_.f*a.f+_.d*a.d
 end
-function aM(_,a)return g(m(a),n(_,m(a)))end
-function p(_,a)return o(_,g(m(a),n(_,m(a))))end
-function aQ(_,a,az)return o(_,g(p(_,a),az or 2))end
-function aR(ah,L,i)local i=i or 1
-return f(d.sin(ah)*d.cos(L)*i,d.cos(ah)*d.cos(L)*i,d.sin(L)*i)end
-function aw(_,J,C,B)return f(n(J,_),n(C,_),n(B,_))end
-function aL(_,J,C,B)return k(k(g(J,_.c),g(C,_.e)),g(B,_.b))end
-function K(c,e,b)return d.max(e,d.min(c,b))end
-function Q()S(1,ac)S(2,ao)end
-function as(ab,a)if not _ then _={}_[a]={I=0,E=0}elseif not _[a]then _[a]={I=0,E=0}end;_[a].E=ab-_[a].I;_[a].I=ab;return _[a].E end
-function r(i,a)if not _ then _={}_[a]={x=f(),D=f()}elseif not _[a]then _[a]={x=f(),D=f()}end;_[a].D=o(i,_[a].x)_[a].x=i;return _[a].D end
-ac=q("trim yaw")ao=q("trim pitch")M=q("Nav Constant")s=q("Max Control")ay=ak.getBool("dumb launch?")function onTick()if ay then
-j={ar=h(4),aC=h(5),aD=h(6),ax=h(7),aq=h(8),aH=h(9)}Y,R,ae=j.ax,j.aq,j.aH
-H,w,z=A(Y),A(R),A(ae)aj,G,O=N(Y),N(R),N(ae)U=f(w*z,-G,w*O)af=f(aj*O+H*G*z,H*w,-aj*z+H*G*O)av=ap(U,af)if F(f(h(1),h(2),h(3)))>0 then
-am=f(h(1),h(2),h(3))aa=f(j.ar,j.aD,j.aC)u=o(am,aa)v=m(u)V=F(u)aA=r(aa,"myvel")P=r(am,"tgtvel")ai=r(P,"tgtacc")aF=r(ai,"tgtjer")aE=o(P,aA)aG=-as(V,"cv")Z=K(V/aG,-70,70)aB=p(ai,v)aI=p(aF,v)an=k(u,g(aE,Z))aP=p(an,v)au=k(k(t(g(an,M),Z^2),t(g(aB,M),2)),t(g(aI,M),6))ag=aw(au,U,af,av)ad(1,K(ag.c,-s,s)+ac)ad(2,K(ag.b,-s,s)+ao)else
-Q()end
+function bm(_,a)return h(m(a),p(_,m(a)))end
+function w(_,a)return l(_,h(m(a),p(_,m(a))))end
+function bg(_,a,aR)return l(_,h(w(_,a),aR or 2))end
+function bk(ah,I,j)local j=j or 1
+return g(b.sin(ah)*b.cos(I)*j,b.cos(ah)*b.cos(I)*j,b.sin(I)*j)end
+function aQ(_,W,G,F)return g(p(W,_),p(G,_),p(F,_))end
+function aL(_,W,G,F)return k(k(h(W,_.c),h(G,_.f)),h(F,_.d))end
+function U(c,f,d)return b.max(f,b.min(c,d))end
+function at()u(1,az)u(2,ab)end
+function aT()u(1,0)u(2,.1)end
+function aU(aq,a)if not _ then _={}_[a]={H=0,C=0}elseif not _[a]then _[a]={H=0,C=0}end;_[a].C=aq-_[a].H;_[a].H=aq;return _[a].C end
+function v(j,a)if not _ then _={}_[a]={y=g(),T=g()}elseif not _[a]then _[a]={y=g(),T=g()}end;_[a].T=l(j,_[a].y)_[a].y=j;return _[a].T end
+az=i("trim yaw")ab=i("trim pitch")P=i("Nav Constant")q=i("Max Control")aH=not an.getBool("dumb launch?")K=0
+aB=i("Max friendlies")aM=i("Host user number")x=i("Frequency seed")O=i("Encryption seed")as,ae=1871759,6393518
+t={}b.randomseed(x)be=b.random(as,ae)b.randomseed(x)for r=1,aB do
+B=b.random(-605791,605791)for bl,aW in ipairs(t)do
+while aW==B do
+B=b.random(-605791,605791)end
+end
+t[r]=B
+end
+aX=t[aM]+be
+t,aB,x,as,ae=o,o,o,o,o
+function ag(z)return g(z.f*(3.81*O),z.c*(3.57*O),z.d*(4.19*O))end
+function onTick()D(3,aX)aG=ag(g(e(11),e(12),e(13)))bj=ag(g(e(14),e(15),e(16)))if aH then
+if e(17)==1 then
+if K<10 then
+K=K+1
+at()else
+N=g(e(1),e(3),e(2))aj,ak,al=e(4),e(5),e(6)X,J,V=Y(aj),Y(ak),Y(al)ap,Z,aa=A(aj),A(ak),A(al)R=g(J*V,-Z,J*aa)Q=g(ap*aa+X*Z*V,X*J,-ap*V+X*Z*aa)ai=aZ(R,Q)bc=e(7)*ad
+aE=e(8)*ad
+b_=e(9)af=e(10)ao=b.sin(bc)*b_
+aS=b.sin(aE)*af
+bb=b.cos(aE)*af
+bd=(bb^2-ao^2)^.5
+ac=g(ao,bd,aS)aN=s(ac)>0
+if aN then
+aC=k(N,aL(ac,R,Q,ai))if s(l(aG,aC))<=35 then
+aT()else
+aA=aC
+M=l(aA,N)E=m(M)ay=s(M)aO=v(N,"myvel")am=v(aA,"tgtvel")aw=v(am,"tgtacc")aP=v(aw,"tgtjer")ba=l(am,aO)aY=-aU(ay,"cv")ar=U(ay/aY,-70,70)aI=w(aw,E)aK=w(aP,E)av=k(M,h(ba,ar))bn=w(av,E)aV=k(k(L(h(av,P),ar^2),L(h(aI,P),2)),L(h(aK,P),6))ax=aQ(aV,R,Q,ai)D(1,U(-ax.c,-q,q)+az)D(2,U(-ax.d,-q,q)+ab)end
+end
+end
+end
 else
-Q()end
+at()end
 end

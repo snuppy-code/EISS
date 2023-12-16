@@ -69,6 +69,15 @@ end
 function validowntarget()
     return ((mass<=2495 or mass>=2505) and mass>=minmass and xyz_acquired)
 end
+function dumboutput()
+	--debug.log("dumb")
+	osn(1, hoff)
+	osn(2, voff)
+end
+function getclear()
+	osn(1, 0)
+	osn(2,1)
+end
 
 
 nc=pgn("Navigation Constant")
@@ -79,164 +88,164 @@ hoff=pgn("Horizontal Offset")
 voff=pgn("Vertical Offset")
 maxdist=pgn("Max Distance from radio")
 targettogoto=false
+notdumblaunch = not property.getBool("dumb launch?")
+launchedtimer = 0
 
 function onTick()
-    
-	--physics sensor to facing vectors
-	rx,ry,rz=input.getNumber(4),input.getNumber(5),input.getNumber(6)
-	cx,cy,cz=math.cos(rx),math.cos(ry),math.cos(rz)
-	sx,sy,sz=math.sin(rx),math.sin(ry),math.sin(rz)
+	if notdumblaunch then
+		--debug.log("notdumblaunch")
+		if ign(15) == 1 then
+			--debug.log("hardpoint fired")
+			if launchedtimer < 10 then--increment timer
+				--debug.log("launch timer counting")
+				launchedtimer = launchedtimer + 1
+				dumboutput()
+			else--we been off rail for 10 ticks, so actually guide	
+				--debug.log("launch timer DONE")
+				--physics sensor to facing vectors
+				rx,ry,rz=input.getNumber(4),input.getNumber(5),input.getNumber(6)
+				cx,cy,cz=math.cos(rx),math.cos(ry),math.cos(rz)
+				sx,sy,sz=math.sin(rx),math.sin(ry),math.sin(rz)
 
-	right = vec(cy*cz, -sy, cy*sz)
-	fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
-	up = cross(right,fwd)
-	--
-  
-	--Calculate missile position and velocity
-	m_pos = vec(ign(1),ign(3),ign(2))
-	m_vel = vecDelta(m_pos,"m_vel")
-	offset = add(m_pos,invert(torelative(vec(0,1.25,0),right,fwd,up))) --Relative offset from phys sensor to back radar
-    	--
-	
-	--Get radio position
-	radio_pos = vec(ign(7),ign(8),ign(9))
-    debug.log("radio pos: "..radio_pos.x..","..radio_pos.y..","..radio_pos.z)
+				right = vec(cy*cz, -sy, cy*sz)
+				fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
+				up = cross(right,fwd)
+				--
+			
+				--Calculate missile position and velocity
+				m_pos = vec(ign(1),ign(3),ign(2))
+				m_vel = vecDelta(m_pos,"m_vel")
+				offset = add(m_pos,invert(torelative(vec(0,1.25,0),right,fwd,up))) --Relative offset from phys sensor to back radar
+					--
+				
+				--Get radio position
+				radio_pos = vec(ign(7),ign(8),ign(9))
+				--debug.log("radio pos: "..radio_pos.x..","..radio_pos.y..","..radio_pos.z)
 
-	--Calculate TGT local position from radars
-	rdrXdist = ign(12)
-	rdrYdist = ign(13)
-	st = ign(14) or 0
-	mass = st*rdrXdist
-	
-	rdrXazim = ign(10)*pi2
-	rdrYelev = ign(11)*pi2
-		
-	hh = m.sin(rdrXazim) * rdrXdist
-	hv = m.sin(rdrYelev) * rdrYdist
-	k1 = m.cos(rdrYelev) * rdrYdist
-	l = (k1^2 - hh^2)^.5
-	tgt_pos_local = vec(hh,l,hv)
-	
-	xyz_acquired = length(tgt_pos_local)>0
-	--
+				--Calculate TGT local position from radars
+				rdrXdist = ign(12)
+				rdrYdist = ign(13)
+				st = ign(14) or 0
+				mass = st*rdrXdist
+				
+				rdrXazim = ign(10)*pi2
+				rdrYelev = ign(11)*pi2
+					
+				hh = m.sin(rdrXazim) * rdrXdist
+				hv = m.sin(rdrYelev) * rdrYdist
+				k1 = m.cos(rdrYelev) * rdrYdist
+				l = (k1^2 - hh^2)^.5
+				tgt_pos_local = vec(hh,l,hv)
+				
+				xyz_acquired = length(tgt_pos_local)>0
+				--
 
-	--Set target xyz
-	p_tgt_pos = tgt_pos or vec()
-	if validowntarget() then --If we are tracking something
-        tgt_pos_global = add(offset,torelative(tgt_pos_local,right,fwd,up))
-		debug.log("tgt_pos_global: "..tgt_pos_global.x..","..tgt_pos_global.y..","..tgt_pos_global.z)
+				--Set target xyz
+				p_tgt_pos = tgt_pos or vec()
+				if validowntarget() then --If we are tracking something
+					tgt_pos_global = add(offset,torelative(tgt_pos_local,right,fwd,up))
+					--debug.log("tgt_pos_global: "..tgt_pos_global.x..","..tgt_pos_global.y..","..tgt_pos_global.z)
 
-        if length(radio_pos)>0 then --If there's a position from radio
-            if length(subt(tgt_pos_global,radio_pos))<=maxdist then --If the distance from our target to radio target is less than maxdist
-                --guide to onboard position (close enough to radio pos, probably same target)
-				--PITBULL
-				debug.log("PITBULL")
-				targettogoto = true
-				tgt_pos = tgt_pos_global
-				state = "PITBULL"
-            else
-                --guide to radio position (target is far from radio pos, so use radio pos instead)
-				--FOX1
-				debug.log("FOX1")
-                targettogoto = true
-                tgt_pos = radio_pos
-				state = "FOX1"
-            end
-        else --No position from radio
-            --guide to onboard position (no radio pos, eg go maddog)
-			--MADDOG
-			debug.log("MADDOG")
-            targettogoto = true
-            tgt_pos = tgt_pos_global
-			state = "MADDOG"
-        end
-	elseif length(radio_pos)>0 then --If there's a position from radio
-		--guide to radio position (no target, but there is a position from radio, so use radio pos instead)
-		--FOX1
-		debug.log("FOX1")
-		targettogoto = true
-		tgt_pos = radio_pos
-		state = "FOX1"
-    else --No onboard position and no radio position
-        --guide to last known position
-		debug.log("LAST KNOWN")
-        tgt_pos = p_tgt_pos
-		state = "LASTKNOWN"
-    end
+					if length(radio_pos)>0 then --If there's a position from radio
+						if length(subt(tgt_pos_global,radio_pos))<=maxdist then --If the distance from our target to radio target is less than maxdist
+							--guide to onboard position (close enough to radio pos, probably same target)
+							--PITBULL
+							--debug.log("PITBULL")
+							targettogoto = true
+							tgt_pos = tgt_pos_global
+							state = "PITBULL"
+						else
+							--guide to radio position (target is far from radio pos, so use radio pos instead)
+							--FOX1
+							--debug.log("FOX1")
+							targettogoto = true
+							tgt_pos = radio_pos
+							state = "FOX1"
+						end
+					else --No position from radio
+						--guide to onboard position (no radio pos, eg go maddog)
+						--MADDOG
+						--debug.log("MADDOG")
+						targettogoto = true
+						tgt_pos = tgt_pos_global
+						state = "MADDOG"
+					end
+				elseif length(radio_pos)>0 then --If there's a position from radio
+					--guide to radio position (no target, but there is a position from radio, so use radio pos instead)
+					--FOX1
+					--debug.log("FOX1")
+					targettogoto = true
+					tgt_pos = radio_pos
+					state = "FOX1"
+				else --No onboard position and no radio position
+					--guide to last known position
+					--debug.log("LAST KNOWN")
+					tgt_pos = p_tgt_pos
+					state = "LASTKNOWN"
+				end
+				
+				--Calculate target position rates
+				tgt_vel = vecDelta(tgt_pos,"tgt_vel")
+				tgt_acc = vecDelta(tgt_vel,"tgt_acc")
+				tgt_jer = vecDelta(tgt_acc,"tgt_jer")
+				--
+				
+				--Calculate target relative position and relative velocity
+				tgt_pos_rel = subt(tgt_pos,m_pos)
+				tgt_pos_rel_n = norm(tgt_pos_rel)
+				vel_rel = subt(tgt_vel,m_vel)
+				--
+				
+				--Make acceleration and jerk normal to LOS
+				tgt_acc_n = reject(tgt_acc,tgt_pos_rel_n)
+				tgt_jer_n = reject(tgt_jer,tgt_pos_rel_n)
+				--
+					
+				--Calculate rotation vector
+				omega = divf(cross(tgt_pos_rel,vel_rel),dot(tgt_pos_rel,tgt_pos_rel))
+				
+				--Acceleration normal to the instantaneous velocity difference
+				TPN_term = multf(cross(vel_rel,omega),nc)
+				
+				--Acceleration normal to the instantaneous line of sight
+				TPN_term = multf(cross(tgt_pos_rel_n,omega),-nc*length(vel_rel))
+				
+				--Acceleration orthogonal to the missile velocity
+				m_vel_n = norm(m_vel)
+				TPN_term = multf(cross(m_vel_n,omega),-nc*length(vel_rel))
+				
+				--TGT Acceleration Term
+				Acc_term = multf(tgt_acc_n,nc/2)
+				
+				--TGT Jerk Term
+				Jer_term = multf(tgt_jer_n,nc/6)
+				
+				--EPN
+				Acmd = add(TPN_term,add(Acc_term,Jer_term))
+				
+				if length(tgt_pos_rel)<1000 and dot(tgt_pos_rel_n,m_vel)>1 and not (state=="FOX1") and not (state=="LASTKNOWN") then--not PITBULL,MADDOG
+					limiter = 1
+				else
+					--PP
+					Acmd = multf(tgt_pos_rel_n,ppnc)
+					limiter = 3
+				end
+				
 
-	debug.log("tgt_pos: "..tgt_pos.x..","..tgt_pos.y..","..tgt_pos.z)
-
-    --p_tgt_pos = tgt_pos or vec()
-	--if validowntarget() then --If mass is above threshold, does not match tree mass, and a radar xyz is available
-	--	tgt_pos = add(offset,torelative(tgt_pos_local,right,fwd,up))
-	--	targettogoto = true
-	--elseif length(radio_pos)>0 then --Else, check if there's a position from radio
-	--	
-	--	targettogoto = true
-	--else --Else, assign it to last known tgt position
-	--	
-	--end
-    
-	--Calculate target position rates
-	tgt_vel = vecDelta(tgt_pos,"tgt_vel")
-	tgt_acc = vecDelta(tgt_vel,"tgt_acc")
-	tgt_jer = vecDelta(tgt_acc,"tgt_jer")
-	--
-    
-	--Calculate target relative position and relative velocity
-	tgt_pos_rel = subt(tgt_pos,m_pos)
-	tgt_pos_rel_n = norm(tgt_pos_rel)
-	vel_rel = subt(tgt_vel,m_vel)
-	--
-	
-	--Make acceleration and jerk normal to LOS
-	tgt_acc_n = reject(tgt_acc,tgt_pos_rel_n)
-	tgt_jer_n = reject(tgt_jer,tgt_pos_rel_n)
-	--
-    	
-	--Calculate rotation vector
-	omega = divf(cross(tgt_pos_rel,vel_rel),dot(tgt_pos_rel,tgt_pos_rel))
-    
-	--Acceleration normal to the instantaneous velocity difference
-	TPN_term = multf(cross(vel_rel,omega),nc)
-    
-	--Acceleration normal to the instantaneous line of sight
-	TPN_term = multf(cross(tgt_pos_rel_n,omega),-nc*length(vel_rel))
-    
-	--Acceleration orthogonal to the missile velocity
-	m_vel_n = norm(m_vel)
-	TPN_term = multf(cross(m_vel_n,omega),-nc*length(vel_rel))
-	
-	--TGT Acceleration Term
-	Acc_term = multf(tgt_acc_n,nc/2)
-	
-	--TGT Jerk Term
-	Jer_term = multf(tgt_jer_n,nc/6)
-	
-	--EPN
-	Acmd = add(TPN_term,add(Acc_term,Jer_term))
-	
-	if length(tgt_pos_rel)<1000 and dot(tgt_pos_rel_n,m_vel)>1 and not (state=="FOX1") and not (state=="LASTKNOWN") then--not PITBULL,MADDOG
-		limiter = 1
+				--Firing and Control
+				ctrl = tolocal(Acmd,right,fwd,up)
+				
+				fired = ign(15)>0 or false
+				
+				if fired and targettogoto then
+					osn(1,clamp(-ctrl.x,-maxc/limiter,maxc/limiter)+hoff)
+					osn(2,clamp(-ctrl.z,-maxc/limiter,maxc/limiter)+voff)
+				else
+					dumboutput()
+				end
+			end
+		end
 	else
-		--PP
-		Acmd = multf(tgt_pos_rel_n,ppnc)
-		limiter = 3
+		dumboutput()
 	end
-	
-
-	--Firing and Control
-	ctrl = tolocal(Acmd,right,fwd,up)
-    
-	fired = ign(15)>0 or false
-	
-	if fired and targettogoto then
-		osn(1,clamp(-ctrl.x,-maxc/limiter,maxc/limiter)+hoff)
-		osn(2,clamp(-ctrl.z,-maxc/limiter,maxc/limiter)+voff)
-	else
-		osn(1,hoff)
-		osn(2,voff)
-	end
-    --
-    
 end

@@ -1,4 +1,4 @@
---math & input shorthands
+---- SHORTHANDS----
 m,i,o,p = math,input,output,property
 ign,osn,igb,osb = i.getNumber, o.setNumber, i.getBool, o.setBool
 pgn,pgb = p.getNumber, p.getBool
@@ -6,6 +6,7 @@ abs,cos,sin,acos,asin,tan,atan = m.abs, m.cos, m.sin, m.acos, m.asin, m.tan, m.a
 pi = m.pi
 pi2 = pi*2
 
+---- VECTOR FUNCTIONS ----
 function vec(x,y,z)
 return {x=x or 0,y=y or 0,z=z or 0}
 end
@@ -56,82 +57,156 @@ function torelative(a,r,f,u)
 return add(add(multf(r,a.x), multf(f,a.y)), multf(u,a.z))
 end
 
---useful stuff
+---- MISSILE FUNCTIONS ----
 function clamp(x, y, z)
 return m.max(y, m.min(x, z))
 end
-
-function dumbOutput()
+function dumboutput()
 	--debug.log("dumb")
 	output.setNumber(1, trimX)
 	output.setNumber(2, trimY)
 end
-
+function getclear()
+	output.setNumber(1, 0)
+	output.setNumber(2,0.1)
+end
 function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]then a[b]={oldVar=0,deltaVar=0}end;a[b].deltaVar=c-a[b].oldVar;a[b].oldVar=c;return a[b].deltaVar end
 function vecDelta(d,b)if not a then a={}a[b]={oldVec=vec(),deltaVec=vec()}elseif not a[b]then a[b]={oldVec=vec(),deltaVec=vec()}end;a[b].deltaVec=subt(d,a[b].oldVec)a[b].oldVec=d;return a[b].deltaVec end
 
+---- MISSILE VARS ----
 trimX = pgn("trim yaw")
 trimY = pgn("trim pitch")
 nav = pgn("Nav Constant")
 maxc = pgn("Max Control")
+notdumblaunch = not property.getBool("dumb launch?")
+launchedtimer = 0
 
-notdumblaunch = property.getBool("dumb launch?")
+---- IFF / DATALINK SETUP ----
+maxfriendlies = pgn("Max friendlies")
+usernumber = pgn("Host user number")
+freqseed = pgn("Frequency seed")
+encseed = pgn("Encryption seed")
+basefreqmin,basefreqmax = 1871759, 6393518
+friendlyfreq = {}
 
+-- find base frequency all friendlies will go from, based on freq seed
+m.randomseed(freqseed)
+basefreq = m.random(basefreqmin,basefreqmax)
+
+-- find offsets for each friendly, ensuring no duplicates, based on freq seed
+m.randomseed(freqseed)
+for i = 1,maxfriendlies do
+  thisoffset = m.random(-605791, 605791)
+  for _,v in ipairs(friendlyfreq) do
+    while v == thisoffset do
+      thisoffset = m.random(-605791, 605791)
+    end
+  end
+  friendlyfreq[i] = thisoffset
+end
+
+-- add the base frequency to our host's offset to get our host's true freq
+ourfreq = friendlyfreq[usernumber] + basefreq
+friendlyfreq, maxfriendlies, freqseed, basefreqmin, basefreqmax = nil,nil,nil,nil,nil
+
+function decrypt(g)
+    return vec(g.y*(3.81*encseed), g.x*(3.57*encseed), g.z*(4.19*encseed))
+end
+
+
+---- MAIN ----
 function onTick()
+	--debug.log("ontick called")
+	--link up with host
+	osn(3,ourfreq)
+	hostpos = decrypt(vec(ign(11),ign(12),ign(13)))
+	hostsel = decrypt(vec(ign(14),ign(15),ign(16)))
+	--debug.log("hostpos: "..hostpos.x..", "..hostpos.y..", "..hostpos.z.."\nhostsel: "..hostsel.x..", "..hostsel.y..", "..hostsel.z)
+
 	if notdumblaunch then
-		--get all phys sensor info, flip z and y pos
-		phys = {
-		x_pos = ign(4),
-		z_pos = ign(5),
-		y_pos = ign(6),
-		x_rot = ign(7),
-		y_rot = ign(8),
-		z_rot = ign(9)}
-		
-		--phys sens rot to facing vectors
-		rx,ry,rz=phys.x_rot,phys.y_rot,phys.z_rot
-		cx,cy,cz=math.cos(rx),math.cos(ry),math.cos(rz)
-		sx,sy,sz=math.sin(rx),math.sin(ry),math.sin(rz)
-		right = vec(cy*cz, -sy, cy*sz)
-		fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
-		up = cross(right,fwd)
-		
-		if length(vec(ign(1),ign(2),ign(3)))>0 then			--if target isn't at 0,0,0:
-			--positions
-			tgtpos = vec(ign(1),ign(2),ign(3))				--get tgt pos
-			mypos = vec(phys.x_pos, phys.y_pos, phys.z_pos)	--get my pos
-			relpos = subt(tgtpos,mypos)						--find relative pos
-			normrelpos = norm(relpos)						--normalize relative pos
-			dist = length(relpos)							--find distance
+		--debug.log("notdumblaunch")
+		if ign(17) == 1 then
+			--debug.log("hardpoint fired")
+			if launchedtimer < 10 then--increment timer
+				--debug.log("launch timer counting")
+				launchedtimer = launchedtimer + 1
+				dumboutput()
+			else--we been off rail for 20 ticks, so actually guide	
+				--debug.log("launch timer DONE")
+				--get all phys sensor info, flip z and y pos
+				mypos = vec(ign(1),ign(3),ign(2))
+				
+				--phys sens rot to facing vectors
+				rx,ry,rz=ign(4),ign(5),ign(6)
+				cx,cy,cz=math.cos(rx),math.cos(ry),math.cos(rz)
+				sx,sy,sz=math.sin(rx),math.sin(ry),math.sin(rz)
+				right = vec(cy*cz, -sy, cy*sz)
+				fwd = vec(sx*sz + cx*sy*cz, cx*cy, -sx*cz + cx*sy*sz)
+				up = cross(right,fwd)
+				
 
-			--derivatives (I think I implemented them)
-			myvel  = vecDelta(mypos,"myvel")					--find my vel
-			--debug.log((length(myvel)*60).." "..(length(myvel)*60/343))
-			tgtvel = vecDelta(tgtpos,"tgtvel")					--find tgt vel
-			tgtacc = vecDelta(tgtvel,"tgtacc")					--find tgt acc
-			tgtjer = vecDelta(tgtacc,"tgtjer")					--find tgt jerk
+				--Calculate TGT local position from radars
+				rdrXazim = ign(7)*pi2
+				rdrYelev = ign(8)*pi2
 
-			relvel = subt(tgtvel,myvel)						--find relative vel
-			cv = -delta(dist,"cv")							--find closing vel
+				rdrXdist = ign(9)
+				rdrYdist = ign(10)
+					
+				hh = m.sin(rdrXazim) * rdrXdist
+				hv = m.sin(rdrYelev) * rdrYdist
+				k1 = m.cos(rdrYelev) * rdrYdist
+				l = (k1^2 - hh^2)^.5
+				tgt_pos_local = vec(hh,l,hv)
+				
+				xyz_acquired = length(tgt_pos_local)>0
+				if xyz_acquired then
+					--debug.log("sees target")
+					tgt_pos_global = add(mypos,torelative(tgt_pos_local,right,fwd,up))
+					--osn(4,tgt_pos_global.x)
+					--osn(5,tgt_pos_global.y)
+					--osn(6,tgt_pos_global.z)
 
-			--rest
-			tti = clamp(dist/cv,-70,70)						--find time to impact
+					if length(subt(hostpos,tgt_pos_global)) <= 35 then
+						--debug.log("evading, too close to host")
+						getclear()
+					else
+						--debug.log("tracking")
+						--positions
+						tgtpos = tgt_pos_global							--get tgt pos
+						relpos = subt(tgtpos,mypos)						--find relative pos
+						normrelpos = norm(relpos)						--normalize relative pos
+						dist = length(relpos)							--find distance
 
-			tgtaccperplos = reject(tgtacc,normrelpos)		--find tgt acc perpendicular to LOS
-			tgtjerperplos = reject(tgtjer,normrelpos)		--find tgt jerk perpendicular to LOS
+						--derivatives
+						myvel  = vecDelta(mypos,"myvel")					--find my vel
+						--debug.log((length(myvel)*60).." "..(length(myvel)*60/343))
+						tgtvel = vecDelta(tgtpos,"tgtvel")					--find tgt vel
+						tgtacc = vecDelta(tgtvel,"tgtacc")					--find tgt acc
+						tgtjer = vecDelta(tgtacc,"tgtjer")					--find tgt jerk
 
-			relzem = add(relpos,multf(relvel,tti))			--find relative zem
-			zemperplos = reject(relzem,normrelpos)			--find zem perpendicular to LOS
+						relvel = subt(tgtvel,myvel)						--find relative vel
+						cv = -delta(dist,"cv")							--find closing vel
 
-			glocmd = add(add(divf(multf(relzem,nav),tti^2),divf(multf(tgtaccperplos,nav),2)),divf(multf(tgtjerperplos,nav),6)) --insane black magic sauce provided by kubson..
-			loccmd = tolocal(glocmd,right,fwd,up)
-			
-	        osn(1,clamp(loccmd.x,-maxc,maxc)+trimX)
-	        osn(2,clamp(loccmd.z,-maxc,maxc)+trimY)
-	    else
-	        dumbOutput()
-	    end
+						--rest
+						tti = clamp(dist/cv,-70,70)						--find time to impact
+
+						tgtaccperplos = reject(tgtacc,normrelpos)		--find tgt acc perpendicular to LOS
+						tgtjerperplos = reject(tgtjer,normrelpos)		--find tgt jerk perpendicular to LOS
+
+						relzem = add(relpos,multf(relvel,tti))			--find relative zem
+						zemperplos = reject(relzem,normrelpos)			--find zem perpendicular to LOS
+
+						glocmd = add(add(divf(multf(relzem,nav),tti^2),divf(multf(tgtaccperplos,nav),2)),divf(multf(tgtjerperplos,nav),6)) --insane black magic sauce provided by kubson..
+						loccmd = tolocal(glocmd,right,fwd,up)
+						
+						osn(1,clamp(-loccmd.x,-maxc,maxc)+trimX)
+						osn(2,clamp(-loccmd.z,-maxc,maxc)+trimY)
+					end
+				end
+			end
+		end
 	else
-		dumbOutput()
+		--debug.log("notdumblaunch =//= true")
+		dumboutput()
 	end
 end

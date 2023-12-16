@@ -3,46 +3,6 @@ m,i,o,p = math,input,output,property
 ign,osn,igb = i.getNumber, o.setNumber, i.getBool
 pgn,pgb = p.getNumber, p.getBool
 
-pitchtunes = {p=pgn("P pitch"),i=pgn("I pitch"),d=pgn("D pitch")}
-rolltunes = {p=pgn("P roll"),i=pgn("I roll"),d=pgn("D roll")}
-yawtunes = {p=pgn("P yaw"),i=pgn("I yaw"),d=pgn("D yaw")}
-
-unloadedgains = {
-	pitch=pgn("Control gain pitch"),
-	roll=pgn("Control gain roll"),
-	yaw=pgn("Control gain yaw")}
-loadedgains = {
-	pitch=pgn("Control gain pitch loaded"),
-	roll=pgn("Control gain roll loaded"),
-	yaw=pgn("Control gain yaw loaded")}
-unloadedtrims = {
-	pitch=pgn("Pitch trim"),
-	roll=pgn("Roll trim"),
-	yaw=pgn("Yaw trim")}
-
-activationdelays = {
-	pitch=pgn("Pitch PID activation delay ticks"),
-	roll=pgn("Roll PID activation delay ticks"),
-	yaw=pgn("Yaw PID activation delay ticks")}
-
-gains = {}
-
-deadzone = pgn("Deadzone")
-
-runpids = pgb("Use PIDs?")
-
-custommissiletrim = {--setup for 0 to 8 KAIs
-	[0] = -0.045,
-	[1] = -0.18 ,
-	[2] = -0.04 ,
-	[3] = -0.2 ,
-	[4] = -0.045,
-	[5] = -0.215,
-	[6] = -0.04 ,
-	[7] = -0.225,
-	[8] = -0.045,
-}
-
 function threshold(a,min,max)
 	return a > min and a < max
 end
@@ -96,55 +56,105 @@ function pid(k,l,n,j)
 	return pdtl[j].controlOutput
 end
 
+pitchtunes = {p=pgn("P pitch"),i=pgn("I pitch"),d=pgn("D pitch")}
+rolltunes = {p=pgn("P roll"),i=pgn("I roll"),d=pgn("D roll")}
+yawtunes = {p=pgn("P yaw"),i=pgn("I yaw"),d=pgn("D yaw")}
+
+unloadedgains = {
+	pitch=pgn("Control gain pitch"),
+	roll=pgn("Control gain roll"),
+	yaw=pgn("Control gain yaw")}
+unloadedtrims = {
+	pitch=pgn("Pitch trim"),
+	roll=pgn("Roll trim"),
+	yaw=pgn("Yaw trim")}
+activationdelays = {
+	pitch=pgn("Pitch PID activation delay ticks"),
+	roll=pgn("Roll PID activation delay ticks"),
+	yaw=pgn("Yaw PID activation delay ticks")}
+
+deadzone = pgn("Deadzone")
+runpids = pgb("Use PIDs?")
+
 sumangspdaxes = {pitch=5,roll=0,yaw=0}
 lastorient = {pitch=-5,roll=0,yaw=0}
 outputaxes = {pitch=0,roll=0,yaw=0}
 
+gains = {}
 pitchever = false
 
-maxmissiles = 8
+group1trims = {
+	yaw = {
+		[1] = -0.14,
+		[2] = 0,
+		[3] = -0.17,
+		[4] = 0,
+		[5] = -0.19,
+		[6] = 0,
+	},
+	pitch = {
+		[1] = 0.01,
+		[2] = -0.01,
+		[3] = -0.03,
+		[4] = -0.06,
+		[5] = -0.09,
+		[6] = -0.11,
+	}
+}
+group2trims = {
+	[1] = -0.04
+}
+
+function pitchgain(x)
+    if x >= 0 and x < 3 then
+        return (0.008*x^3 - 0.055*x^2 + 0.127*x + 1.1)
+    elseif x >= 3 and x < 4 then
+        return (0.065*x + 1.015)
+    elseif x >= 4 and x <= 6 then
+        return 0.012*x^2 - 0.097*x + 1.465
+    else
+        return 0
+    end
+end
+
+gains = {
+	pitch=pgn("Control gain pitch"),
+	roll=pgn("Control gain roll"),
+	yaw=pgn("Control gain yaw")}
 
 function onTick()
 	manaxes = {pitch=ign(2), roll=ign(1), yaw=ign(3)}--yaw=0}
 	angspdaxes = {pitch=-ign(4), roll=-ign(5), yaw=ign(6)}
-	--spd = ign(7)
-	--if spd <= 145 then
-	--	spdfactor = 20
-	--else
-	--	spdfactor = 0.51/(1-3.64*(2.71828^(-0.01*spd)))
-	--end
-	--debug.log("spdfactor: "..spdfactor)
-	missiles = ign(8)
-	missilesfactor = missiles/8
-	--debug.log("missilesfactor: "..missilesfactor)
-	gains = {
-		pitch=lerp(unloadedgains.pitch,loadedgains.pitch,missilesfactor),
-		roll=lerp(unloadedgains.roll,loadedgains.roll,missilesfactor),
-		yaw=lerp(unloadedgains.yaw,loadedgains.yaw,missilesfactor)}
+
+	group1missiles = ign(8)
+	group2missiles = ign(9)
+
+	gains.pitch = 0
+	gains.pitch = pitchgain(group1missiles)+ign(13)*0.3--missile gain compensating and mseld gain adding
+	gains.roll = unloadedgains.roll + (group1missiles*0.34 + ign(13)*0.3)
+	
 	--gains = {
 	--	pitch=ign(10),
-	--	roll=ign(9),
-	--	yaw=ign(11)}
-	--trims = {
-	--	pitch=0,
-	--	roll=0,
-	--	yaw=0}
-	--debug.log("pitch gain: "..gains.pitch)
-	--debug.log("pitch gain: "..gains.roll)
-	--debug.log("pitch gain: "..gains.yaw)
+	--	roll=ign(11),
+	--	yaw=ign(12)
+	--}
 
+	--adjust trims with our gain
 	trims = {
 		pitch=unloadedtrims.pitch*gains.pitch,
 		roll=unloadedtrims.roll*gains.roll,
 		yaw=unloadedtrims.yaw*gains.yaw}
-	if custommissiletrim[missiles] then
-		trims.yaw = trims.yaw + custommissiletrim[missiles]*gains.yaw
+	--add group 1 yaw and pitch counter trim
+	if group1trims.yaw[group1missiles] then
+		trims.yaw = trims.yaw + group1trims.yaw[group1missiles]*gains.yaw
 	end
-
-	--gains = {
-	--	pitch=gains.pitch*spdfactor,
-	--	roll=gains.roll*spdfactor,
-	--	yaw=gains.yaw*spdfactor}
+	if group1trims.pitch[group1missiles] then
+		trims.pitch = trims.pitch + group1trims.pitch[group1missiles]*gains.pitch
+	end
+	--add group 2 yaw counter trim
+	if group2trims[group2missiles] then
+		trims.yaw = trims.yaw + group2trims[group2missiles]*gains.yaw
+	end
 
 	sumangspdaxes = addAxes(sumangspdaxes,angspdaxes)
 

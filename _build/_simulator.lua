@@ -25,6 +25,6 @@ sandboxEnv.simulator = simulator
 simulator:_beginSimulation(false, arg[1], arg[2])
 
 -- main require
-sandboxEnv.require("EVA section 2")
+sandboxEnv.require("Hydra AGM90")
 
 simulator:_giveControlToMainLoop()
