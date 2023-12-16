@@ -32,9 +32,7 @@ end
 function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]then a[b]={oldVar=0,deltaVar=0}end;a[b].deltaVar=c-a[b].oldVar;a[b].oldVar=c;return a[b].deltaVar end
 function vecDelta(d,b)if not a then a={}a[b]={oldVec=vec(),deltaVec=vec()}elseif not a[b]then a[b]={oldVec=vec(),deltaVec=vec()}end;a[b].deltaVec=subt(d,a[b].oldVec)a[b].oldVec=d;return a[b].deltaVec end
 
-maxspeed = 297
-maxalt = 4000
-maxgs = 22
+maxspeed = 23
 speed = 0
 mypos = vec()
 
@@ -44,7 +42,7 @@ function onTick()
     myacc = multf(vecDelta(myvel,"myacc"),60)
 
     speed = length(myvel)
-    speed = speed+speed/(speed/2)
+    speed = speed
     accmag = length(myacc)
     g = accmag/9.81
 end
@@ -58,17 +56,4 @@ function onDraw()
     line(0,h-1,0,speedpixels)
     line(0,speedpixels,4,speedpixels)
     text(2,speedpixels+2,"Spd:"..m.floor(speed+0.5))
-
-    --alt
-    altpixels = (1-mypos.z/maxalt)*(h-1)
-    line(w-1,h-1,w-1,altpixels)
-    line(w-1,altpixels,w-5,altpixels)
-    thetext = "Alt:"..m.floor(mypos.z+0.5)
-    text(w-#thetext*5-1,altpixels+2,thetext)
-
-    --gs
-    gpixels = (g/maxgs)*34
-    setcolor(40,4,4,255)
-    line(w/2-1-gpixels,h-1,w/2+gpixels,h-1)
-    text(w/2+gpixels-12,h-7,"G:"..m.floor(g*10+0.5)/10)
 end

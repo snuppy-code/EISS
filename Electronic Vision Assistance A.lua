@@ -108,18 +108,7 @@ function dotline(x1,y1,x2,y2)
 	end
 end
 
----- EVA SETUP VARS ----
-points={}
-max_points=100
-t=3
-
-camera_offset=vec(0,2.625,-0.5)
-laser_offset=vec(0,3.125,-0.25)
-
-laser_angles = {}
-for i=1,t do
-    laser_angles[i] = {hor=0,ver=0}
-end
+camera_offset=vec(0,0.875,0)
 
 ---- NON-EVA SETUP VARS ----
 culltime = 40
@@ -130,8 +119,7 @@ function onTick()
 
 	----  CONTROLS  ----
 	ACM = ign(28) == 1
-    zoom_in = 0.12
-    laser_dist = ign(20)
+    zoom_in = 0.36	
 
 	----  MY DATA  ----
 	mypos = vec(ign(1),ign(3),ign(2))
@@ -186,90 +174,9 @@ function onTick()
 	selectedtgt = vec(ign(23),ign(24),ign(25))
 	--debug.log("tsdx: "..selectedtgt.x.." y: "..selectedtgt.y.." z: "..selectedtgt.z)
 	
-
-	---- LIDAR ----
-	camera_right = right
-	camera_forward = to_global_frame(spherical_to_cart(0,-0.6*pi/4,1),right,fwd,up)
-	camera_up = cross(camera_right,camera_forward)
-
-	--laser spot calculations
-	for i=t,2,-1 do
-		laser_angles[i].hor = laser_angles[i-1].hor
-		laser_angles[i].ver = laser_angles[i-1].ver
-	end
-
-	laser_angles[1].hor = hor or 0
-	laser_angles[1].ver = ver or 0
-
-	if laser_dist >= 5 and laser_dist < 2000 then
-		--calculate point in global frame
-		laser_spot = add(to_global_frame(add(spherical_to_cart(laser_angles[t].hor,laser_angles[t].ver,laser_dist),laser_offset),right,fwd,up),mypos)
-		laser_spot = vec(laser_spot.x,laser_spot.y,laser_spot.z < 0 and 0 or laser_spot.z) --if laser spot is below water level, set z to 0
-		
-		if #points > 0 then --if the table has points
-
-			new,j = true,0
-			while j < #points and new and j < max_points do --check if calculated point is new
-				j = j + 1
-				new = length(subt(points[j],laser_spot)) > 5 --new if distance is >5m
-			end
-
-			table_full = #points >= max_points
-
-			if new then --if calculated point is new
-
-				if table_full then
-					for i=1,max_points-1 do --remove oldest point and shift all table contents down by 1
-						points[i] = points[i+1]
-					end
-					points[max_points] = laser_spot --add new point (overwrite last spot in table)
-				else
-					points[#points+1] = laser_spot --add new point (extend the table)
-				end
-
-			end
-
-		else --if the table is empty
-
-			points[1] = laser_spot --add new point (first index)
-
-		end
-
-	end
-
-	--outputs
-	hor = math.rad(math.random(-40,40))
-	ver = math.rad(math.random(-40,40))
-
-	osn(1,hor*4/pi)
-	osn(2,ver*4/pi)
-
-
 end
 function onDraw()
 	w,h = s.getWidth(),s.getHeight()
-
-	---- LIDAR ----
-	for k,v in pairs(points) do --for all points
-		relative_position = subt(v,mypos) --get relative positon
-		dist = length(relative_position) --dist
-
-		if dist<2000 then
-			local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
-
-			if local_position.y > 0 then
-				pixel_x,pixel_y = to_monitor(local_position,camera_offset,zoom_in,w,h)
-				setcolor(5-dist, dist-5, 0)
-
-				if(v.z<0.5) then
-					setcolor(clamp(200-dist/10,0,200), 0, clamp(dist/10,0,200), clamp(200-dist/20,0,200))
-				else
-					setcolor(clamp(200-dist/10,0,200), clamp(dist/10,0,200), 0, clamp(200-dist/20,0,200))
-				end
-				rectF(pixel_x-1,pixel_y,1,1)
-			end
-    	end
-	end
 	
 	---- SYMBOLS ----
 	--targets
@@ -285,7 +192,7 @@ function onDraw()
 		end
 
 		relative_position = subt(targetvector,mypos)
-		local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+		local_position = to_local_frame(relative_position,right,fwd,up)
 		tgtpixelx, tgtpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
 		
 		thistargetalt=targetvector.z
@@ -295,12 +202,12 @@ function onDraw()
 		end
 		rect(tgtpixelx-1,tgtpixely-1,2,2)
 	end
-	
+	 
 	--selected target
 	setcolor(55,20,40,180)
 	if length(selectedtgt) > 0 then
 		relative_position = subt(selectedtgt,mypos)
-		local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+		local_position = to_local_frame(relative_position,right,fwd,up)
 		tgtpixelx, tgtpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
 		
 		dotline(w/2,h,tgtpixelx,tgtpixely)
@@ -315,7 +222,7 @@ function onDraw()
 	setcolor(0,40,255,230)
 	for k,v in pairs(friendlies) do
 		relative_position = subt(v.pos,mypos)
-		local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+		local_position = to_local_frame(relative_position,right,fwd,up)
 		fpixelx, fpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
 		
 		thistargetalt=v.pos.z
@@ -329,7 +236,7 @@ function onDraw()
 
 		if length(v.sel) > 0 then
 			relative_position = subt(v.sel,mypos)
-			local_position = to_local_frame(relative_position,camera_right,camera_forward,camera_up)
+			local_position = to_local_frame(relative_position,right,fwd,up)
 			ftrkpixelx, ftrkpixely = to_monitor(local_position,camera_offset,zoom_in,w,h)
 
 			setcolor(30,90,255,155)
