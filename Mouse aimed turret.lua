@@ -6,6 +6,7 @@ pi = m.pi
 pi2 = pi*2
 
 function delta(c,b)if not a then a={}a[b]={oldVar=0,deltaVar=0}elseif not a[b]then a[b]={oldVar=0,deltaVar=0}end;a[b].deltaVar=c-a[b].oldVar;a[b].oldVar=c;return a[b].deltaVar end
+function clamp(a,min,max) return m.min(m.max(a,min),max) end
 
 integral_prior = 0
 
@@ -14,6 +15,10 @@ ki = pgn("i")
 kd = pgn("d")
 iclamp = pgn("i clamp")
 vclamp = pgn("v clamp")
+
+vclampzones = {
+    [1]
+}
 
 lookhorgain = pgn("horizontal look velocity gain")
 lookvergain = pgn("vertical look velocity gain")
@@ -27,7 +32,8 @@ function onTick()
     lookleady = delta(lookangy,"lly")*lookvergain
     pivotang = ign(1)
 
-    error = ((m.max(m.min(lookangx+lookleadx,0.37),-0.37) - pivotang)%1+1.5)%1-0.5
+    lookangx = clamp(lookangx+lookleadx,-0.37,0.37)
+    error = (( - pivotang)%1+1.5)%1-0.5
     integral = m.max(m.min(integral_prior+error,iclamp),-iclamp)
     derivative = delta(error,"deriv")
 

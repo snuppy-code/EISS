@@ -1,0 +1,46 @@
+"filename", "language", "Lua", "Markdown", "comment", "blank", "total"
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Active Datalink.lua", "Lua", 56, 0, 11, 19, 86
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\EVA section 2.lua", "Lua", 45, 0, 1, 13, 59
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Electronic Vision Assistance A.lua", "Lua", 196, 0, 13, 57, 266
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Emission Tracking System A.lua", "Lua", 0, 0, 1, 1, 2
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Hydra AGM90.lua", "Lua", 156, 0, 31, 25, 212
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\KAI 10A Guidance.lua", "Lua", 176, 0, 44, 30, 250
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Mouse aimed turret.lua", "Lua", 30, 0, 6, 11, 47
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua", "Lua", 34, 0, 4, 9, 47
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\README.md", "Markdown", 0, 3, 0, 0, 3
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua", "Lua", 259, 0, 103, 44, 406
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Target Viewing Camera.lua", "Lua", 179, 0, 7, 44, 230
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Track While Scan A.lua", "Lua", 298, 0, 103, 36, 437
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Vamperion Hardpoint Controller A.lua", "Lua", 62, 0, 10, 9, 81
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\_build.lua", "Lua", 65, 0, 3, 33, 101
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\_buildactions.lua", "Lua", 11, 0, 37, 10, 58
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\_simulator.lua", "Lua", 15, 0, 9, 7, 31
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\active datalink.lua", "Lua", 56, 0, 11, 20, 87
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\chatgpt ballistic calc.lua", "Lua", 89, 0, 9, 12, 110
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\electronic vision assistance a.lua", "Lua", 196, 0, 13, 58, 267
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\emission tracking system a.lua", "Lua", 0, 0, 1, 2, 3
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\eva section 2.lua", "Lua", 45, 0, 1, 14, 60
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\hydra agm90.lua", "Lua", 156, 0, 31, 26, 213
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\kai 10a guidance.lua", "Lua", 176, 0, 44, 31, 251
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\passive datalink.lua", "Lua", 34, 0, 4, 10, 48
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\tactical situation display a.lua", "Lua", 259, 0, 103, 45, 407
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\target viewing camera.lua", "Lua", 179, 0, 7, 45, 231
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\track while scan a.lua", "Lua", 298, 0, 103, 37, 438
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\track while scan dev version.lua", "Lua", 165, 0, 13, 14, 192
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\vamperion fcs 2.lua", "Lua", 187, 0, 13, 23, 223
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\_intermediate\vamperion hardpoint controller a.lua", "Lua", 62, 0, 10, 10, 82
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\active datalink.lua", "Lua", 26, 0, 8, 2, 36
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\chatgpt ballistic calc.lua", "Lua", 33, 0, 8, 2, 43
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\electronic vision assistance a.lua", "Lua", 97, 0, 8, 2, 107
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\emission tracking system a.lua", "Lua", 0, 0, 8, 2, 10
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\eva section 2.lua", "Lua", 19, 0, 8, 2, 29
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\hydra agm90.lua", "Lua", 71, 0, 8, 2, 81
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\kai 10a guidance.lua", "Lua", 98, 0, 8, 2, 108
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\passive datalink.lua", "Lua", 15, 0, 8, 2, 25
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\tactical situation display a.lua", "Lua", 159, 0, 0, 2, 161
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\target viewing camera.lua", "Lua", 92, 0, 8, 2, 102
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\track while scan a.lua", "Lua", 167, 0, 3, 3, 173
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\vamperion fcs 2.lua", "Lua", 104, 0, 8, 2, 114
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\_build\out\release\vamperion hardpoint controller a.lua", "Lua", 30, 0, 8, 2, 40
+"c:\Users\Squingle\Desktop\!folders\! d-github\EISS\vamperion fcs 2.lua", "Lua", 187, 0, 13, 22, 222
+"Total", "-", 4582, 3, 850, 744, 6179
