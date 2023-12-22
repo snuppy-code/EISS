@@ -1,3 +1,4 @@
+
 m,i,o,p = math,input,output,property
 ign,osn,igb,osb = i.getNumber, o.setNumber, i.getBool, o.setBool
 pgn,pgb = p.getNumber, p.getBool

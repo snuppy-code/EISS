@@ -7,33 +7,33 @@
 --      By Nameous Changey
 -- Minimized Size: 509 (812 with comment) chars
 
-p=ipairs
-m=true
-l=false
-j=output
-k=input
-o,i,n,r=k.getBool,j.setBool,k.getNumber,j.setNumber
-e=1
-c=1
-g={_={[1]=1,[2]=2,[3]=3,[4]=6,[5]=7,[6]=8},b={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6}}d={_={[1]=4,[2]=5},b={[1]=0,[2]=4,[3]=5}}u,q=l,l
-function onTick()t=o(1)if t and not u then
-e=e%(#g._+1)+1
+l=ipairs
+k=true
+j=false
+r=output
+t=input
+o,m,i,s=t.getBool,r.setBool,t.getNumber,r.setNumber
+d=1
+f=1
+b={_={[1]=1,[2]=2,[3]=3,[4]=6,[5]=7,[6]=8},g={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6}}h={_={[1]=4,[2]=5},g={[1]=0,[2]=4,[3]=5}}n,u=j,j
+function onTick()p=o(1)if p and not n then
+d=d%(#b._+1)+1
 end
-u=t
-i(g.b[e],m)a=0
-for v,h in p(g._)do
-if not(n(h)==0)then
+n=p
+m(b.g[d],k)a=0
+for v,e in l(b._)do
+if not(i(e)==0)then
 a=a+1
 end
 end
-r(1,a)s=o(2)if s and not q then
-c=c%(#d._+1)+1
+s(1,a)q=o(2)if q and not u then
+f=f%(#h._+1)+1
 end
-q=s
-i(d.b[c],m)f=0
-for v,h in p(d._)do
-if not(n(h)==0)then
-f=f+1
+u=q
+m(h.g[f],k)c=0
+for v,e in l(h._)do
+if not(i(e)==0)then
+c=c+1
 end
 end
-r(2,f)end
+s(2,c)end

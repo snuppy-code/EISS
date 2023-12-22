@@ -31,9 +31,9 @@ end
 function cross(a,b)
 return vec(a.y*b.z-a.z*b.y, a.z*b.x-a.x*b.z, a.x*b.y-a.y*b.x)
 end
-function stoc(hor,ver,d)
+function stoc(hor,ver,stocd)
 stocd=stocd or 1
-return vec(m.sin(hor)*m.cos(ver)*d, m.cos(hor)*m.cos(ver)*d, m.sin(ver)*d)
+return vec(m.sin(hor)*m.cos(ver)*stocd, m.cos(hor)*m.cos(ver)*stocd, m.sin(ver)*stocd)
 end
 function tolocal(a,r,f,u)
 return vec(dot(r,a),dot(f,a),dot(u,a))
