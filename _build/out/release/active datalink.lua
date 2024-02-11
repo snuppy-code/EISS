@@ -7,29 +7,29 @@
 --      By Nameous Changey
 -- Minimized Size: 842 (1145 with comment) chars
 
-r=ipairs
-i,a,j,k=math,input.getNumber,output.setNumber,property.getNumber
-o=k("Max friendlies")s=k("User number")t=k("Frequency seed")c=k("Encryption seed")F,D=1871759,6393518
-i.randomseed(t)y=i.random(F,D)b={}i.randomseed(t)for l=1,o do
-m=i.random(-605791,605791)for I,z in r(b)do
-while z==m do
-m=i.random(-605791,605791)end
+u=ipairs
+g,a,i,k=math,input.getNumber,output.setNumber,property.getNumber
+o=k("Max friendlies")s=k("User number")t=k("Frequency seed")c=k("Encryption seed")G,B=1871759,6393518
+g.randomseed(t)w=g.random(G,B)b={}g.randomseed(t)for l=1,o do
+q=g.random(-605791,605791)for J,F in u(b)do
+while F==q do
+q=g.random(-605791,605791)end
 end
-b[l]=m
+b[l]=q
 end
-for v in r(b)do
-b[v]=b[v]+y
+for r in u(b)do
+b[r]=b[r]+w
 end
 _=1
 C=7
-d={}u=8
-A={}function E(p)return h(p.f/(3.57*c),p.e/(3.81*c),p.g/(4.19*c))end
-function G(q)return h(q.f*(3.81*c),q.e*(3.57*c),q.g*(4.19*c))end
-function h(e,f,g)return{e=e or 0,f=f or 0,g=g or 0}end
-function onTick()w=h(a(1),a(2),a(3))_=(_==o)and 1 or _+1
+j={}v=8
+A={}function z(p)return h(p.f/(3.57*c),p.d/(3.81*c),p.e/(4.19*c))end
+function D(m)return h(m.f*(3.81*c),m.d*(3.57*c),m.e*(4.19*c))end
+function h(d,f,e)return{d=d or 0,f=f or 0,e=e or 0}end
+function onTick()E=h(a(1),a(2),a(3))_=(_==o)and 1 or _+1
 _=(_==s)and((_==o)and 1 or _+1)or _
-x=b[_]for l=u,2,-1 do
-d[l]=d[l-1]end
-d[1]={H=L,B=_}if#d==u then
-A[d[C].B]={J=G(h(a(4),a(5),a(6)))}end
-n=E(w)j(1,n.e)j(2,n.f)j(3,n.g)j(4,x)j(5,b[s])K=h(a(7),a(8),a(9))end
+x=b[_]for l=v,2,-1 do
+j[l]=j[l-1]end
+j[1]={H=L,y=_}if#j==v then
+A[j[C].y]={K=D(h(a(4),a(5),a(6)))}end
+n=z(E)i(1,n.d)i(2,n.f)i(3,n.e)i(4,x)i(5,b[s])I=h(a(7),a(8),a(9))end

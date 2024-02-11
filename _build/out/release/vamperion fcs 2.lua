@@ -6,53 +6,53 @@
 -- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
 --      By Nameous Changey
 -- Minimized Size: 2559 (2864 with comment) chars
-at="Control gain pitch"
+at="Control gain yaw"
 as="Control gain roll"
-ar="Control gain yaw"
+ar="Control gain pitch"
 
-D=false
-R=true
-S,j,V,u=math,input,output,property
-l,n,an=j.getNumber,V.setNumber,j.getBool
-e,ad=u.getNumber,u.getBool
-function J(m,min,max)return m>min and m<max
+B=false
+Q=true
+S,k,af,t=math,input,output,property
+m,n,an=k.getNumber,af.setNumber,k.getBool
+e,al=t.getNumber,t.getBool
+function H(l,min,max)return l>min and l<max
 end
-function aq(m,min,max)return S.min(S.max(m,min),max)end
-function aj(m,w)return{_=m._+w._,b=m.b+w.b,a=m.a+w.a}end
-function ao(m,w,P)return m*(1-P)+w*P end
-function C(ai,aa,ak,c)if not k then
-k={}k[c]={z=0,x=0}elseif not k[c]then
-k[c]={z=0,x=0}end
-if ai then
-if k[c].z>=aa then
-k[c].x=ak
-return R
+function ap(l,min,max)return S.min(S.max(l,min),max)end
+function aj(l,w)return{_=l._+w._,b=l.b+w.b,a=l.a+w.a}end
+function ao(l,w,O)return l*(1-O)+w*O end
+function G(ag,Z,ah,c)if not j then
+j={}j[c]={z=0,x=0}elseif not j[c]then
+j[c]={z=0,x=0}end
+if ag then
+if j[c].z>=Z then
+j[c].x=ah
+return Q
 else
-k[c].z=k[c].z+1
-return D
+j[c].z=j[c].z+1
+return B
 end
 else
-if k[c].x==0 then
-return D
+if j[c].x==0 then
+return B
 else
-k[c].x=k[c].x-1
-return R
+j[c].x=j[c].x-1
+return Q
 end
 end
 end
-function K(ac,ae,G,c)if not f then
-f={}f[c]={r=0,j=0,p=0,F=0,I=0}elseif not f[c]then
-f[c]={r=0,j=0,p=0,F=0,I=0}end
-f[c].r=ac-ae
-f[c].j=f[c].I+f[c].r
-f[c].p=f[c].r-f[c].F
-f[c].Y=G.u*f[c].r+G.j*f[c].j+G.p*f[c].p
-f[c].F=f[c].r
-f[c].I=f[c].j
-return f[c].Y
+function J(V,ae,K,c)if not f then
+f={}f[c]={s=0,k=0,p=0,C=0,D=0}elseif not f[c]then
+f[c]={s=0,k=0,p=0,C=0,D=0}end
+f[c].s=V-ae
+f[c].k=f[c].D+f[c].s
+f[c].p=f[c].s-f[c].C
+f[c].ab=K.t*f[c].s+K.k*f[c].k+K.p*f[c].p
+f[c].C=f[c].s
+f[c].D=f[c].k
+return f[c].ab
 end
-ah={u=e("P pitch"),j=e("I pitch"),p=e("D pitch")}am={u=e("P roll"),j=e("I roll"),p=e("D roll")}ag={u=e("P yaw"),j=e("I yaw"),p=e("D yaw")}al={_=e(at),b=e(as),a=e(ar)}M={_=e("Pitch trim"),b=e("Roll trim"),a=e("Yaw trim")}B={_=e("Pitch PID activation delay ticks"),b=e("Roll PID activation delay ticks"),a=e("Yaw PID activation delay ticks")}q=e("Deadzone")H=ad("Use PIDs?")o={_=5,b=0,a=0}s={_=-5,b=0,a=0}d={_=0,b=0,a=0}h={}ap=D
-A={a={[1]=-.14,[2]=0,[3]=-.17,[4]=0,[5]=-.19,[6]=0},_={[1]=.01,[2]=-.01,[3]=-.03,[4]=-.06,[5]=-.09,[6]=-.11}}Q={[1]=-.04}function U(i)if i>=0 and i<3 then
+W={t=e("P pitch"),k=e("I pitch"),p=e("D pitch")}ad={t=e("P roll"),k=e("I roll"),p=e("D roll")}aa={t=e("P yaw"),k=e("I yaw"),p=e("D yaw")}Y={_=e(ar),b=e(as),a=e(at)}F={_=e("Pitch trim"),b=e("Roll trim"),a=e("Yaw trim")}E={_=e("Pitch PID activation delay ticks"),b=e("Roll PID activation delay ticks"),a=e("Yaw PID activation delay ticks")}r=e("Deadzone")I=al("Use PIDs?")o={_=5,b=0,a=0}q={_=-5,b=0,a=0}d={_=0,b=0,a=0}h={}aq=B
+A={a={[1]=-.14,[2]=0,[3]=-.17,[4]=0,[5]=-.19,[6]=0},_={[1]=.01,[2]=-.01,[3]=-.03,[4]=-.06,[5]=-.09,[6]=-.11}}N={[1]=-.04}function am(i)if i>=0 and i<3 then
 return(.008*i^3-.055*i^2+.127*i+1.1)elseif i>=3 and i<4 then
 return(.065*i+1.015)elseif i>=4 and i<=6 then
 return .012*i^2-.097*i+1.465
@@ -60,53 +60,53 @@ else
 return 0
 end
 end
-h={_=e(at),b=e(as),a=e(ar)}function onTick()t={_=l(2),b=l(1),a=l(3)}y={_=-l(4),b=-l(5),a=l(6)}v=l(8)N=l(9)h._=0
-h._=U(v)+l(13)*.3
-h.b=al.b+(v*.34+l(13)*.3)g={_=M._*h._,b=M.b*h.b,a=M.a*h.a}if A.a[v]then
+h={_=e(ar),b=e(as),a=e(at)}function onTick()u={_=m(2),b=m(1),a=m(3)}y={_=-m(4),b=-m(5),a=m(6)}v=m(8)R=m(9)h._=0
+h._=am(v)+m(13)*.3
+h.b=Y.b+(v*.34+m(13)*.3)g={_=F._*h._,b=F.b*h.b,a=F.a*h.a}if A.a[v]then
 g.a=g.a+A.a[v]*h.a
 end
 if A._[v]then
 g._=g._+A._[v]*h._
 end
-if Q[N]then
-g.a=g.a+Q[N]*h.a
+if N[R]then
+g.a=g.a+N[R]*h.a
 end
-o=aj(o,y)X=t._*h._
-ab=K(s._,o._,ah,"ppid")L=J(t._,-q,q)if C(not L,0,B._,"pcap")then
+o=aj(o,y)U=u._*h._
+ak=J(q._,o._,W,"ppid")L=H(u._,-r,r)if G(not L,0,E._,"pcap")then
 if L then
 d._=g._-y._*10
 else
-d._=g._+X
+d._=g._+U
 end
-s._=o._
-elseif H then
-d._=g._+ab
+q._=o._
+elseif I then
+d._=g._+ak
 else
 d._=g._
 end
-Z=t.b*h.b
-af=K(s.b,o.b,am,"rpid")E=J(t.b,-q,q)if C(not E,0,B.b,"rcap")then
-if E then
+ai=u.b*h.b
+T=J(q.b,o.b,ad,"rpid")M=H(u.b,-r,r)if G(not M,0,E.b,"rcap")then
+if M then
 d.b=g.b-y.b*2
 else
-d.b=g.b+Z
+d.b=g.b+ai
 end
-s.b=o.b
-elseif H then
-d.b=g.b+af
+q.b=o.b
+elseif I then
+d.b=g.b+T
 else
 d.b=g.b
 end
-W=t.a*h.a
-T=K(s.a,o.a,ag,"ypid")O=J(t.a,-q,q)if C(not O or not L or not E,0,B.a,"ycap")then
-if O then
+X=u.a*h.a
+ac=J(q.a,o.a,aa,"ypid")P=H(u.a,-r,r)if G(not P or not L or not M,0,E.a,"ycap")then
+if P then
 d.a=g.a-y.a*5
 else
-d.a=g.a+W
+d.a=g.a+X
 end
-s.a=o.a
-elseif H then
-d.a=g.a+T
+q.a=o.a
+elseif I then
+d.a=g.a+ac
 else
 d.a=g.a
 end

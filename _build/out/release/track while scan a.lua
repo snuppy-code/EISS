@@ -3,144 +3,144 @@
 -- Workshop: <WorkshopLink>
 
 
-am=false
-ay=true
-L=ipairs
-T=table.remove
-n,t,aI,as=math,input,output,property
-e,c,aW,aV=t.getNumber,aI.setNumber,t.getBool,aI.setBool
-C,b_=as.getNumber,as.getBool
+ak=false
+aB=true
+M=ipairs
+P=table.remove
+n,r,aD,ax=math,input,output,property
+d,b,aX,aY=r.getNumber,aD.setNumber,r.getBool,aD.setBool
+B,aW=ax.getNumber,ax.getBool
 cos,sin=n.cos,n.sin
 pi=n.pi
-z=pi*2
-function g(i,h,f)return{i=i or 0,h=h or 0,f=f or 0}end
-function v(b,l)return g(b.i+l.i,b.h+l.h,b.f+l.f)end
-function S(b,an)return g(b.i*an,b.h*an,b.f*an)end
-function aO(b)return S(b,-1)end
-function E(b,l)return v(b,aO(l))end
-function y(b)return n.sqrt(b.i*b.i+b.h*b.h+b.f*b.f)end
-function ae(b,l)return b.i*l.i+b.h*l.h+b.f*l.f
+A=pi*2
+function f(h,i,g)return{h=h or 0,i=i or 0,g=g or 0}end
+function v(c,l)return f(c.h+l.h,c.i+l.i,c.g+l.g)end
+function Q(c,U)return f(c.h*U,c.i*U,c.g*U)end
+function aM(c)return Q(c,-1)end
+function z(c,l)return v(c,aM(l))end
+function w(c)return n.sqrt(c.h*c.h+c.i*c.i+c.g*c.g)end
+function am(c,l)return c.h*l.h+c.i*l.i+c.g*l.g
 end
-function aS(b,l)return g(b.h*l.f-b.f*l.h,b.f*l.i-b.i*l.f,b.i*l.h-b.h*l.i)end
-function ah(aH,ao,V)aU=aU or 1
-return g(n.sin(aH)*n.cos(ao)*V,n.cos(aH)*n.cos(ao)*V,n.sin(ao)*V)end
-function aJ(b,J,ar,af)return g(ae(J,b),ae(ar,b),ae(af,b))end
-function ab(b,J,ar,af)return v(v(S(J,b.i),S(ar,b.h)),S(af,b.f))end
-ad=C("Max friendlies")aE=C("User number")ax=C("Frequency seed")B=C("Encryption seed")aL,aM=1871759,6393518
-n.randomseed(ax)aN=n.random(aL,aM)x={}n.randomseed(ax)for t=1,ad do
-ac=n.random(-605791,605791)for aX,Y in L(x)do
-while Y==ac do
-ac=n.random(-605791,605791)end
+function aK(c,l)return f(c.i*l.g-c.g*l.i,c.g*l.h-c.h*l.g,c.h*l.i-c.i*l.h)end
+function aq(aH,W,ab)aS=aS or 1
+return f(n.sin(aH)*n.cos(W)*ab,n.cos(aH)*n.cos(W)*ab,n.sin(W)*ab)end
+function aO(c,L,ap,ar)return f(am(L,c),am(ap,c),am(ar,c))end
+function an(c,L,ap,ar)return v(v(Q(L,c.h),Q(ap,c.i)),Q(ar,c.g))end
+aa=B("Max friendlies")at=B("User number")aA=B("Frequency seed")D=B("Encryption seed")aP,aJ=1871759,6393518
+n.randomseed(aA)aQ=n.random(aP,aJ)x={}n.randomseed(aA)for r=1,aa do
+Y=n.random(-605791,605791)for aV,V in M(x)do
+while V==Y do
+Y=n.random(-605791,605791)end
 end
-x[t]=ac
+x[r]=Y
 end
-for k in L(x)do
-x[k]=x[k]+aN
+for k in M(x)do
+x[k]=x[k]+aQ
 end
-q=1
-K=1
-aR=719700
-I=7
-s={}aB=8
-P={}aY={}a={}aA=C("Merge Dist")aK=C("Cull Time")d={}for t=1,14 do
-d[t]={}end
-function at(al)return g(al.h/(3.57*B),al.i/(3.81*B),al.f/(4.19*B))end
-function aF(U)return g(U.h*(3.81*B),U.i*(3.57*B),U.f*(4.19*B))end
-aq=0
+s=1
+N=1
+aN=719700
+H=7
+q={}av=8
+S={}aZ={}a={}aC=B("Merge Dist")aR=B("Cull Time")e={}for r=1,14 do
+e[r]={}end
+function aI(ag)return f(ag.i/(3.57*D),ag.h/(3.81*D),ag.g/(4.19*D))end
+function aG(Z)return f(Z.i*(3.81*D),Z.h*(3.57*D),Z.g*(4.19*D))end
+X=0
 j=0
-p,D=0,0
-function onTick()aq=aq+1
-u=g(e(1),e(2),e(3))av=e(27)==1
-if av and not aT and(#a>0)then
-if a[j%(#a)+1]._.f>0 then
+o,F=0,0
+function onTick()X=X+1
+y=f(d(1),d(2),d(3))aw=d(27)==1
+if aw and not aL and(#a>0)then
+if a[j%(#a)+1]._.g>0 then
 j=j%(#a)+1
 end
 end
-aT=av
-aQ=e(28)==1
-aD,aC,az=e(4),e(5),e(6)aa,ai,aj=cos(aD),cos(aC),cos(az)au,W,ak=sin(aD),sin(aC),sin(az)M=g(ai*aj,-W,ai*ak)O=g(au*ak+aa*W*aj,aa*ai,-au*aj+aa*W*ak)R=aS(M,O)Q=aq%3>0
-if Q then
-q=(q==ad)and 1 or q+1
-q=(q==aE)and((q==ad)and 1 or q+1)or q
-aw=x[q]else
-K=(K==9)and 1 or K+1
-aw=aR+K
+aL=aw
+aU=d(28)==1
+ay,az,aE=d(4),d(5),d(6)ah,ac,al=cos(ay),cos(az),cos(aE)as,aj,af=sin(ay),sin(az),sin(aE)K=f(ac*al,-aj,ac*af)I=f(as*af+ah*aj*al,ah*ac,-as*al+ah*aj*af)R=aK(K,I)T=X%3>0
+if T then
+s=(s==aa)and 1 or s+1
+s=(s==at)and((s==aa)and 1 or s+1)or s
+aF=x[s]else
+N=(N==9)and 1 or N+1
+aF=aN+N
 end
-for t=aB,2,-1 do
-s[t]=s[t-1]end
-if Q then
-s[1]={aG=Q,H=q}else
-s[1]={aG=Q,H=K}end
-if#s==aB then
-if s[I].aG then
-P[s[I].H]={_=aF(g(e(7),e(8),e(9))),ap=aF(g(e(21),e(22),e(23)))}else
-d[4+s[I].H]._=g(e(10),e(11),0)d[4+s[I].H].F=0
-d[4+s[I].H].aP=ay
+for r=av,2,-1 do
+q[r]=q[r-1]end
+if T then
+q[1]={au=T,O=s}else
+q[1]={au=T,O=N}end
+if#q==av then
+if q[H].au then
+S[q[H].O]={_=aG(f(d(7),d(8),d(9))),ad=aG(f(d(21),d(22),d(23)))}else
+e[4+q[H].O]._=f(d(10),d(11),0)e[4+q[H].O].E=0
+e[4+q[H].O].aT=aB
 end
 end
-c(3,aw)c(29,x[aE])Z=at(u)c(4,Z.i)c(5,Z.h)c(6,Z.f)if e(18)>0 then
-d[1].r=ah(e(19)*z,e(20)*z,e(18))d[1].o=ab(d[1].r,M,O,R)d[1]._=v(d[1].o,u)else
-d[1]={r=g(),o=g(),_=g()}end
-d[1].F=e(30)if e(12)>0 then
-d[2].r=ah(e(13)*z,e(14)*z,e(12))d[2].o=ab(d[2].r,M,O,R)d[2]._=v(d[2].o,u)else
-d[2]={r=g(),o=g(),_=g()}end
-d[2].F=e(31)if e(24)>0 then
-d[3].r=ah(e(25)*z+pi,e(26)*z,e(24))d[3].o=ab(d[3].r,M,O,R)d[3]._=v(d[3].o,u)else
-d[3]={r=g(),o=g(),_=g()}end
-d[3].F=e(32)d[4]._=g(e(15),e(16),e(17))if y(d[4]._)>0 then
-d[4].o=E(u,d[4]._)d[4].r=aJ(d[4].o,M,O,R)else
-d[4]={r=g(),o=g(),_=g()}end
-d[4].F=0
-for k,m in L(d)do
-if m._ and m.F and(y(m._)>0)then
-if m.aP then
-m._=v(m._,g(0,0,-9999))m.o=E(u,m._)end
-if(y(m.o)>0)and not(m.F>0)then
-local ag=0
-for A,aZ in L(a)do
-if ag==0 then
-if y(E(a[A]._,m._))<=aA then
-ag=A
-a[A]._=m._
-a[A].N=0
+b(3,aF)b(29,x[at])ai=aI(y)b(4,ai.h)b(5,ai.i)b(6,ai.g)if d(18)>0 then
+e[1].t=aq(d(19)*A,d(20)*A,d(18))e[1].p=an(e[1].t,K,I,R)e[1]._=v(e[1].p,y)else
+e[1]={t=f(),p=f(),_=f()}end
+e[1].E=d(30)if d(12)>0 then
+e[2].t=aq(d(13)*A,d(14)*A,d(12))e[2].p=an(e[2].t,K,I,R)e[2]._=v(e[2].p,y)else
+e[2]={t=f(),p=f(),_=f()}end
+e[2].E=d(31)if d(24)>0 then
+e[3].t=aq(d(25)*A+pi,d(26)*A,d(24))e[3].p=an(e[3].t,K,I,R)e[3]._=v(e[3].p,y)else
+e[3]={t=f(),p=f(),_=f()}end
+e[3].E=d(32)e[4]._=f(d(15),d(16),d(17))if w(e[4]._)>0 then
+e[4].p=z(y,e[4]._)e[4].t=aO(e[4].p,K,I,R)else
+e[4]={t=f(),p=f(),_=f()}end
+e[4].E=0
+for k,m in M(e)do
+if m._ and m.E and(w(m._)>0)then
+if m.aT then
+m._=v(m._,f(0,0,-9999))m.p=z(y,m._)end
+if(w(m.p)>0)and not(m.E>0)then
+local ae=0
+for C,b_ in M(a)do
+if ae==0 then
+if w(z(a[C]._,m._))<=aC then
+ae=C
+a[C]._=m._
+a[C].J=0
 end
 else
-if y(E(a[A]._,m._))<=aA then
-T(a,A)end
+if w(z(a[C]._,m._))<=aC then
+P(a,C)end
 end
 end
-if ag==0 then
-a[#a+1]={_=m._,N=0}end
+if ae==0 then
+a[#a+1]={_=m._,J=0}end
 end
 end
 end
-for k,Y in L(a)do
-G=ay
-a[k].N=a[k].N+1
-if(Y.N>=aK)and not(k==j)then
+for k,V in M(a)do
+G=aB
+a[k].J=a[k].J+1
+if(V.J>=aR)and not(k==j)then
 if G then
-T(a,k)G=am
+P(a,k)G=ak
 if k<j then
 j=j-1
 end
 end
 else
-if a[k]._.f<=-1 and a[k]._.f>=-7999
+if a[k]._.g<=-1 and a[k]._.g>=-7999
 then
-a[k]._.f=5
+a[k]._.g=5
 end
 if G then
-if y(E(u,a[k]._))<=50 then
-T(a,k)G=am
+if w(z(y,a[k]._))<=50 then
+P(a,k)G=ak
 if k<j then
 j=j-1
 end
 end
 end
-for t,J in pairs(P)do
+for r,L in pairs(S)do
 if G then
-if y(E(J._,a[k]._))<=300 then
-T(a,k)G=am
+if w(z(L._,a[k]._))<=300 then
+P(a,k)G=ak
 if k<j then
 j=j-1
 end
@@ -149,24 +149,24 @@ end
 end
 end
 end
-if a[p]then
-c(14,a[p]._.i)c(15,a[p]._.h)c(16,a[p]._.f)end
-if a[p+1]then
-c(17,a[p+1]._.i)c(18,a[p+1]._.h)c(19,a[p+1]._.f)end
-c(26,p)p=p+2
-if p>#a then
-p=1
+if a[o]then
+b(14,a[o]._.h)b(15,a[o]._.i)b(16,a[o]._.g)end
+if a[o+1]then
+b(17,a[o+1]._.h)b(18,a[o+1]._.i)b(19,a[o+1]._.g)end
+b(26,o)o=o+2
+if o>#a then
+o=1
 end
-w=P[D]if w then
-c(20,w._.i)c(21,w._.h)c(22,w._.f)c(23,w.ap.i)c(24,w.ap.h)c(25,w.ap.f)end
-c(28,D)D=D+1
-if D>#P then
-D=1
+u=S[F]if u then
+b(20,u._.h)b(21,u._.i)b(22,u._.g)b(23,u.ad.h)b(24,u.ad.i)b(25,u.ad.g)end
+b(28,F)F=F+1
+if F>#S then
+F=1
 end
-if aQ then
-c(30,0)c(31,0)c(32,0)else
+if aU then
+b(30,0)b(31,0)b(32,0)else
 if a[j]then
-c(30,a[j]._.i)c(31,a[j]._.h)c(32,a[j]._.f)X=at(a[j]._)c(2,X.i)c(12,X.h)c(13,X.f)c(11,a[j].N)else
-c(30,0)c(31,0)c(32,0)c(11,0)end
+b(30,a[j]._.h)b(31,a[j]._.i)b(32,a[j]._.g)ao=aI(a[j]._)b(2,ao.h)b(12,ao.i)b(13,ao.g)b(11,a[j].J)else
+b(30,0)b(31,0)b(32,0)b(11,0)end
 end
-c(7,0)c(8,0)c(9,1)c(10,1)end
+b(7,0)b(8,0)b(9,1)b(10,1)end

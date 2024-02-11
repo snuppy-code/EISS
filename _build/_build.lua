@@ -36,11 +36,6 @@ local _builder = LifeBoatAPI.Tools.Builder:new(rootDirs, outputDir, luaDocsMCPat
 
 if onLBBuildStarted then onLBBuildStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]])) end
 
-if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]])) end
-
-local combinedText, outText, outFile = _builder:buildMicrocontroller([[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]]), params)
-if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]]), outFile, combinedText, outText) end
-
 if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Vamperion Hardpoint Controller A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Vamperion Hardpoint Controller A.lua]])) end
 
 local combinedText, outText, outFile = _builder:buildMicrocontroller([[Vamperion Hardpoint Controller A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Vamperion Hardpoint Controller A.lua]]), params)
@@ -66,6 +61,11 @@ if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.
 local combinedText, outText, outFile = _builder:buildMicrocontroller([[Tactical Situation Display A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua]]), params)
 if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Tactical Situation Display A.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Tactical Situation Display A.lua]]), outFile, combinedText, outText) end
 
+if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]])) end
+
+local combinedText, outText, outFile = _builder:buildMicrocontroller([[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]]), params)
+if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Passive Datalink.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Passive Datalink.lua]]), outFile, combinedText, outText) end
+
 if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[KAI 10A Guidance.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\KAI 10A Guidance.lua]])) end
 
 local combinedText, outText, outFile = _builder:buildMicrocontroller([[KAI 10A Guidance.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\KAI 10A Guidance.lua]]), params)
@@ -75,6 +75,11 @@ if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.
 
 local combinedText, outText, outFile = _builder:buildMicrocontroller([[Hydra AGM90.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Hydra AGM90.lua]]), params)
 if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Hydra AGM90.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Hydra AGM90.lua]]), outFile, combinedText, outText) end
+
+if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Hydra AGM90 Export.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Hydra AGM90 Export.lua]])) end
+
+local combinedText, outText, outFile = _builder:buildMicrocontroller([[Hydra AGM90 Export.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Hydra AGM90 Export.lua]]), params)
+if onLBBuildFileComplete then onLBBuildFileComplete(LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[Hydra AGM90 Export.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\Hydra AGM90 Export.lua]]), outFile, combinedText, outText) end
 
 if onLBBuildFileStarted then onLBBuildFileStarted(_builder, params, LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS]]), [[EVA section 2.lua]], LifeBoatAPI.Tools.Filepath:new([[c:\Users\Squingle\Desktop\!folders\! d-github\EISS\EVA section 2.lua]])) end
 
