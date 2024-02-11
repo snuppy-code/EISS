@@ -1,60 +1,60 @@
---made by judgementalbird on discord
-ae=property
-ad=output
-S=math
-R=S.sin
-T=S.cos
-s=ad.setNumber
-b,ag,aq,ar=S,input,ad,ae
-d,N,aT,aX=ag.getNumber,aq.setNumber,ag.getBool,aq.setBool
-o,aZ=ar.getNumber,ar.getBool
+--by judgementalbird on discord
+am=property
+ae=output
+O=math
+H=O.sin
+T=O.cos
+t=ae.setNumber
+b,al,ag,X=O,input,ae,am
+g,M,aY,aX=al.getNumber,ag.setNumber,al.getBool,ag.setBool
+n,aT=X.getNumber,X.getBool
 abs,cos,sin,acos,asin,tan,atan=b.abs,b.cos,b.sin,b.acos,b.asin,b.tan,b.atan
 pi=b.pi
-at=pi*2
-function g(c,f,e)return{c=c or 0,f=f or 0,e=e or 0}end
-function h(_,m)return g(_.c*m,_.f*m,_.e*m)end
+ab=pi*2
+function f(c,e,d)return{c=c or 0,e=e or 0,d=d or 0}end
+function h(_,o)return f(_.c*o,_.e*o,_.d*o)end
 function az(_)return h(_,-1)end
-function y(_,m)return h(_,1/m)end
-function j(_,a)return g(_.c+a.c,_.f+a.f,_.e+a.e)end
+function y(_,o)return h(_,1/o)end
+function j(_,a)return f(_.c+a.c,_.e+a.e,_.d+a.d)end
 function k(_,a)return j(_,az(a))end
-function t(_)return b.sqrt(_.c*_.c+_.f*_.f+_.e*_.e)end
-function l(_)return h(_,1/t(_))end
-function aL(_,a)return g(_.f*a.e-_.e*a.f,_.e*a.c-_.c*a.e,_.c*a.f-_.f*a.c)end
-function n(_,a)return _.c*a.c+_.f*a.f+_.e*a.e
+function q(_)return b.sqrt(_.c*_.c+_.e*_.e+_.d*_.d)end
+function m(_)return h(_,1/q(_))end
+function aO(_,a)return f(_.e*a.d-_.d*a.e,_.d*a.c-_.c*a.d,_.c*a.e-_.e*a.c)end
+function l(_,a)return _.c*a.c+_.e*a.e+_.d*a.d
 end
-function aV(_,a)return h(l(a),n(_,l(a)))end
-function q(_,a)return k(_,h(l(a),n(_,l(a))))end
-function aU(_,a,aN)return k(_,h(q(_,a),aN or 2))end
-function aY(ap,C,i)local i=i or 1
-return g(b.sin(ap)*b.cos(C)*i,b.cos(ap)*b.cos(C)*i,b.sin(C)*i)end
-function aM(_,F,O,P)return g(n(F,_),n(O,_),n(P,_))end
-function ay(_,F,O,P)return j(j(h(F,_.c),h(O,_.f)),h(P,_.e))end
-function J(c,f,e)return b.max(f,b.min(c,e))end
-function W()s(1,ai)s(2,af)end
-function aJ()s(1,0)s(2,.1)end
-function aD(an,a)if not _ then _={}_[a]={E=0,Q=0}elseif not _[a]then _[a]={E=0,Q=0}end;_[a].Q=an-_[a].E;_[a].E=an;return _[a].Q end
-function p(i,a)if not _ then _={}_[a]={I=g(),v=g()}elseif not _[a]then _[a]={I=g(),v=g()}end;_[a].v=k(i,_[a].I)_[a].I=i;return _[a].v end
-ai=o("trim yaw")af=o("trim pitch")z=o("Nav Constant")r=o("Max Control")aO=not ae.getBool("dumb launch?")A=0
-aC=o("Used freq")function onTick()N(3,aC)aE=g(d(11),d(12),d(13))aW=g(d(14),d(15),d(16))if aO then
-if d(17)==1 then
-if A<10 then
-A=A+1
-W()else
-B=g(d(1),d(3),d(2))Y,V,X=d(4),d(5),d(6)D,H,G=T(Y),T(V),T(X)aa,K,L=R(Y),R(V),R(X)w=g(H*G,-K,H*L)u=g(aa*L+D*K*G,D*H,-aa*G+D*K*L)ah=aL(w,u)aB=d(7)*at
-am=d(8)*at
-aw=d(9)al=d(10)ao=b.sin(aB)*aw
-ax=b.sin(am)*al
-aF=b.cos(am)*al
-aI=(aF^2-ao^2)^.5
-ab=g(ao,aI,ax)aR=t(ab)>0
-if aR then
-ac=j(B,ay(ab,w,u,ah))if t(k(aE,ac))<=35 then
-aJ()else
-U=ac
-M=k(U,B)x=l(M)av=t(M)aK=p(B,"myvel")as=p(U,"tgtvel")Z=p(as,"tgtacc")aS=p(Z,"tgtjer")aQ=k(as,aK)aP=-aD(av,"cv")au=J(av/aP,-70,70)aA=q(Z,x)aH=q(aS,x)aj=j(M,h(aQ,au))b_=q(aj,x)aG=j(j(y(h(aj,z),au^2),y(h(aA,z),2)),y(h(aH,z),6))ak=aM(aG,w,u,ah)N(1,J(-ak.c,-r,r)+ai)N(2,J(-ak.e,-r,r)+af)end
+function aV(_,a)return h(m(a),l(_,m(a)))end
+function p(_,a)return k(_,h(m(a),l(_,m(a))))end
+function aU(_,a,aC)return k(_,h(p(_,a),aC or 2))end
+function aW(ao,P,i)local i=i or 1
+return f(b.sin(ao)*b.cos(P)*i,b.cos(ao)*b.cos(P)*i,b.sin(P)*i)end
+function ay(_,Q,B,R)return f(l(Q,_),l(B,_),l(R,_))end
+function aM(_,Q,B,R)return j(j(h(Q,_.c),h(B,_.e)),h(R,_.d))end
+function A(c,e,d)return b.max(e,b.min(c,d))end
+function ac()t(1,aj)t(2,Y)end
+function aA()t(1,0)t(2,.1)end
+function aw(au,a)if not _ then _={}_[a]={N=0,L=0}elseif not _[a]then _[a]={N=0,L=0}end;_[a].L=au-_[a].N;_[a].N=au;return _[a].L end
+function s(i,a)if not _ then _={}_[a]={z=f(),I=f()}elseif not _[a]then _[a]={z=f(),I=f()}end;_[a].I=k(i,_[a].z)_[a].z=i;return _[a].I end
+aj=n("trim yaw")Y=n("trim pitch")w=n("Nav Constant")r=n("Max Control")aK=not am.getBool("dumb launch?")S=0
+aL=n("Used freq")function onTick()M(3,aL)aD=f(g(4),g(5),g(6))if aK then
+if g(17)==1 then
+if S<10 then
+S=S+1
+ac()else
+J=f(g(1),g(3),g(2))Z,aa,av=g(4),g(5),g(6)u,C,v=T(Z),T(aa),T(av)ar,F,K=H(Z),H(aa),H(av)x=f(C*v,-F,C*K)E=f(ar*K+u*F*v,u*C,-ar*v+u*F*K)at=aO(x,E)aH=g(7)*ab
+an=g(8)*ab
+aJ=g(9)ad=g(10)ap=b.sin(aH)*aJ
+aI=b.sin(an)*ad
+aS=b.cos(an)*ad
+aN=(aS^2-ap^2)^.5
+W=f(ap,aN,aI)aF=q(W)>0
+if aF then
+ak=j(J,aM(W,x,E,at))if q(k(aD,ak))<=35 then
+aA()else
+as=ak
+G=k(as,J)D=m(G)V=q(G)aG=s(J,"myvel")U=s(as,"tgtvel")ai=s(U,"tgtacc")aE=s(ai,"tgtjer")aQ=k(U,aG)aB=-aw(V,"cv")aq=A(V/aB,-70,70)aR=p(ai,D)ax=p(aE,D)ah=j(G,h(aQ,aq))aZ=p(ah,D)aP=j(j(y(h(ah,w),aq^2),y(h(aR,w),2)),y(h(ax,w),6))af=ay(aP,x,E,at)M(1,A(-af.c,-r,r)+aj)M(2,A(-af.d,-r,r)+Y)end
 end
 end
 end
 else
-W()end
+ac()end
 end

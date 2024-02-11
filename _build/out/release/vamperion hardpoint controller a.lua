@@ -7,33 +7,33 @@
 --      By Nameous Changey
 -- Minimized Size: 509 (812 with comment) chars
 
-u=ipairs
-o=true
-t=false
+s=ipairs
+l=true
+j=false
 q=output
-n=input
-r,l,m,j=n.getBool,q.setBool,n.getNumber,q.setNumber
-g=1
+k=input
+u,i,t,r=k.getBool,q.setBool,k.getNumber,q.setNumber
 f=1
-e={_={[1]=1,[2]=2,[3]=3,[4]=6,[5]=7,[6]=8},a={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6}}b={_={[1]=4,[2]=5},a={[1]=0,[2]=4,[3]=5}}p,k=t,t
-function onTick()i=r(1)if i and not p then
-g=g%(#e._+1)+1
+g=1
+e={_={[1]=1,[2]=2,[3]=3,[4]=6,[5]=7,[6]=8},c={[1]=0,[2]=1,[3]=8,[4]=2,[5]=7,[6]=3,[7]=6}}h={_={[1]=4,[2]=5},c={[1]=0,[2]=4,[3]=5}}m,p=j,j
+function onTick()o=u(1)if o and not m then
+f=f%(#e._+1)+1
 end
-p=i
-l(e.a[g],o)d=0
-for v,c in u(e._)do
-if not(m(c)==0)then
+m=o
+i(e.c[f],l)d=0
+for v,b in s(e._)do
+if not(t(b)==0)then
 d=d+1
 end
 end
-j(1,d)s=r(2)if s and not k then
-f=f%(#b._+1)+1
+r(1,d)n=u(2)if n and not p then
+g=g%(#h._+1)+1
 end
-k=s
-l(b.a[f],o)h=0
-for v,c in u(b._)do
-if not(m(c)==0)then
-h=h+1
+p=n
+i(h.c[g],l)a=0
+for v,b in s(h._)do
+if not(t(b)==0)then
+a=a+1
 end
 end
-j(2,h)end
+r(2,a)end

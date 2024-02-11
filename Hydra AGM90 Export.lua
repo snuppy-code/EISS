@@ -89,8 +89,8 @@ function onTick()
 	--debug.log("ontick called")
 	--link up with host
 	osn(3,ourfreq)
-	hostpos = vec(ign(11),ign(12),ign(13))
-	hostsel = vec(ign(14),ign(15),ign(16))
+	hostpos = vec(ign(4),ign(5),ign(6))
+	--hostsel = vec(ign(14),ign(15),ign(16))
 	--debug.log("hostpos: "..hostpos.x..", "..hostpos.y..", "..hostpos.z.."\nhostsel: "..hostsel.x..", "..hostsel.y..", "..hostsel.z)
 
 	if notdumblaunch then

@@ -7,95 +7,95 @@
 --      By Nameous Changey
 -- Minimized Size: 2841 (3146 with comment) chars
 
-Q=property
-aa=output
-ao=input
-u=screen
-ac=u.setColor
-g=ao.getNumber
-W=aa.setNumber
-bc=ao.getBool
-aR=aa.setBool
-aQ=Q.getNumber
-aV=Q.getBool
-aZ=Q.getText
+I=property
+ag=output
+ah=input
+x=screen
+ak=x.setColor
+f=ah.getNumber
+N=ag.setNumber
+aZ=ah.getBool
+aW=ag.setBool
+bc=I.getNumber
+aR=I.getBool
+ba=I.getText
 b=math
 pi=b.pi
-P=pi*2
+H=pi*2
 sin=b.sin
 cos=b.cos
 tan=b.tan
 asin=b.asin
 acos=b.acos
 atan=b.atan
-function f(t,T,aE,aC)return{a=t
-or 0,d=T
-or 0,c=aE
-or 0,i=aC
+function g(u,D,aG,ay)return{a=u
+or 0,c=D
+or 0,d=aG
+or 0,i=ay
 or 0}end
-function z(_,e)return f(_.a+e.a,_.d+e.d,_.c+e.c)end
-function ba(_,e)return f(_.a*e.a,_.d*e.d,_.c*e.c)end
-function l(_,v)return f(_.a*v,_.d*v,_.c*v)end
-function ab(_)return l(_,-1)end
-function I(_,e)return z(_,ab(e))end
-function s(_)return b.sqrt(_.a*_.a+_.d*_.d+_.c*_.c)end
-function au(_,v)return l(_,1/v)end
-function aY(_)return au(_,s(_))end
-function J(_,e)return _.a*e.a+_.d*e.d+_.c*e.c
+function z(_,e)return g(_.a+e.a,_.c+e.c,_.d+e.d)end
+function bd(_,e)return g(_.a*e.a,_.c*e.c,_.d*e.d)end
+function n(_,v)return g(_.a*v,_.c*v,_.d*v)end
+function ap(_)return n(_,-1)end
+function R(_,e)return z(_,ap(e))end
+function s(_)return b.sqrt(_.a*_.a+_.c*_.c+_.d*_.d)end
+function aM(_,v)return n(_,1/v)end
+function be(_)return aM(_,s(_))end
+function U(_,e)return _.a*e.a+_.c*e.c+_.d*e.d
 end
-function aI(_,e)return f(_.d*e.c-_.c*e.d,_.c*e.a-_.a*e.c,_.a*e.d-_.d*e.a)end
-function bb(x,G,w)local w=w
+function ar(_,e)return g(_.c*e.d-_.d*e.c,_.d*e.a-_.a*e.d,_.a*e.c-_.c*e.a)end
+function aT(t,O,w)local w=w
 or 1
-return f(b.sin(x)*b.cos(G)*w,b.cos(x)*b.cos(G)*w,b.sin(G)*w)end
-function aP(_,r)if not m then
-m={}m[r]={F=f(),L=f()}elseif not m[r]then
-m[r]={F=f(),L=f()}end
-m[r].L=I(_,m[r].F)m[r].F=_
-return m[r].L
+return g(b.sin(t)*b.cos(O)*w,b.cos(t)*b.cos(O)*w,b.sin(O)*w)end
+function at(_,p)if not m then
+m={}m[p]={F=g(),C=g()}elseif not m[p]then
+m[p]={F=g(),C=g()}end
+m[p].C=R(_,m[p].F)m[p].F=_
+return m[p].C
 end
-function aH(_,K,R,O)return f(J(K,_),J(R,_),J(O,_))end
-function aX(_,K,R,O)return z(z(l(K,_.a),l(R,_.d)),l(O,_.c))end
-function aA(_)return s(_),b.atan(_.a,_.d),b.asin(_.c/s(_))end
-function N(af)local b={}for k=1,3 do
-b[k]={}for o=1,3 do
-b[k][o]=af and af[k*3-3+o]or 0
-end
-end
-return b
-end
-function y(aM,q)local b={}for k=1,3 do
-b[k]={}for o=1,3 do
-b[k][o]=0
-for Y=1,3 do
-b[k][o]=b[k][o]+aM[k][Y]*q[Y][o]end
+function au(_,M,T,S)return g(U(M,_),U(T,_),U(S,_))end
+function b_(_,M,T,S)return z(z(n(M,_.a),n(T,_.c)),n(S,_.d))end
+function av(_)return s(_),b.atan(_.a,_.c),b.asin(_.d/s(_))end
+function K(aq)local b={}for j=1,3 do
+b[j]={}for r=1,3 do
+b[j][r]=aq and aq[j*3-3+r]or 0
 end
 end
 return b
 end
-function A(j,i)local a={}a.a=i.a*j[1][1]+i.d*j[2][1]+i.c*j[3][1]a.d=i.a*j[1][2]+i.d*j[2][2]+i.c*j[3][2]a.c=i.a*j[1][3]+i.d*j[2][3]+i.c*j[3][3]return a end
-function ad(t,min,max)return b.max(min,b.min(t,max))end
-function as(t,T,q)return t*(1-q)+T*q end
-aF=f(0,1.5,-1)q=4
-aS,bd=0,0
-aU,H,p,aW=.5,.88,0,0
-function onTick()ae,X,ak=g(4),g(5),g(6)U,C,M=cos(ae),cos(X),cos(ak)al,S,B=sin(ae),sin(X),sin(ak)am=f(C*M,-S,C*B)ag=f(al*B+U*S*M,U*C,-al*M+U*S*B)aG=aI(am,ag)aJ=ab(ag)E=l(f(g(10),g(12),g(11)),P/60)ai=aP(E,"angular_acc")Z=l(E,q)av=z(Z,l(ai,.5*q^2))h=s(ai)>.001 and av or(s(E)>.001 and Z or f(0,0,0))an=N({1,0,0,0,cos(h.a),-sin(h.a),0,sin(h.a),cos(h.a)})ap=N({cos(h.d),0,sin(h.d),0,1,0,-sin(h.d),0,cos(h.d)})aq=N({cos(h.c),-sin(h.c),0,sin(h.c),cos(h.c),0,0,0,1})aD=y(y(aq,ap),an)b_=y(y(an,ap),aq)V=aD
-aO=A(V,am)aN=A(V,aG)aK=A(V,aJ)az=f(g(1),g(3),g(2))ar=f(g(13),g(14),g(15))ah=I(ar,az)aL=I(aH(ah,aO,aN,aK),aF)be,aB,ax=aA(aL)aj=g(16)==2
-aT=g(17)>0
-ay=g(20)>0
-if aj then
-D=g(18)else
-D=0
+function y(aN,o)local b={}for j=1,3 do
+b[j]={}for r=1,3 do
+b[j][r]=0
+for Z=1,3 do
+b[j][r]=b[j][r]+aN[j][Z]*o[Z][r]end
 end
-if ay then
-H=ad(H+D*.004,.3,1)n=(atan(as(tan(.0125),tan(1.1),H))-.0125)/(1.1-.0125)else
-at=b.min(g(19),99)aw=s(ah)p=ad(p+D*.001,-.1,.3)n=(.99/(1+.4*2.7^(-.014*aw)))if(p+n)>1 then
-p=1-n
-elseif(p+n)<0 then
-p=-n
 end
-n=n+p-at/4000
+return b
 end
-W(1,-aB/P)W(2,ax/P*2.942+.7355)W(3,n)end
-function onDraw()i,x=u.getWidth(),u.getHeight()if aj then
-ac(1,1,1,200)u.drawRectF(2,x-6,12,5)ac(85,160,35)u.drawText(2,x-6,"SOI")end
+function Q(k,i)local a={}a.a=i.a*k[1][1]+i.c*k[2][1]+i.d*k[3][1]a.c=i.a*k[1][2]+i.c*k[2][2]+i.d*k[3][2]a.d=i.a*k[1][3]+i.c*k[2][3]+i.d*k[3][3]return a end
+function an(u,min,max)return b.max(min,b.min(u,max))end
+function aL(u,D,o)return u*(1-o)+D*o end
+as=g(0,1.5,-1)o=4
+aX,aU=0,0
+aS,W,q,bb=.5,.88,0,0
+function onTick()ad,ai,aj=f(4),f(5),f(6)A,G,L=cos(ad),cos(ai),cos(aj)ac,E,B=sin(ad),sin(ai),sin(aj)af=g(G*L,-E,G*B)aa=g(ac*B+A*E*L,A*G,-ac*L+A*E*B)aA=ar(af,aa)aB=ap(aa)V=n(g(f(10),f(12),f(11)),H/60)Y=at(V,"angular_acc")ao=n(V,o)aP=z(ao,n(Y,.5*o^2))h=s(Y)>.001 and aP or(s(V)>.001 and ao or g(0,0,0))ae=K({1,0,0,0,cos(h.a),-sin(h.a),0,sin(h.a),cos(h.a)})al=K({cos(h.c),0,sin(h.c),0,1,0,-sin(h.c),0,cos(h.c)})ab=K({cos(h.d),-sin(h.d),0,sin(h.d),cos(h.d),0,0,0,1})ax=y(y(ab,al),ae)aQ=y(y(ae,al),ab)P=ax
+aF=Q(P,af)az=Q(P,aA)aO=Q(P,aB)aI=g(f(1),f(3),f(2))aw=g(f(13),f(14),f(15))am=R(aw,aI)aC=R(au(am,aF,az,aO),as)aV,aH,aE=av(aC)X=f(16)==2
+aY=f(17)>0
+aJ=f(20)>0
+if X then
+J=f(18)else
+J=0
+end
+if aJ then
+W=an(W+J*.004,.3,1)l=(atan(aL(tan(.0125),tan(1.1),W))-.0125)/(1.1-.0125)else
+aK=b.min(f(19),99)aD=s(am)q=an(q+J*.001,-.1,.3)l=(.99/(1+.4*2.7^(-.014*aD)))if(q+l)>1 then
+q=1-l
+elseif(q+l)<0 then
+q=-l
+end
+l=l+q-aK/4000
+end
+N(1,-aH/H)N(2,aE/H*2.942+.7355)N(3,l)end
+function onDraw()i,t=x.getWidth(),x.getHeight()if X then
+ak(1,1,1,200)x.drawRectF(2,t-6,12,5)ak(85,160,35)x.drawText(2,t-6,"SOI")end
 end

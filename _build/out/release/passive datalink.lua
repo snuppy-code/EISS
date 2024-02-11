@@ -7,18 +7,18 @@
 --      By Nameous Changey
 -- Minimized Size: 566 (869 with comment) chars
 
-_=nil
-a,i,b,d=math,input.getNumber,output.setNumber,property.getNumber
-p=d("Max friendlies")s=d("User number")j=d("Frequency seed")m=d("Encryption seed")q,n=1871759,6393518
-c={}a.randomseed(j)t=a.random(q,n)a.randomseed(j)for u=1,p do
-k=a.random(-605791,605791)for x,r in ipairs(c)do
-while r==k do
-k=a.random(-605791,605791)end
+a=nil
+_,h,e,c=math,input.getNumber,output.setNumber,property.getNumber
+q=c("Max friendlies")v=c("User number")i=c("Frequency seed")m=c("Encryption seed")p,n=1871759,6393518
+f={}_.randomseed(i)s=_.random(p,n)_.randomseed(i)for r=1,q do
+k=_.random(-605791,605791)for x,u in ipairs(f)do
+while u==k do
+k=_.random(-605791,605791)end
 end
-c[u]=k
+f[r]=k
 end
-v=c[s]+t
-c,p,j,q,n=_,_,_,_,_
-function w(h)return o(h.f/(3.57*m),h.e/(3.81*m),h.g/(4.19*m))end
-function o(e,f,g)return{e=e or 0,f=f or 0,g=g or 0}end
-function onTick()b(4,v)l=w(o(i(1),i(2),i(3)))b(1,l.e)b(2,l.f)b(3,l.g)end
+t=f[v]+s
+f,q,i,p,n=a,a,a,a,a
+function w(j)return o(j.g/(3.57*m),j.b/(3.81*m),j.d/(4.19*m))end
+function o(b,g,d)return{b=b or 0,g=g or 0,d=d or 0}end
+function onTick()e(4,t)l=w(o(h(1),h(2),h(3)))e(1,l.b)e(2,l.g)e(3,l.d)end
