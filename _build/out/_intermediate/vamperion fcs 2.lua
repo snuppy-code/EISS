@@ -127,36 +127,41 @@ function onTick()
 	manaxes = {pitch=ign(2), roll=ign(1), yaw=ign(3)}--yaw=0}
 	angspdaxes = {pitch=-ign(4), roll=-ign(5), yaw=ign(6)}
 
+	speed = ign(7)
 	group1missiles = ign(8)
 	group2missiles = ign(9)
 
+	--this is worrying code.......
 	gains.pitch = 0
 	gains.pitch = pitchgain(group1missiles)+ign(13)*0.3--missile gain compensating and mseld gain adding
 	gains.roll = unloadedgains.roll + (group1missiles*0.34 + ign(13)*0.3)
-	
-	--gains = {
-	--	pitch=ign(10),
-	--	roll=ign(11),
-	--	yaw=ign(12)
-	--}
 
-	--adjust trims with our gain
-	trims = {
+	if speed < 89 then
+		gains.pitch = gains.pitch * 4
+	elseif (speed >= 89) and (speed <= 250) then
+		gains.pitch = gains.pitch * (3.50571465e-06*speed^3 - 1.94251309e-03*speed^2 + 0.322519926*speed - 12.5915429)
+	end
+
+	--make trims which we will actually use, based on unloaded trims and the configured gain
+	local trims = {
 		pitch=unloadedtrims.pitch*gains.pitch,
 		roll=unloadedtrims.roll*gains.roll,
 		yaw=unloadedtrims.yaw*gains.yaw}
-	--add group 1 yaw and pitch counter trim
+	
+	--add yaw and pitch counter trim for group 1 of missils
 	if group1trims.yaw[group1missiles] then
 		trims.yaw = trims.yaw + group1trims.yaw[group1missiles]*gains.yaw
 	end
 	if group1trims.pitch[group1missiles] then
 		trims.pitch = trims.pitch + group1trims.pitch[group1missiles]*gains.pitch
 	end
-	--add group 2 yaw counter trim
+	
+	--add yaw counter trim for group 2 of missiles
 	if group2trims[group2missiles] then
 		trims.yaw = trims.yaw + group2trims[group2missiles]*gains.yaw
 	end
-
+	
+	--integral of angular speed
 	sumangspdaxes = addAxes(sumangspdaxes,angspdaxes)
 
 	--pitch

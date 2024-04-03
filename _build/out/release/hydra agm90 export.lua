@@ -1,60 +1,68 @@
---by judgementalbird on discord
-am=property
+-- Author: 
+-- GitHub: <GithubLink>
+-- Workshop: <WorkshopLink>
+--
+-- Developed & Minimized using LifeBoatAPI - Stormworks Lua plugin for VSCode
+-- https://code.visualstudio.com/download (search "Stormworks Lua with LifeboatAPI" extension)
+--      By Nameous Changey
+-- Minimized Size: 2346 (2651 with comment) chars
+
+al=property
 ae=output
-O=math
-H=O.sin
-T=O.cos
-t=ae.setNumber
-b,al,ag,X=O,input,ae,am
-g,M,aY,aX=al.getNumber,ag.setNumber,al.getBool,ag.setBool
-n,aT=X.getNumber,X.getBool
+F=math
+B=F.sin
+O=F.cos
+r=ae.setNumber
+b,av,ac,ag=F,input,ae,al
+f,J,aT,aV=av.getNumber,ac.setNumber,av.getBool,ac.setBool
+o,aY=ag.getNumber,ag.getBool
 abs,cos,sin,acos,asin,tan,atan=b.abs,b.cos,b.sin,b.acos,b.asin,b.tan,b.atan
 pi=b.pi
-ab=pi*2
-function f(c,e,d)return{c=c or 0,e=e or 0,d=d or 0}end
-function h(_,o)return f(_.c*o,_.e*o,_.d*o)end
-function az(_)return h(_,-1)end
-function y(_,o)return h(_,1/o)end
-function j(_,a)return f(_.c+a.c,_.e+a.e,_.d+a.d)end
-function k(_,a)return j(_,az(a))end
-function q(_)return b.sqrt(_.c*_.c+_.e*_.e+_.d*_.d)end
-function m(_)return h(_,1/q(_))end
-function aO(_,a)return f(_.e*a.d-_.d*a.e,_.d*a.c-_.c*a.d,_.c*a.e-_.e*a.c)end
-function l(_,a)return _.c*a.c+_.e*a.e+_.d*a.d
+Y=pi*2
+function g(d,e,c)return{d=d or 0,e=e or 0,c=c or 0}end
+function h(_,n)return g(_.d*n,_.e*n,_.c*n)end
+function aF(_)return h(_,-1)end
+function G(_,n)return h(_,1/n)end
+function j(_,a)return g(_.d+a.d,_.e+a.e,_.c+a.c)end
+function k(_,a)return j(_,aF(a))end
+function s(_)return b.sqrt(_.d*_.d+_.e*_.e+_.c*_.c)end
+function m(_)return h(_,1/s(_))end
+function aE(_,a)return g(_.e*a.c-_.c*a.e,_.c*a.d-_.d*a.c,_.d*a.e-_.e*a.d)end
+function l(_,a)return _.d*a.d+_.e*a.e+_.c*a.c
 end
-function aV(_,a)return h(m(a),l(_,m(a)))end
+function aW(_,a)return h(m(a),l(_,m(a)))end
 function p(_,a)return k(_,h(m(a),l(_,m(a))))end
-function aU(_,a,aC)return k(_,h(p(_,a),aC or 2))end
-function aW(ao,P,i)local i=i or 1
-return f(b.sin(ao)*b.cos(P)*i,b.cos(ao)*b.cos(P)*i,b.sin(P)*i)end
-function ay(_,Q,B,R)return f(l(Q,_),l(B,_),l(R,_))end
-function aM(_,Q,B,R)return j(j(h(Q,_.c),h(B,_.e)),h(R,_.d))end
-function A(c,e,d)return b.max(e,b.min(c,d))end
-function ac()t(1,aj)t(2,Y)end
-function aA()t(1,0)t(2,.1)end
-function aw(au,a)if not _ then _={}_[a]={N=0,L=0}elseif not _[a]then _[a]={N=0,L=0}end;_[a].L=au-_[a].N;_[a].N=au;return _[a].L end
-function s(i,a)if not _ then _={}_[a]={z=f(),I=f()}elseif not _[a]then _[a]={z=f(),I=f()}end;_[a].I=k(i,_[a].z)_[a].z=i;return _[a].I end
-aj=n("trim yaw")Y=n("trim pitch")w=n("Nav Constant")r=n("Max Control")aK=not am.getBool("dumb launch?")S=0
-aL=n("Used freq")function onTick()M(3,aL)aD=f(g(4),g(5),g(6))if aK then
-if g(17)==1 then
+function aU(_,a,az)return k(_,h(p(_,a),az or 2))end
+function aX(W,L,i)local i=i or 1
+return g(b.sin(W)*b.cos(L)*i,b.cos(W)*b.cos(L)*i,b.sin(L)*i)end
+function aA(_,D,M,w)return g(l(D,_),l(M,_),l(w,_))end
+function aw(_,D,M,w)return j(j(h(D,_.d),h(M,_.e)),h(w,_.c))end
+function E(d,e,c)return b.max(e,b.min(d,c))end
+function an()r(1,ao)r(2,ak)end
+function ax()r(1,0)r(2,.1)end
+function ay(aq,a)if not _ then _={}_[a]={R=0,I=0}elseif not _[a]then _[a]={R=0,I=0}end;_[a].I=aq-_[a].R;_[a].R=aq;return _[a].I end
+function t(i,a)if not _ then _={}_[a]={u=g(),Q=g()}elseif not _[a]then _[a]={u=g(),Q=g()}end;_[a].Q=k(i,_[a].u)_[a].u=i;return _[a].Q end
+ao=o("trim yaw")ak=o("trim pitch")P=o("Nav Constant")q=o("Max Control")aK=not al.getBool("dumb launch?")S=0
+aL=o("Used freq")function onTick()J(3,aL)aB=g(f(4),f(5),f(6))if aK then
+if f(17)==1 then
 if S<10 then
 S=S+1
-ac()else
-J=f(g(1),g(3),g(2))Z,aa,av=g(4),g(5),g(6)u,C,v=T(Z),T(aa),T(av)ar,F,K=H(Z),H(aa),H(av)x=f(C*v,-F,C*K)E=f(ar*K+u*F*v,u*C,-ar*v+u*F*K)at=aO(x,E)aH=g(7)*ab
-an=g(8)*ab
-aJ=g(9)ad=g(10)ap=b.sin(aH)*aJ
-aI=b.sin(an)*ad
-aS=b.cos(an)*ad
-aN=(aS^2-ap^2)^.5
-W=f(ap,aN,aI)aF=q(W)>0
-if aF then
-ak=j(J,aM(W,x,E,at))if q(k(aD,ak))<=35 then
-aA()else
-as=ak
-G=k(as,J)D=m(G)V=q(G)aG=s(J,"myvel")U=s(as,"tgtvel")ai=s(U,"tgtacc")aE=s(ai,"tgtjer")aQ=k(U,aG)aB=-aw(V,"cv")aq=A(V/aB,-70,70)aR=p(ai,D)ax=p(aE,D)ah=j(G,h(aQ,aq))aZ=p(ah,D)aP=j(j(y(h(ah,w),aq^2),y(h(aR,w),2)),y(h(ax,w),6))af=ay(aP,x,E,at)M(1,A(-af.c,-r,r)+aj)M(2,A(-af.d,-r,r)+Y)end
+an()else
+z=g(f(1),f(3),f(2))ai,as,aj=f(4),f(5),f(6)y,N,K=O(ai),O(as),O(aj)V,C,v=B(ai),B(as),B(aj)A=g(N*K,-C,N*v)x=g(V*v+y*C*K,y*N,-V*K+y*C*v)am=aE(A,x)aD=f(7)*Y
+au=f(8)*Y
+aC=f(9)ah=f(10)af=b.sin(aD)*aC
+aJ=b.sin(au)*ah
+aI=b.cos(au)*ah
+aP=(aI^2-af^2)^.5
+ab=g(af,aP,aJ)aG=s(ab)>0
+if aG then
+ar=j(z,aw(ab,A,x,am))if s(k(aB,ar))<=35 then
+ax()else
+X=ar
+T=k(X,z)H=m(T)ap=s(T)aO=t(z,"myvel")at=t(X,"tgtvel")aa=t(at,"tgtacc")aR=t(aa,"tgtjer")aM=k(at,aO)aN=-ay(ap,"cv")U=E(ap/aN,-70,70)aQ=p(aa,H)aS=p(aR,H)ad=j(T,h(aM,U))aZ=p(ad,H)aH=j(j(G(h(ad,P),U^2),G(h(aQ,P),2)),G(h(aS,P),6))Z=aA(aH,A,x,am)J(1,E(-Z.d,-q,q)+ao)J(2,E(-Z.c,-q,q)+ak)end
 end
 end
 end
 else
-ac()end
+an()end
 end

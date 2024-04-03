@@ -8,17 +8,17 @@
 -- Minimized Size: 566 (869 with comment) chars
 
 a=nil
-_,h,e,c=math,input.getNumber,output.setNumber,property.getNumber
-q=c("Max friendlies")v=c("User number")i=c("Frequency seed")m=c("Encryption seed")p,n=1871759,6393518
-f={}_.randomseed(i)s=_.random(p,n)_.randomseed(i)for r=1,q do
-k=_.random(-605791,605791)for x,u in ipairs(f)do
-while u==k do
-k=_.random(-605791,605791)end
+_,i,c,g=math,input.getNumber,output.setNumber,property.getNumber
+n=g("Max friendlies")s=g("User number")k=g("Frequency seed")h=g("Encryption seed")p,q=1871759,6393518
+f={}_.randomseed(k)t=_.random(p,q)_.randomseed(k)for w=1,n do
+l=_.random(-605791,605791)for x,v in ipairs(f)do
+while v==l do
+l=_.random(-605791,605791)end
 end
-f[r]=k
+f[w]=l
 end
-t=f[v]+s
-f,q,i,p,n=a,a,a,a,a
-function w(j)return o(j.g/(3.57*m),j.b/(3.81*m),j.d/(4.19*m))end
-function o(b,g,d)return{b=b or 0,g=g or 0,d=d or 0}end
-function onTick()e(4,t)l=w(o(h(1),h(2),h(3)))e(1,l.b)e(2,l.g)e(3,l.d)end
+u=f[s]+t
+f,n,k,p,q=a,a,a,a,a
+function r(j)return o(j.b/(3.57*h),j.e/(3.81*h),j.d/(4.19*h))end
+function o(e,b,d)return{e=e or 0,b=b or 0,d=d or 0}end
+function onTick()c(4,u)m=r(o(i(1),i(2),i(3)))c(1,m.e)c(2,m.b)c(3,m.d)end

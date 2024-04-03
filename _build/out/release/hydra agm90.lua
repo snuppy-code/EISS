@@ -7,74 +7,74 @@
 --      By Nameous Changey
 -- Minimized Size: 2777 (3082 with comment) chars
 
-n=nil
-aj=property
-an=output
-z=math
-K=z.sin
-A=z.cos
-w=an.setNumber
-b,s,ad,aC=z,input,an,aj
-e,T,bm,bl=s.getNumber,ad.setNumber,s.getBool,ad.setBool
-i,bg=aC.getNumber,aC.getBool
+m=nil
+am=property
+au=output
+T=math
+Q=T.sin
+I=T.cos
+v=au.setNumber
+b,r,ak,ar=T,input,au,am
+e,J,bf,bl=r.getNumber,ak.setNumber,r.getBool,ak.setBool
+i,bk=ar.getNumber,ar.getBool
 abs,cos,sin,acos,asin,tan,atan=b.abs,b.cos,b.sin,b.acos,b.asin,b.tan,b.atan
 pi=b.pi
-ar=pi*2
+aE=pi*2
 function g(c,f,d)return{c=c or 0,f=f or 0,d=d or 0}end
-function h(_,m)return g(_.c*m,_.f*m,_.d*m)end
-function aZ(_)return h(_,-1)end
-function C(_,m)return h(_,1/m)end
+function h(_,n)return g(_.c*n,_.f*n,_.d*n)end
+function aH(_)return h(_,-1)end
+function L(_,n)return h(_,1/n)end
 function k(_,a)return g(_.c+a.c,_.f+a.f,_.d+a.d)end
-function l(_,a)return k(_,aZ(a))end
+function l(_,a)return k(_,aH(a))end
 function q(_)return b.sqrt(_.c*_.c+_.f*_.f+_.d*_.d)end
-function o(_)return h(_,1/q(_))end
-function aG(_,a)return g(_.f*a.d-_.d*a.f,_.d*a.c-_.c*a.d,_.c*a.f-_.f*a.c)end
-function p(_,a)return _.c*a.c+_.f*a.f+_.d*a.d
+function p(_)return h(_,1/q(_))end
+function aW(_,a)return g(_.f*a.d-_.d*a.f,_.d*a.c-_.c*a.d,_.c*a.f-_.f*a.c)end
+function o(_,a)return _.c*a.c+_.f*a.f+_.d*a.d
 end
-function bi(_,a)return h(o(a),p(_,o(a)))end
-function t(_,a)return l(_,h(o(a),p(_,o(a))))end
-function bh(_,a,bb)return l(_,h(t(_,a),bb or 2))end
-function bn(aw,Z,j)local j=j or 1
-return g(b.sin(aw)*b.cos(Z)*j,b.cos(aw)*b.cos(Z)*j,b.sin(Z)*j)end
-function aJ(_,G,J,R)return g(p(G,_),p(J,_),p(R,_))end
-function aU(_,G,J,R)return k(k(h(G,_.c),h(J,_.f)),h(R,_.d))end
-function I(c,f,d)return b.max(f,b.min(c,d))end
-function ah()w(1,aB)w(2,ae)end
-function aN()w(1,0)w(2,.1)end
-function aH(ak,a)if not _ then _={}_[a]={U=0,D=0}elseif not _[a]then _[a]={U=0,D=0}end;_[a].D=ak-_[a].U;_[a].U=ak;return _[a].D end
-function r(j,a)if not _ then _={}_[a]={S=g(),W=g()}elseif not _[a]then _[a]={S=g(),W=g()}end;_[a].W=l(j,_[a].S)_[a].S=j;return _[a].W end
-aB=i("trim yaw")ae=i("trim pitch")N=i("Nav Constant")v=i("Max Control")aI=not aj.getBool("dumb launch?")P=0
-ac=i("Max friendlies")aY=i("Host user number")aa=i("Frequency seed")L=i("Encryption seed")ap,ag=1871759,6393518
-u={}b.randomseed(aa)bd=b.random(ap,ag)b.randomseed(aa)for s=1,ac do
-X=b.random(-605791,605791)for bk,aO in ipairs(u)do
-while aO==X do
-X=b.random(-605791,605791)end
+function bh(_,a)return h(p(a),o(_,p(a)))end
+function t(_,a)return l(_,h(p(a),o(_,p(a))))end
+function bn(_,a,aJ)return l(_,h(t(_,a),aJ or 2))end
+function bm(az,N,j)local j=j or 1
+return g(b.sin(az)*b.cos(N)*j,b.cos(az)*b.cos(N)*j,b.sin(N)*j)end
+function aO(_,C,G,A)return g(o(C,_),o(G,_),o(A,_))end
+function aK(_,C,G,A)return k(k(h(C,_.c),h(G,_.f)),h(A,_.d))end
+function X(c,f,d)return b.max(f,b.min(c,d))end
+function ay()v(1,an)v(2,aF)end
+function aU()v(1,0)v(2,.1)end
+function aV(ap,a)if not _ then _={}_[a]={P=0,z=0}elseif not _[a]then _[a]={P=0,z=0}end;_[a].z=ap-_[a].P;_[a].P=ap;return _[a].z end
+function s(j,a)if not _ then _={}_[a]={B=g(),Y=g()}elseif not _[a]then _[a]={B=g(),Y=g()}end;_[a].Y=l(j,_[a].B)_[a].B=j;return _[a].Y end
+an=i("trim yaw")aF=i("trim pitch")aa=i("Nav Constant")w=i("Max Control")aS=not am.getBool("dumb launch?")R=0
+av=i("Max friendlies")aI=i("Host user number")M=i("Frequency seed")U=i("Encryption seed")ax,aj=1871759,6393518
+u={}b.randomseed(M)aN=b.random(ax,aj)b.randomseed(M)for r=1,av do
+O=b.random(-605791,605791)for bj,aM in ipairs(u)do
+while aM==O do
+O=b.random(-605791,605791)end
 end
-u[s]=X
+u[r]=O
 end
-aP=u[aY]+bd
-u,ac,aa,ap,ag=n,n,n,n,n
-function av(F)return g(F.f*(3.81*L),F.c*(3.57*L),F.d*(4.19*L))end
-function onTick()T(3,aP)bc=av(g(e(11),e(12),e(13)))bj=av(g(e(14),e(15),e(16)))if aI then
+aL=u[aI]+aN
+u,av,M,ax,aj=m,m,m,m,m
+function aD(V)return g(V.f*(3.81*U),V.c*(3.57*U),V.d*(4.19*U))end
+function onTick()J(3,aL)aQ=aD(g(e(11),e(12),e(13)))bg=aD(g(e(14),e(15),e(16)))if aS then
 if e(17)==1 then
-if P<10 then
-P=P+1
-ah()else
-x=g(e(1),e(3),e(2))ay,aA,aE=e(4),e(5),e(6)Q,O,H=A(ay),A(aA),A(aE)af,B,E=K(ay),K(aA),K(aE)y=g(O*H,-B,O*E)Y=g(af*E+Q*B*H,Q*O,-af*H+Q*B*E)ax=aG(y,Y)b_=e(7)*ar
-as=e(8)*ar
-ba=e(9)au=e(10)ai=b.sin(b_)*ba
-aM=b.sin(as)*au
-be=b.cos(as)*au
-aS=(be^2-ai^2)^.5
-aD=g(ai,aS,aM)aL=q(aD)>0
-if aL then
-aq=k(x,aU(aD,y,Y,ax))if q(l(bc,aq))<=35 then
-aN()else
-ab=aq
-V=l(ab,x)M=o(V)at=q(V)aX=r(x,"myvel")aF=r(ab,"tgtvel")az=r(aF,"tgtacc")aV=r(az,"tgtjer")aQ=l(aF,aX)aK=-aH(at,"cv")am=I(at/aK,-70,70)aT=t(az,M)aR=t(aV,M)al=k(V,h(aQ,am))bf=t(al,M)aW=k(k(C(h(al,N),am^2),C(h(aT,N),2)),C(h(aR,N),6))ao=aJ(aW,y,Y,ax)T(1,I(-ao.c,-v,v)+aB)T(2,I(-ao.d,-v,v)+ae)end
+if R<10 then
+R=R+1
+ay()else
+Z=g(e(1),e(3),e(2))ai,ah,at=e(4),e(5),e(6)x,F,S=I(ai),I(ah),I(at)ao,D,y=Q(ai),Q(ah),Q(at)W=g(F*S,-D,F*y)K=g(ao*y+x*D*S,x*F,-ao*S+x*D*y)as=aW(W,K)b_=e(7)*aE
+ag=e(8)*aE
+aG=e(9)ab=e(10)aw=b.sin(b_)*aG
+aX=b.sin(ag)*ab
+bc=b.cos(ag)*ab
+aP=(bc^2-aw^2)^.5
+ae=g(aw,aP,aX)aY=q(ae)>0
+if aY then
+ad=k(Z,aK(ae,W,K,as))if q(l(aQ,ad))<=35 then
+aU()else
+af=ad
+H=l(af,Z)E=p(H)ac=q(H)be=s(Z,"myvel")aq=s(af,"tgtvel")al=s(aq,"tgtacc")aT=s(al,"tgtjer")bb=l(aq,be)ba=-aV(ac,"cv")aA=X(ac/ba,-70,70)aZ=t(al,E)bd=t(aT,E)aB=k(H,h(bb,aA))bi=t(aB,E)aR=k(k(L(h(aB,aa),aA^2),L(h(aZ,aa),2)),L(h(bd,aa),6))aC=aO(aR,W,K,as)J(1,X(-aC.c,-w,w)+an)J(2,X(-aC.d,-w,w)+aF)end
 end
 end
 end
 else
-ah()end
+ay()end
 end
